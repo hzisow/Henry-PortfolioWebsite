@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Henry Zisow | Portfolio</title>
+
+  <meta property="og:title" content="Henry Zisow | Portfolio" />
+  <meta property="og:description" content="Personal portfolio showcasing projects and skills." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://henryzisow.com/opengraph.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@replit" />
+  <meta name="twitter:title" content="Henry Zisow | Portfolio" />
+  <meta name="twitter:description" content="Personal portfolio showcasing projects and skills." />
+  <meta name="twitter:image" content="https://henryzisow.com/opengraph.jpg" />
+
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Desktop Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="sidebar-header" onclick="scrollToSection('home')">
+        <h1 class="sidebar-title">Henry Zisow</h1>
+        <p class="sidebar-subtitle">Builder</p>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-link active" data-section="home" onclick="scrollToSection('home')">
+          <div class="nav-indicator" id="indicator-home"></div>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Home
+        </button>
+        <button class="nav-link" data-section="projects" onclick="scrollToSection('projects')">
+          <div class="nav-indicator" id="indicator-projects"></div>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
+          Projects
+        </button>
+        <button class="nav-link" data-section="resume" onclick="scrollToSection('resume')">
+          <div class="nav-indicator" id="indicator-resume"></div>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+          Resume
+        </button>
+        <button class="nav-link" data-section="contact" onclick="scrollToSection('contact')">
+          <div class="nav-indicator" id="indicator-contact"></div>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Contact
+        </button>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-social">
+        <a href="https://www.linkedin.com/in/henry-zisow-67002a387/" target="_blank" rel="noopener noreferrer" class="social-link">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+      <p class="sidebar-copyright">&copy; 2026 Henry Zisow</p>
+    </div>
+  </aside>
+
+  <!-- Mobile Header -->
+  <header class="mobile-header" id="mobile-header">
+    <div class="mobile-header-title" onclick="scrollToSection('home')">Henry Zisow</div>
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleMobileMenu()">
+      <svg id="hamburger-icon" class="hamburger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+      <svg id="close-icon" class="hamburger-icon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-overlay" id="mobile-overlay">
+    <nav class="mobile-nav">
+      <button class="mobile-nav-link" onclick="scrollToSection('home')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Home
+      </button>
+      <button class="mobile-nav-link" onclick="scrollToSection('projects')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
+        Projects
+      </button>
+      <button class="mobile-nav-link" onclick="scrollToSection('resume')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+        Resume
+      </button>
+      <button class="mobile-nav-link" onclick="scrollToSection('contact')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Contact
+      </button>
+      <div class="mobile-social">
+        <a href="https://www.linkedin.com/in/henry-zisow-67002a387/" target="_blank" rel="noopener noreferrer" class="social-link">
+          <svg class="social-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content" id="main-content">
+
+    <!-- Home Section -->
+    <section id="home" class="section section-home">
+      <div class="home-glow"></div>
+      <div class="home-content fade-in">
+        <h1 class="home-heading fade-in">Hi, I'm <span class="text-blue">Henry Zisow</span></h1>
+        <p class="home-subtitle fade-in">I'm a 10th grader at Gann Academy.</p>
+        <div class="home-buttons fade-in">
+          <button class="btn btn-primary btn-glow" onclick="scrollToSection('projects')">Coding Projects</button>
+          <button class="btn btn-secondary" onclick="scrollToSection('resume')">Resume</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section section-projects">
+      <div class="glow glow-projects-1"></div>
+      <div class="glow glow-projects-2"></div>
+      <div class="projects-container fade-in">
+        <div class="section-header">
+          <h2 class="section-title fade-in">Projects</h2>
+        </div>
+        <div class="projects-grid">
+
+          <div class="project-card fade-in" data-project="brusher-games" onclick="openModal('brusher-games')">
+            <div class="project-image" style="background-image: url('images/project-brusher.png')"></div>
+            <div class="project-overlay"></div>
+            <div class="project-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+            </div>
+            <div class="project-info">
+              <span class="project-year">2025</span>
+              <h3 class="project-title">Brusher Games</h3>
+              <div class="project-tags">
+                <span class="tag">Replit</span>
+                <span class="tag">AI</span>
+                <span class="tag">Vibecoding</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card fade-in" data-project="ai-tiktok" onclick="openModal('ai-tiktok')">
+            <div class="project-image-contain" style="background-image: url('images/project-tiktok.png')"></div>
+            <div class="project-overlay"></div>
+            <div class="project-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+            </div>
+            <div class="project-info">
+              <span class="project-year">2025</span>
+              <h3 class="project-title">AI Tiktok Video Automation</h3>
+              <div class="project-tags">
+                <span class="tag">N8N</span>
+                <span class="tag">Openrouter</span>
+                <span class="tag">Automation</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card fade-in" data-project="sora-downloader" onclick="openModal('sora-downloader')">
+            <div class="project-image" style="background-image: url('images/project-sora.png')"></div>
+            <div class="project-overlay"></div>
+            <div class="project-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+            </div>
+            <div class="project-info">
+              <span class="project-year">2025</span>
+              <h3 class="project-title">OpenAI Sora Video Bulk Downloader</h3>
+              <div class="project-tags">
+                <span class="tag">Sora</span>
+                <span class="tag">OpenAI</span>
+                <span class="tag">Replit</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section id="resume" class="section section-resume">
+      <div class="glow glow-resume-1"></div>
+      <div class="glow glow-resume-2"></div>
+      <div class="resume-container fade-in">
+        <div class="resume-header fade-in">
+          <h2 class="section-title-serif">Resume</h2>
+          <a href="resume.pdf" download="Henry_Zisow_Resume.pdf" class="btn btn-primary btn-download">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            Download PDF
+          </a>
+        </div>
+        <div class="resume-viewer fade-in">
+          <iframe src="resume.pdf" class="resume-iframe" title="Resume"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section section-contact">
+      <div class="glow glow-contact-1"></div>
+      <div class="glow glow-contact-2"></div>
+      <div class="contact-content fade-in">
+        <h2 class="section-title-serif fade-in">Get in Touch</h2>
+        <div class="contact-items">
+          <a href="mailto:hzisow@gmail.com" class="contact-item fade-in">
+            <div class="contact-icon-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <span>hzisow@gmail.com</span>
+          </a>
+          <a href="tel:+16178930994" class="contact-item fade-in">
+            <div class="contact-icon-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <span>+1 (617) 893-0994</span>
+          </a>
+          <a href="https://www.linkedin.com/in/henry-zisow-67002a387/" target="_blank" rel="noopener noreferrer" class="contact-item fade-in">
+            <div class="contact-icon-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <span>Henry Zisow</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Project Modal -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-content" id="modal-content">
+      <button class="modal-close" onclick="closeModal(event, true)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <div class="modal-body">
+        <div class="modal-image-section" id="modal-image-section">
+          <div class="modal-image" id="modal-image"></div>
+          <div class="modal-image-gradient" id="modal-image-gradient"></div>
+        </div>
+        <div class="modal-info-section">
+          <h3 class="modal-title" id="modal-title"></h3>
+          <div class="modal-tags" id="modal-tags"></div>
+          <p class="modal-description" id="modal-description"></p>
+          <div class="modal-actions" id="modal-actions"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
