@@ -32,6 +32,8 @@ html {
   scroll-behavior: smooth;
   overflow-x: hidden;
   width: 100%;
+  max-width: 100%;
+  overscroll-behavior-x: none;
 }
 
 body {
@@ -41,13 +43,17 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   width: 100%;
+  max-width: 100%;
   position: relative;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .main-content {
   overflow-x: clip;
+  max-width: 100%;
 }
 
 ::-webkit-scrollbar {
