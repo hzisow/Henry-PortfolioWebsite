@@ -226,35 +226,101 @@
       font-size: 14px;
     }
 
-    /* Resume */
-    .resume-grid {
+    /* Resume entries */
+    .entries { display: flex; flex-direction: column; }
+    .entry {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 32px;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
     }
-    .stat {
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--bg-elev);
-      transition: all var(--transition);
-    }
-    .stat:hover { border-color: var(--text-soft); }
-    .stat-value {
+    .entry:last-child { border-bottom: 1px solid var(--border); }
+    .entry-title {
       font-family: 'Fraunces', serif;
-      font-size: 28px;
       font-weight: 500;
-      letter-spacing: -0.02em;
+      font-size: 19px;
+      letter-spacing: -0.01em;
       color: var(--text);
       margin-bottom: 4px;
     }
-    .stat-label {
-      font-size: 13px;
+    .entry-role {
+      font-size: 14px;
       color: var(--text-muted);
-      line-height: 1.4;
+      font-style: italic;
     }
-    .resume-actions { display: flex; gap: 10px; }
+    .entry-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-soft);
+      text-align: right;
+      white-space: nowrap;
+    }
+    .entry-meta > div + div { margin-top: 2px; }
+    .entry-bullets {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      grid-column: 1 / -1;
+    }
+    .entry-bullets li {
+      position: relative;
+      padding-left: 18px;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      line-height: 1.55;
+    }
+    .entry-bullets li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 8px;
+      height: 1px;
+      background: var(--text-soft);
+    }
+
+    /* One-line activity rows */
+    .activity {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: baseline;
+      padding: 12px 0;
+      border-top: 1px solid var(--border);
+      font-size: 15px;
+    }
+    .activity:last-child { border-bottom: 1px solid var(--border); }
+    .activity-role { font-style: italic; color: var(--text); }
+    .activity-org { color: var(--text-muted); }
+    .activity-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    /* Skills block */
+    .skills-list {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 12px 24px;
+    }
+    .skills-list dt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-soft);
+      padding-top: 3px;
+    }
+    .skills-list dd {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .resume-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
     .btn {
       display: inline-flex;
       align-items: center;
@@ -464,7 +530,7 @@
       <div class="nav-links">
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
-        <a href="#resume">Resume</a>
+        <a href="#education">Resume</a>
         <a href="#contact">Contact</a>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
@@ -522,34 +588,168 @@
       </div>
     </section>
 
-    <section id="resume">
-      <div class="section-label">Resume</div>
-      <div class="resume-grid">
-        <div class="stat">
-          <div class="stat-value">4.4</div>
-          <div class="stat-label">Weighted GPA</div>
+    <section id="education">
+      <div class="section-label">Education</div>
+      <div class="entries">
+        <div class="entry">
+          <div>
+            <div class="entry-title">Gann Academy</div>
+            <div class="entry-role">Class of 2028 · Weighted GPA 4.4</div>
+          </div>
+          <div class="entry-meta">
+            <div>Waltham, MA</div>
+            <div>2025–Present</div>
+          </div>
+          <ul class="entry-bullets">
+            <li>Selected coursework: AP Computer Science A, Advanced Precalculus BC, AP Chemistry.</li>
+          </ul>
         </div>
-        <div class="stat">
-          <div class="stat-value">ICDC</div>
-          <div class="stat-label">International Competition Qualifier</div>
+        <div class="entry">
+          <div>
+            <div class="entry-title">Milton Academy</div>
+            <div class="entry-role">Grade 9</div>
+          </div>
+          <div class="entry-meta">
+            <div>Milton, MA</div>
+            <div>2024–2025</div>
+          </div>
+          <ul class="entry-bullets">
+            <li>Member, Investment Club.</li>
+          </ul>
         </div>
-        <div class="stat">
-          <div class="stat-value">Top 5</div>
-          <div class="stat-label">DECA States · Principles of Finance</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value">1 of 2</div>
-          <div class="stat-label">Sophomore State Officers, MA DECA</div>
+        <div class="entry">
+          <div>
+            <div class="entry-title">The Rashi School</div>
+            <div class="entry-role">Grades K–8 · Class of 2024</div>
+          </div>
+          <div class="entry-meta">
+            <div>Dedham, MA</div>
+            <div>2015–2024</div>
+          </div>
         </div>
       </div>
+    </section>
+
+    <section id="leadership">
+      <div class="section-label">Leadership &amp; Service</div>
+      <div class="entries">
+        <div class="entry">
+          <div>
+            <div class="entry-title">Massachusetts DECA</div>
+            <div class="entry-role">State Officer</div>
+          </div>
+          <div class="entry-meta">
+            <div>Boston, MA</div>
+            <div>2026–Present</div>
+          </div>
+          <ul class="entry-bullets">
+            <li>Elected by 1,000+ voting delegates at the State Career Development Conference, representing 13,000 competitors statewide — 1 of 2 sophomores elected to serve as a state officer.</li>
+            <li>Lead and facilitate district competitions, delivering programming and mentorship to support member success at regional and state levels.</li>
+          </ul>
+        </div>
+        <div class="entry">
+          <div>
+            <div class="entry-title">MAST Tutoring</div>
+            <div class="entry-role">Volunteer Tutor</div>
+          </div>
+          <div class="entry-meta">
+            <div>Waltham, MA</div>
+            <div>2025–Present</div>
+          </div>
+          <ul class="entry-bullets">
+            <li>Provide weekly one-on-one academic support to a middle school student at John F. Kennedy Middle School across math, science, English, and social studies.</li>
+          </ul>
+        </div>
+        <div class="entry">
+          <div>
+            <div class="entry-title">The Rashi School</div>
+            <div class="entry-role">Student Government President</div>
+          </div>
+          <div class="entry-meta">
+            <div>Dedham, MA</div>
+            <div>2023–2024</div>
+          </div>
+          <ul class="entry-bullets">
+            <li>Collaborated with the Student Dean to organize school-wide charity initiatives and lead the student body, earning NASC Gold Recognition and ADL No Place for Hate certification.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="awards">
+      <div class="section-label">Awards &amp; Honors</div>
+      <div class="entries">
+        <div class="entry">
+          <div>
+            <div class="entry-title">DECA International Career Development Conference Qualifier</div>
+            <div class="entry-role">Placed top 5 of 40 Principles of Finance competitors at the state level to advance to internationals.</div>
+          </div>
+          <div class="entry-meta"><div>2026</div></div>
+        </div>
+        <div class="entry">
+          <div>
+            <div class="entry-title">DECA State Career Development Conference Qualifier</div>
+            <div class="entry-role">Placed top 4 of 30 Principles of Finance competitors at the district level to advance to states.</div>
+          </div>
+          <div class="entry-meta"><div>2025</div></div>
+        </div>
+        <div class="entry">
+          <div>
+            <div class="entry-title">NASC Emerging Student Leader Award</div>
+            <div class="entry-role">Recognized nationally for distinction in public speaking, leadership, and service.</div>
+          </div>
+          <div class="entry-meta"><div>2022–2024</div></div>
+        </div>
+        <div class="entry">
+          <div>
+            <div class="entry-title">NASC National Council of Excellence Gold Recognition</div>
+            <div class="entry-role">Led effort as Student Government President to earn national recognition for student leadership, service, and engagement.</div>
+          </div>
+          <div class="entry-meta"><div>2023–2024</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="activities">
+      <div class="section-label">Other Activities</div>
+      <div class="entries">
+        <div class="activity">
+          <span class="activity-role">International Competitor</span>
+          <span class="activity-org">Gann Academy DECA</span>
+          <span class="activity-date">2025–Present</span>
+        </div>
+        <div class="activity">
+          <span class="activity-role">Member</span>
+          <span class="activity-org">Gann Academy Stock Market Club</span>
+          <span class="activity-date">2025–Present</span>
+        </div>
+        <div class="activity">
+          <span class="activity-role">Lawyer</span>
+          <span class="activity-org">Gann Academy Mock Trial Team</span>
+          <span class="activity-date">2025</span>
+        </div>
+        <div class="activity">
+          <span class="activity-role">Member</span>
+          <span class="activity-org">Milton Academy Investment Club</span>
+          <span class="activity-date">2024–2025</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="section-label">Skills &amp; Interests</div>
+      <dl class="skills-list">
+        <dt>Skills</dt>
+        <dd>Java (actively learning), AI automation tools, Replit, 3D modeling and printing</dd>
+        <dt>Interests</dt>
+        <dd>Finance, business, artificial intelligence, technology, mathematics</dd>
+        <dt>Hobbies</dt>
+        <dd>Golf, basketball, DJing</dd>
+      </dl>
       <div class="resume-actions">
         <a class="btn btn-primary" href="Henry Zisow Resume.pdf" download="Henry Zisow Resume.pdf">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          Download PDF
-        </a>
-        <a class="btn" href="Henry Zisow Resume.pdf" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-          Open in new tab
+          Download full resume (PDF)
         </a>
       </div>
     </section>
