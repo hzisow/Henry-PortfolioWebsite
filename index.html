@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Henry Zisow | Portfolio</title>
 
   <meta property="og:title" content="Henry Zisow | Portfolio" />
@@ -14,291 +14,674 @@
   <meta name="twitter:description" content="Personal portfolio showcasing projects and skills." />
   <meta name="twitter:image" content="https://henryzisow.com/opengraph.jpg" />
 
-  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="alternate icon" type="image/png" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f3f3f0;
+      --bg-elev: #e7e7e2;
+      --border: #bdbdb4;
+      --text: #131313;
+      --text-muted: #494945;
+      --text-soft: #6c6c66;
+      --accent: #3b85c7;
+      --hover: #dbdbd3;
+      --radius: 10px;
+      --max: 920px;
+      --transition: 180ms ease;
+    }
+    [data-theme="dark"] {
+      --bg: #141413;
+      --bg-elev: #1c1c1a;
+      --border: #2a2926;
+      --text: #f0ede4;
+      --text-muted: #a8a49b;
+      --text-soft: #6f6c64;
+      --accent: #7eb8e8;
+      --hover: #22221f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+      transition: background var(--transition), color var(--transition);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav.top {
+      position: sticky; top: 0; z-index: 50;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+    .theme-toggle:hover { color: var(--text); border-color: var(--text-muted); }
+    .theme-toggle svg { width: 16px; height: 16px; }
+    [data-theme="dark"] .sun { display: block; }
+    [data-theme="dark"] .moon { display: none; }
+    .sun { display: none; }
+    .moon { display: block; }
+
+    /* Sections */
+    section { padding: 80px 0 48px; }
+    section:first-of-type { padding-top: 96px; }
+
+    /* Hero */
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: clamp(40px, 6.2vw, 72px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 22px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--accent);
+    }
+    .hero .tagline {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin-bottom: 32px;
+      line-height: 1.55;
+    }
+    .hero .meta {
+      display: flex;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-soft);
+      font-family: 'JetBrains Mono', monospace;
+      align-items: center;
+    }
+    .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-soft); }
+
+    /* Section label */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* About */
+    .about p {
+      font-size: 17px;
+      color: var(--text);
+      margin-bottom: 16px;
+      max-width: 620px;
+    }
+    .about p + p { color: var(--text-muted); }
+
+    /* Projects list */
+    .projects-list { display: flex; flex-direction: column; }
+    .project {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 20px;
+      align-items: baseline;
+      padding: 22px 0;
+      border-top: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: padding var(--transition);
+      cursor: pointer;
+    }
+    .project:last-child { border-bottom: 1px solid var(--border); }
+    .project:hover { padding-left: 8px; }
+    .project:hover .project-arrow { transform: translate(2px, -2px); opacity: 1; }
+    .project-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+    .project-main h3 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 20px;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+    .project-main p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-soft);
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+    .project-arrow {
+      color: var(--text-soft);
+      opacity: 0.6;
+      transition: all var(--transition);
+      font-size: 14px;
+    }
+
+    /* Resume */
+    .resume-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .stat {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-elev);
+      transition: all var(--transition);
+    }
+    .stat:hover { border-color: var(--text-soft); }
+    .stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .resume-actions { display: flex; gap: 10px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all var(--transition);
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+    }
+    .btn:hover { background: var(--hover); border-color: var(--text-soft); }
+    .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .btn-primary:hover { background: var(--text-muted); border-color: var(--text-muted); color: var(--bg); }
+    .btn svg { width: 14px; height: 14px; }
+
+    /* Contact */
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+    }
+    .contact-row {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 16px 0;
+      border-top: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      transition: padding var(--transition);
+    }
+    .contact-row:last-child { border-bottom: 1px solid var(--border); }
+    .contact-row:hover { padding-left: 8px; }
+    .contact-row:hover .contact-arrow { opacity: 1; transform: translate(2px, -2px); }
+    .contact-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-soft);
+    }
+    .contact-value { font-size: 15px; color: var(--text); }
+    .contact-arrow { color: var(--text-soft); opacity: 0.5; transition: all var(--transition); }
+
+    /* Footer */
+    footer {
+      padding: 32px 0 48px;
+      border-top: 1px solid var(--border);
+      margin-top: 64px;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-soft);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .footer-inner a {
+      color: var(--text-soft);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-inner a:hover { color: var(--text); }
+
+    @media (max-width: 720px) {
+      .container { padding: 0 20px; }
+      .nav-inner { padding: 12px 20px; }
+      .nav-links { gap: 18px; }
+      .nav-brand { font-size: 16px; }
+      .nav-links a { font-size: 13px; }
+      .hero h1 { font-size: clamp(34px, 9vw, 44px); }
+      .hero .tagline { font-size: 16px; }
+      .about p { font-size: 16px; }
+      .resume-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stat { padding: 16px; }
+      .stat-value { font-size: 24px; }
+      .stat-label { font-size: 12px; }
+      .project { grid-template-columns: 44px 1fr 16px; gap: 12px; padding: 18px 0; }
+      .project-main h3 { font-size: 18px; }
+      .project-main p { font-size: 13px; }
+      .contact-row { grid-template-columns: 72px 1fr auto; padding: 14px 0; }
+      .contact-value { font-size: 14px; }
+      section { padding: 56px 0 32px; }
+      section:first-of-type { padding-top: 56px; }
+      footer { margin-top: 48px; padding: 28px 0 36px; }
+      .footer-inner { font-size: 12px; }
+      .modal-overlay { padding: 16px; }
+      .modal-body { padding: 22px; }
+      .modal h3 { font-size: 22px; }
+      .modal-desc { font-size: 14px; }
+      .resume-actions { flex-direction: column; align-items: stretch; }
+      .btn { justify-content: center; }
+    }
+
+    @media (max-width: 460px) {
+      .nav-links a:nth-child(4) { display: none; }
+      .resume-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; gap: 6px; align-items: flex-start; }
+    }
+
+    @media (hover: none) {
+      .project:hover, .contact-row:hover { padding-left: 0; }
+      .project:hover .project-arrow,
+      .contact-row:hover .contact-arrow { transform: none; }
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 220ms ease, visibility 0s linear 220ms;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 220ms ease, visibility 0s linear 0s;
+    }
+    .modal {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      max-width: 560px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      transform: translateY(12px) scale(0.98);
+      transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      z-index: 2;
+    }
+    .modal-close:hover { color: var(--text); border-color: var(--text-soft); }
+    .modal-close svg { width: 14px; height: 14px; }
+    .modal-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-size: cover;
+      background-position: center;
+      background-color: var(--bg-elev);
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-image.contain { background-size: contain; background-repeat: no-repeat; }
+    .modal-body { padding: 28px; }
+    .modal-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+    .modal h3 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 26px;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+    .modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+    .modal-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+    .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Reveal animation */
+    .reveal { opacity: 0; transform: translateY(8px); transition: opacity 600ms ease, transform 600ms ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
 </head>
-<body>
-  <!-- Desktop Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div>
-      <div class="sidebar-header" onclick="scrollToSection('home')">
-        <h1 class="sidebar-title">Henry Zisow</h1>
-        <p class="sidebar-subtitle">Builder</p>
+<body data-theme="light">
+  <nav class="top">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">Henry Zisow</a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#resume">Resume</a>
+        <a href="#contact">Contact</a>
       </div>
-      <nav class="sidebar-nav">
-        <button class="nav-link active" data-section="home" onclick="scrollToSection('home')">
-          <div class="nav-indicator" id="indicator-home"></div>
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-          Home
-        </button>
-        <button class="nav-link" data-section="projects" onclick="scrollToSection('projects')">
-          <div class="nav-indicator" id="indicator-projects"></div>
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
-          Projects
-        </button>
-        <button class="nav-link" data-section="resume" onclick="scrollToSection('resume')">
-          <div class="nav-indicator" id="indicator-resume"></div>
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
-          Resume
-        </button>
-        <button class="nav-link" data-section="contact" onclick="scrollToSection('contact')">
-          <div class="nav-indicator" id="indicator-contact"></div>
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          Contact
-        </button>
-      </nav>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
     </div>
-    <div class="sidebar-footer">
-      <div class="sidebar-social">
-        <a href="https://www.linkedin.com/in/henry-zisow-67002a387/" target="_blank" rel="noopener noreferrer" class="social-link">
-          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Henry Zisow<br/><em>builder</em>, student, and leader.</h1>
+      <p class="tagline">Sophomore at Gann Academy and a Massachusetts DECA State Officer. I build things with code, compete in business, and ship fast.</p>
+      <div class="meta">
+        <span>Boston, MA</span>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="section-label">About</div>
+      <p>I'm a high school sophomore who builds software for fun. I spend my time prototyping with code, competing in DECA, and serving as a Massachusetts DECA State Officer.</p>
+      <p>Recently I've been working on automation tools, small games, and utilities. I qualified for ICDC this year in Principles of Finance and placed Top 5 at States.</p>
+    </section>
+
+    <section id="projects">
+      <div class="section-label">Projects</div>
+      <div class="projects-list">
+        <div class="project" data-project="brusher-games">
+          <div class="project-year">2025</div>
+          <div class="project-main">
+            <h3>Brusher Games</h3>
+            <p>A web-based platform that organizes and tracks school-wide elimination-style games with targets, eliminations, and live standings.</p>
+            <div class="project-tags"><span class="tag">Claude</span><span class="tag">AI</span><span class="tag">Vibecoding</span></div>
+          </div>
+          <div class="project-arrow">↗</div>
+        </div>
+        <div class="project" data-project="ai-tiktok">
+          <div class="project-year">2025</div>
+          <div class="project-main">
+            <h3>AI TikTok Video Automation</h3>
+            <p>A fully automated AI TikTok video generator and uploader using N8N, UploadPost API, OpenRouter, and Airtable.</p>
+            <div class="project-tags"><span class="tag">N8N</span><span class="tag">OpenRouter</span><span class="tag">Automation</span></div>
+          </div>
+          <div class="project-arrow">↗</div>
+        </div>
+        <div class="project" data-project="sora-downloader">
+          <div class="project-year">2025</div>
+          <div class="project-main">
+            <h3>OpenAI Sora Bulk Downloader</h3>
+            <p>Manage and bulk-download Sora AI videos with prompts as filenames for easy organization.</p>
+            <div class="project-tags"><span class="tag">Sora</span><span class="tag">OpenAI</span><span class="tag">Replit</span></div>
+          </div>
+          <div class="project-arrow">↗</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="resume">
+      <div class="section-label">Resume</div>
+      <div class="resume-grid">
+        <div class="stat">
+          <div class="stat-value">4.4</div>
+          <div class="stat-label">Weighted GPA</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">ICDC</div>
+          <div class="stat-label">International Competition Qualifier</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">Top 5</div>
+          <div class="stat-label">DECA States · Principles of Finance</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">1 of 2</div>
+          <div class="stat-label">Sophomore State Officers, MA DECA</div>
+        </div>
+      </div>
+      <div class="resume-actions">
+        <a class="btn btn-primary" href="Henry Zisow Resume.pdf" download="Henry Zisow Resume.pdf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          Download PDF
+        </a>
+        <a class="btn" href="Henry Zisow Resume.pdf" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          Open in new tab
         </a>
       </div>
-      <p class="sidebar-copyright">&copy; 2026 Henry Zisow</p>
-    </div>
-  </aside>
+    </section>
 
-  <!-- Mobile Header -->
-  <header class="mobile-header" id="mobile-header">
-    <div class="mobile-header-title" onclick="scrollToSection('home')">Henry Zisow</div>
-    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleMobileMenu()">
-      <svg id="hamburger-icon" class="hamburger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-      <svg id="close-icon" class="hamburger-icon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-    </button>
-  </header>
-
-  <!-- Mobile Menu Overlay -->
-  <div class="mobile-overlay" id="mobile-overlay">
-    <nav class="mobile-nav">
-      <button class="mobile-nav-link" onclick="scrollToSection('home')">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-        Home
-      </button>
-      <button class="mobile-nav-link" onclick="scrollToSection('projects')">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
-        Projects
-      </button>
-      <button class="mobile-nav-link" onclick="scrollToSection('resume')">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
-        Resume
-      </button>
-      <button class="mobile-nav-link" onclick="scrollToSection('contact')">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        Contact
-      </button>
-      <div class="mobile-social">
-        <a href="https://www.linkedin.com/in/henry-zisow-67002a387/" target="_blank" rel="noopener noreferrer" class="social-link">
-          <svg class="social-icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+    <section id="contact">
+      <div class="section-label">Contact</div>
+      <div class="contact-list">
+        <a class="contact-row" href="mailto:hzisow@gmail.com">
+          <div class="contact-label">Email</div>
+          <div class="contact-value">hzisow@gmail.com</div>
+          <div class="contact-arrow">↗</div>
+        </a>
+        <a class="contact-row" href="tel:+16178930994">
+          <div class="contact-label">Phone</div>
+          <div class="contact-value">+1 (617) 893-0994</div>
+          <div class="contact-arrow">↗</div>
+        </a>
+        <a class="contact-row" href="https://www.linkedin.com/in/henry-zisow-67002a387/" target="_blank">
+          <div class="contact-label">LinkedIn</div>
+          <div class="contact-value">Henry Zisow</div>
+          <div class="contact-arrow">↗</div>
+        </a>
+        <a class="contact-row" href="https://github.com/hzisow" target="_blank">
+          <div class="contact-label">GitHub</div>
+          <div class="contact-value">@hzisow</div>
+          <div class="contact-arrow">↗</div>
         </a>
       </div>
-    </nav>
-  </div>
-
-  <!-- Main Content -->
-  <main class="main-content" id="main-content">
-
-    <!-- Home Section -->
-    <section id="home" class="section section-home">
-      <div class="home-grid"></div>
-      <div class="home-glow"></div>
-      <div class="home-fade"></div>
-      <div class="home-content fade-in">
-        <h1 class="home-heading fade-in">
-          <span class="home-greeting">Hi, I'm</span>
-          <span class="text-blue home-name">Henry Zisow<span class="home-cursor"></span></span>
-        </h1>
-        <p class="home-location fade-in">Sophomore at Gann Academy · Newton, MA</p>
-        <p class="home-subtitle fade-in">
-          I build things with code, compete in <span class="subtitle-accent">DECA</span>, and lead as a <span class="subtitle-accent">Massachusetts State Officer</span>.
-        </p>
-        <div class="home-roles fade-in">
-          <span class="role-chip">Builder</span>
-          <span class="role-dot"></span>
-          <span class="role-chip">State Officer</span>
-          <span class="role-dot"></span>
-          <span class="role-chip">Student</span>
-        </div>
-        <div class="home-buttons fade-in">
-          <button class="btn btn-primary btn-glow" onclick="scrollToSection('projects')">View Projects</button>
-          <button class="btn btn-secondary" onclick="scrollToSection('resume')">Resume</button>
-        </div>
-      </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="section section-projects">
-      <div class="glow glow-projects-1"></div>
-      <div class="glow glow-projects-2"></div>
-      <div class="projects-container fade-in">
-        <div class="section-header">
-          <h2 class="section-title fade-in">Projects</h2>
-        </div>
-        <div class="projects-grid">
-
-          <div class="project-card fade-in" data-project="brusher-games" onclick="openModal('brusher-games')">
-            <div class="project-image" style="background-image: url('images/project-brusher.png')"></div>
-            <div class="project-overlay"></div>
-            <div class="project-arrow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
-            </div>
-            <div class="project-info">
-              <span class="project-year">2025</span>
-              <h3 class="project-title">Brusher Games</h3>
-              <div class="project-tags">
-                <span class="tag">Replit</span>
-                <span class="tag">AI</span>
-                <span class="tag">Vibecoding</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="project-card fade-in" data-project="ai-tiktok" onclick="openModal('ai-tiktok')">
-            <div class="project-image-contain" style="background-image: url('images/project-tiktok.png')"></div>
-            <div class="project-overlay"></div>
-            <div class="project-arrow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
-            </div>
-            <div class="project-info">
-              <span class="project-year">2025</span>
-              <h3 class="project-title">AI Tiktok Video Automation</h3>
-              <div class="project-tags">
-                <span class="tag">N8N</span>
-                <span class="tag">Openrouter</span>
-                <span class="tag">Automation</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="project-card fade-in" data-project="sora-downloader" onclick="openModal('sora-downloader')">
-            <div class="project-image" style="background-image: url('images/project-sora.png')"></div>
-            <div class="project-overlay"></div>
-            <div class="project-arrow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
-            </div>
-            <div class="project-info">
-              <span class="project-year">2025</span>
-              <h3 class="project-title">OpenAI Sora Video Bulk Downloader</h3>
-              <div class="project-tags">
-                <span class="tag">Sora</span>
-                <span class="tag">OpenAI</span>
-                <span class="tag">Replit</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Resume Section -->
-    <section id="resume" class="section section-resume">
-      <div class="glow glow-resume-1"></div>
-      <div class="glow glow-resume-2"></div>
-      <div class="resume-container fade-in">
-        <div class="resume-header fade-in">
-          <div>
-            <h2 class="section-title-serif">Resume</h2>
-            <p class="resume-subtitle">Last updated April 2026</p>
-          </div>
-          <div class="resume-header-actions">
-            <a href="Henry Zisow Resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-download">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-              Open in new tab
-            </a>
-            <a href="Henry Zisow Resume.pdf" download="Henry Zisow Resume.pdf" class="btn btn-primary btn-download">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-              Download PDF
-            </a>
-          </div>
-        </div>
-
-        <div class="resume-stats fade-in">
-          <div class="stat-card">
-            <div class="stat-value">4.4</div>
-            <div class="stat-label">Weighted GPA</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">1 of 2</div>
-            <div class="stat-label">Sophomore State Officers, MA DECA</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">Top 5</div>
-            <div class="stat-label">DECA States · Principles of Finance</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">ICDC</div>
-            <div class="stat-label">International Competition Qualifier</div>
-          </div>
-        </div>
-
-        <div class="resume-viewer fade-in">
-          <div class="resume-viewer-bar">
-            <div class="resume-viewer-dots">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="resume-viewer-filename">Henry_Zisow_Resume.pdf</div>
-            <div class="resume-viewer-spacer"></div>
-          </div>
-          <iframe src="Henry Zisow Resume.pdf#view=FitH&toolbar=0&navpanes=0" class="resume-iframe" title="Henry Zisow Resume"></iframe>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section section-contact">
-      <div class="glow glow-contact-1"></div>
-      <div class="glow glow-contact-2"></div>
-      <div class="contact-content fade-in">
-        <h2 class="section-title-serif fade-in">Get in Touch</h2>
-        <div class="contact-items">
-          <a href="mailto:hzisow@gmail.com" class="contact-item fade-in">
-            <div class="contact-icon-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-            </div>
-            <span>hzisow@gmail.com</span>
-          </a>
-          <a href="tel:+16178930994" class="contact-item fade-in">
-            <div class="contact-icon-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            </div>
-            <span>+1 (617) 893-0994</span>
-          </a>
-          <a href="https://www.linkedin.com/in/henry-zisow-67002a387/" target="_blank" rel="noopener noreferrer" class="contact-item fade-in">
-            <div class="contact-icon-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-            </div>
-            <span>Henry Zisow</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Project Modal -->
-  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-    <div class="modal-content" id="modal-content">
-      <button class="modal-close" onclick="closeModal(event, true)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-      </button>
-      <div class="modal-body">
-        <div class="modal-image-section" id="modal-image-section">
-          <div class="modal-image" id="modal-image"></div>
-          <div class="modal-image-gradient" id="modal-image-gradient"></div>
-        </div>
-        <div class="modal-info-section">
-          <h3 class="modal-title" id="modal-title"></h3>
+    <div class="modal-overlay" id="modal">
+      <div class="modal" id="modal-inner">
+        <button class="modal-close" id="modal-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+        <div class="modal-image" id="modal-image"></div>
+        <div class="modal-body">
+          <div class="modal-year">2025</div>
+          <h3 id="modal-title"></h3>
           <div class="modal-tags" id="modal-tags"></div>
-          <p class="modal-description" id="modal-description"></p>
+          <p class="modal-desc" id="modal-desc"></p>
           <div class="modal-actions" id="modal-actions"></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <footer>
+      <div class="footer-inner">
+        <span>© 2026 Henry Zisow</span>
+        <span>Boston, MA</span>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const root = document.body;
+    const stored = localStorage.getItem('theme');
+    if (stored) root.setAttribute('data-theme', stored);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) root.setAttribute('data-theme', 'dark');
+
+    function toggleTheme() {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+
+    const projects = {
+      'brusher-games': {
+        title: 'Brusher Games',
+        description: 'A web-based platform that organizes, manages, and tracks school-wide elimination-style games by assigning targets, recording eliminations, and displaying live standings.',
+        tags: ['Claude', 'AI', 'Vibecoding'],
+        image: 'images/project-brusher.png',
+        link: 'https://brushergames.replit.app',
+        imageContain: false
+      },
+      'ai-tiktok': {
+        title: 'AI TikTok Video Automation',
+        description: 'A fully automated AI TikTok video generator and uploader. Uses N8N, UploadPost API, OpenRouter API, and Airtable.',
+        tags: ['N8N', 'OpenRouter', 'Automation'],
+        image: 'images/project-tiktok.png',
+        imageContain: true,
+        download: 'Airtable_to_Platforms.json',
+        downloadLabel: 'Download N8N Workflow'
+      },
+      'sora-downloader': {
+        title: 'OpenAI Sora Bulk Downloader',
+        description: 'An easy way to manage and organize Sora AI video downloads. Takes in all the files Sora generates and lets you bulk download with the file name being the prompt, for easy organization.',
+        tags: ['Sora', 'OpenAI', 'Replit'],
+        image: 'images/project-sora.png',
+        link: 'https://sora-batch-gen--hzisow.replit.app/',
+        imageContain: false
+      }
+    };
+
+    const modal = document.getElementById('modal');
+
+    function openModal(id) {
+      const p = projects[id];
+      if (!p) return;
+      const img = document.getElementById('modal-image');
+      img.style.backgroundImage = "url('" + p.image + "')";
+      img.classList.toggle('contain', !!p.imageContain);
+      document.getElementById('modal-title').textContent = p.title;
+      document.getElementById('modal-desc').textContent = p.description;
+      document.getElementById('modal-tags').innerHTML = p.tags.map(t => '<span class="tag">' + t + '</span>').join('');
+      let actions = '';
+      if (p.link) actions += '<a class="btn btn-primary" href="' + p.link + '" target="_blank" rel="noopener noreferrer">Visit Site <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>';
+      if (p.download) actions += '<a class="btn" href="' + p.download + '" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> ' + p.downloadLabel + '</a>';
+      document.getElementById('modal-actions').innerHTML = actions;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.project').forEach(el => {
+      el.addEventListener('click', () => openModal(el.dataset.project));
+    });
+
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeModal();
+    });
+    document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+    document.getElementById('modal-inner').addEventListener('click', e => e.stopPropagation());
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
 </body>
 </html>
