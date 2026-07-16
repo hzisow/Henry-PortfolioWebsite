@@ -4,838 +4,1447 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Henry Zisow | Portfolio</title>
+  <meta name="description" content="Henry Zisow — builder, student, and leader. Massachusetts DECA State Co-President. Built for speed. Ka-chow." />
+  <meta name="theme-color" content="#e8342c" />
 
   <meta property="og:title" content="Henry Zisow | Portfolio" />
-  <meta property="og:description" content="Personal portfolio showcasing projects and skills." />
+  <meta property="og:description" content="Builder, student, leader — built for speed. Projects, racing-grade resume, and more. Ka-chow!" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://henryzisow.com/opengraph.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Henry Zisow | Portfolio" />
-  <meta name="twitter:description" content="Personal portfolio showcasing projects and skills." />
+  <meta name="twitter:description" content="Builder, student, leader — built for speed. Ka-chow!" />
   <meta name="twitter:image" content="https://henryzisow.com/opengraph.jpg" />
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
   <style>
     :root {
-      --bg: #f3f3f0;
-      --bg-elev: #e7e7e2;
-      --border: #bdbdb4;
-      --text: #131313;
-      --text-muted: #494945;
-      --text-soft: #6c6c66;
-      --accent: #3b85c7;
-      --hover: #dbdbd3;
-      --radius: 10px;
-      --max: 920px;
-      --transition: 180ms ease;
-    }
-    [data-theme="dark"] {
-      --bg: #141413;
-      --bg-elev: #1c1c1a;
-      --border: #2a2926;
-      --text: #f0ede4;
-      --text-muted: #a8a49b;
-      --text-soft: #6f6c64;
-      --accent: #7eb8e8;
-      --hover: #22221f;
+      --asphalt: #0b0b0e;
+      --asphalt-2: #101014;
+      --panel: #15151b;
+      --panel-2: #1a1a21;
+      --line: #26262e;
+      --line-soft: #1e1e25;
+      --red: #e8342c;
+      --red-hot: #ff4b3e;
+      --red-dark: #b31313;
+      --yellow: #ffc21a;
+      --white: #f5f2ea;
+      --muted: #a8a49e;
+      --soft: #75726c;
+      --radius: 14px;
+      --max: 1080px;
+      --t: 200ms ease;
+      --font-display: 'Racing Sans One', 'Arial Black', sans-serif;
+      --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 84px; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: var(--font-body);
+      background:
+        radial-gradient(1200px 600px at 85% -5%, rgba(232, 52, 44, 0.10), transparent 60%),
+        radial-gradient(900px 500px at -10% 30%, rgba(255, 194, 26, 0.05), transparent 55%),
+        var(--asphalt);
+      color: var(--white);
       line-height: 1.6;
       font-size: 16px;
-      transition: background var(--transition), color var(--transition);
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+    ::selection { background: var(--red); color: #fff; }
 
-    .container { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+    .container { max-width: var(--max); margin: 0 auto; padding: 0 24px; position: relative; }
 
-    /* Nav */
-    nav.top {
-      position: sticky; top: 0; z-index: 50;
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+    /* ============ CHECKER UTILITY ============ */
+    .checker {
+      background: repeating-conic-gradient(#e9e6df 0% 25%, #101013 0% 50%) 0 0 / 22px 22px;
     }
+
+    /* ============ PRELOADER — race start lights ============ */
+    #preloader {
+      position: fixed; inset: 0; z-index: 300;
+      background: var(--asphalt);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+      transition: transform 600ms cubic-bezier(0.7, 0, 0.3, 1), opacity 500ms ease;
+      animation: pl-safety 400ms ease 5s forwards; /* auto-hide even if JS stalls */
+    }
+    #preloader.done { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+    @keyframes pl-safety { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+    .pl-lights { display: flex; gap: 18px; }
+    .pl-light {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #1d1d24; border: 2px solid #2c2c35;
+      transition: all 150ms ease;
+    }
+    .pl-light.on { background: var(--red); border-color: var(--red-hot); box-shadow: 0 0 24px rgba(232,52,44,0.8); }
+    .pl-light.go { background: #35d156; border-color: #5df080; box-shadow: 0 0 28px rgba(53,209,86,0.9); }
+    .pl-word {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 8vw, 84px);
+      font-style: italic;
+      letter-spacing: 0.02em;
+      color: var(--yellow);
+      text-shadow: 4px 4px 0 var(--red);
+      opacity: 0; transform: scale(0.6) skewX(-8deg);
+      transition: all 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .pl-word.show { opacity: 1; transform: scale(1) skewX(-8deg); }
+    .pl-sub { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.3em; color: var(--soft); text-transform: uppercase; }
+
+    /* ============ SCROLL PROGRESS TRACK ============ */
+    #track {
+      position: fixed; top: 0; left: 0; right: 0; height: 6px; z-index: 210;
+      background: #1a1a20;
+      border-bottom: 1px solid #000;
+    }
+    #track-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--red-dark), var(--red) 60%, var(--yellow));
+      box-shadow: 0 0 12px rgba(232, 52, 44, 0.7);
+    }
+    #track-finish {
+      position: absolute; right: 0; top: 0; bottom: 0; width: 22px;
+      background: repeating-conic-gradient(#dcdcd4 0% 25%, #0c0c0f 0% 50%) 0 0 / 6px 6px;
+      opacity: 0.9;
+    }
+    #track-car {
+      position: fixed; top: -7px; left: 0; z-index: 211; width: 44px; height: 20px;
+      will-change: transform; pointer-events: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    }
+
+    /* ============ NAV ============ */
+    nav.top {
+      position: fixed; top: 6px; left: 0; right: 0; z-index: 200;
+      background: rgba(11, 11, 14, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line-soft);
+      transition: transform 320ms ease;
+    }
+    nav.top.hidden { transform: translateY(-110%); }
     .nav-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      max-width: var(--max); margin: 0 auto; padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
     }
     .nav-brand {
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
-      font-size: 17px;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-display); font-style: italic;
+      font-size: 19px; letter-spacing: 0.03em;
+      color: var(--white); text-decoration: none; white-space: nowrap;
     }
-    .nav-links { display: flex; gap: 28px; }
+    .nav-brand .n95 { color: var(--red); }
+    .nav-brand svg { width: 18px; height: 18px; }
+    .nav-links { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    .nav-links::-webkit-scrollbar { display: none; }
     .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: color var(--transition);
+      color: var(--muted); text-decoration: none;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      font-family: var(--font-mono);
+      padding: 6px 10px; border-radius: 6px; white-space: nowrap;
+      transition: color var(--t), background var(--t);
     }
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+    .nav-links a.active { color: var(--yellow); }
 
-    .theme-toggle {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      width: 34px; height: 34px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all var(--transition);
+    /* ============ SECTIONS ============ */
+    section { padding: 110px 0 40px; position: relative; }
+    .flag-label {
+      display: flex; align-items: center; gap: 12px;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.28em;
+      color: var(--red-hot); margin-bottom: 14px;
     }
-    .theme-toggle:hover { color: var(--text); border-color: var(--text-muted); }
-    .theme-toggle svg { width: 16px; height: 16px; }
-    [data-theme="dark"] .sun { display: block; }
-    [data-theme="dark"] .moon { display: none; }
-    .sun { display: none; }
-    .moon { display: block; }
+    .flag-label::before {
+      content: ''; width: 16px; height: 16px; flex: none;
+      background: repeating-conic-gradient(#e9e6df 0% 25%, #101013 0% 50%) 0 0 / 8px 8px;
+      border: 1px solid var(--line);
+    }
+    .flag-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
+    .sec-title {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(34px, 5.4vw, 56px);
+      line-height: 1.04; letter-spacing: 0.01em;
+      text-transform: uppercase; color: var(--white);
+      margin-bottom: 12px;
+    }
+    .sec-title .accent { color: var(--red); }
+    .sec-sub { color: var(--muted); font-size: 16px; max-width: 640px; margin-bottom: 40px; font-weight: 300; }
 
-    /* Sections */
-    section { padding: 80px 0 48px; }
-    section:first-of-type { padding-top: 96px; }
-
-    /* Hero */
+    /* ============ HERO ============ */
+    .hero {
+      min-height: min(100svh, 1000px);
+      padding: 120px 0 0;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      position: relative; overflow: hidden;
+    }
+    .hero-95 {
+      position: absolute; top: 4%; right: -4%;
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(220px, 38vw, 560px); line-height: 0.8;
+      color: transparent;
+      -webkit-text-stroke: 2px rgba(232, 52, 44, 0.22);
+      user-select: none; pointer-events: none;
+      will-change: transform;
+    }
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 30%, transparent 75%);
+    }
+    .hero-content { position: relative; z-index: 2; padding-bottom: 30px; }
+    .hero-kicker {
+      font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--yellow);
+      display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+    }
+    .hero-kicker .bolt { width: 14px; height: 14px; }
     .hero h1 {
-      font-family: 'Fraunces', serif;
-      font-weight: 400;
-      font-size: clamp(40px, 6.2vw, 72px);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      color: var(--text);
+      font-family: var(--font-display); font-style: italic; font-weight: 400;
+      font-size: clamp(54px, 11vw, 128px);
+      line-height: 0.92; letter-spacing: 0.01em; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero h1 .row { display: block; overflow: hidden; }
+    .hero h1 .l { display: inline-block; will-change: transform; }
+    .hero h1 .row-2 .l {
+      color: transparent;
+      -webkit-text-stroke: 2.5px var(--red);
+    }
+    html.js .hero h1 .l { transform: translateY(110%); animation: letter-up 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards; animation-delay: var(--ld, 0ms); }
+    @keyframes letter-up { to { transform: translateY(0); } }
+    .hero-strip {
+      display: inline-block;
+      font-family: var(--font-mono); font-weight: 700; font-size: clamp(12px, 1.7vw, 15px);
+      letter-spacing: 0.22em; text-transform: uppercase;
+      background: var(--red); color: #fff;
+      padding: 8px 18px; transform: skewX(-10deg);
+      box-shadow: 6px 6px 0 rgba(255, 194, 26, 0.85);
       margin-bottom: 22px;
     }
-    .hero h1 em {
-      font-style: italic;
-      font-weight: 400;
-      color: var(--accent);
-    }
+    .hero-strip span { display: inline-block; transform: skewX(10deg); }
     .hero .tagline {
-      font-size: 18px;
-      color: var(--text-muted);
-      max-width: 540px;
-      margin-bottom: 32px;
-      line-height: 1.55;
+      font-size: clamp(16px, 2vw, 19px); color: var(--muted);
+      max-width: 560px; margin-bottom: 24px; font-weight: 300; line-height: 1.65;
     }
-    .hero .meta {
-      display: flex;
-      gap: 16px;
-      font-size: 14px;
-      color: var(--text-soft);
-      font-family: 'JetBrains Mono', monospace;
-      align-items: center;
+    .hero .tagline strong { color: var(--white); font-weight: 600; }
+    .hero-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 26px; }
+    .chip {
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em;
+      color: var(--muted); border: 1px solid var(--line);
+      background: rgba(255,255,255,0.02);
+      padding: 7px 13px; border-radius: 999px;
+      transition: all var(--t);
     }
-    .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-soft); }
+    .chip:hover { border-color: var(--red); color: var(--white); }
+    .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
 
-    /* Section label */
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-soft);
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* About */
-    .about p {
-      font-size: 17px;
-      color: var(--text);
-      margin-bottom: 16px;
-      max-width: 620px;
-    }
-    .about p + p { color: var(--text-muted); }
-
-    /* Projects list */
-    .projects-list { display: flex; flex-direction: column; }
-    .project {
-      display: grid;
-      grid-template-columns: 60px 1fr auto;
-      gap: 20px;
-      align-items: baseline;
-      padding: 22px 0;
-      border-top: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-      transition: padding var(--transition);
-      cursor: pointer;
-    }
-    .project:last-child { border-bottom: 1px solid var(--border); }
-    .project:hover { padding-left: 8px; }
-    .project:hover .project-arrow { transform: translate(2px, -2px); opacity: 1; }
-    .project-year {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--text-soft);
-    }
-    .project-main h3 {
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
-      font-size: 20px;
-      letter-spacing: -0.01em;
-      margin-bottom: 6px;
-    }
-    .project-main p {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-    .tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-soft);
-      padding: 2px 8px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-    }
-    .project-arrow {
-      color: var(--text-soft);
-      opacity: 0.6;
-      transition: all var(--transition);
-      font-size: 14px;
-    }
-
-    /* Resume entries */
-    .entries { display: flex; flex-direction: column; }
-    .entry {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 20px;
-      padding: 20px 0;
-      border-top: 1px solid var(--border);
-    }
-    .entry:last-child { border-bottom: 1px solid var(--border); }
-    .entry-title {
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
-      font-size: 19px;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .entry-role {
-      font-size: 14px;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-    .entry-meta {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-soft);
-      text-align: right;
-      white-space: nowrap;
-    }
-    .entry-meta > div + div { margin-top: 2px; }
-    .entry-bullets {
-      list-style: none;
-      padding: 0;
-      margin-top: 10px;
-      grid-column: 1 / -1;
-    }
-    .entry-bullets li {
-      position: relative;
-      padding-left: 18px;
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      line-height: 1.55;
-    }
-    .entry-bullets li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 10px;
-      width: 8px;
-      height: 1px;
-      background: var(--text-soft);
-    }
-
-    /* One-line activity rows */
-    .activity {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 16px;
-      align-items: baseline;
-      padding: 12px 0;
-      border-top: 1px solid var(--border);
-      font-size: 15px;
-    }
-    .activity:last-child { border-bottom: 1px solid var(--border); }
-    .activity-role { font-style: italic; color: var(--text); }
-    .activity-org { color: var(--text-muted); }
-    .activity-date {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-soft);
-    }
-
-    /* Skills block */
-    .skills-list {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 12px 24px;
-    }
-    .skills-list dt {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-soft);
-      padding-top: 3px;
-    }
-    .skills-list dd {
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    .resume-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all var(--transition);
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 15px 26px; text-decoration: none; cursor: pointer;
+      border: 2px solid var(--red); color: var(--white);
+      background: transparent; transform: skewX(-8deg);
+      transition: all var(--t); position: relative;
+    }
+    .btn > span, .btn > svg { transform: skewX(8deg); }
+    .btn svg { width: 15px; height: 15px; flex: none; }
+    .btn:hover { background: rgba(232, 52, 44, 0.12); box-shadow: 0 0 24px rgba(232, 52, 44, 0.35); transform: skewX(-8deg) translateY(-2px); }
+    .btn-primary { background: var(--red); box-shadow: 5px 5px 0 rgba(255, 194, 26, 0.9); }
+    .btn-primary:hover { background: var(--red-hot); box-shadow: 7px 7px 0 rgba(255, 194, 26, 0.9); }
+
+    /* Hero road + car */
+    .hero-road {
+      position: relative; height: 112px; z-index: 1;
+      background: linear-gradient(#131317, #0d0d10);
+      border-top: 3px solid #202027;
+      box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
+    }
+    .hero-road::before { /* moving center dashes */
+      content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 6px; margin-top: -3px;
+      background: repeating-linear-gradient(90deg, var(--yellow) 0 60px, transparent 60px 130px);
+      opacity: 0.55;
+      animation: road-move 0.7s linear infinite;
+    }
+    .hero-road::after { /* bottom edge line */
+      content: ''; position: absolute; left: 0; right: 0; bottom: 10px; height: 2px;
+      background: rgba(255,255,255,0.08);
+    }
+    @keyframes road-move { to { background-position: -130px 0; } }
+
+    .hero-car {
+      position: absolute; bottom: 82px; right: max(3vw, 20px); z-index: 3;
+      width: min(500px, 56vw);
       cursor: pointer;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      font-family: inherit;
+      -webkit-tap-highlight-color: transparent;
     }
-    .btn:hover { background: var(--hover); border-color: var(--text-soft); }
-    .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-    .btn-primary:hover { background: var(--text-muted); border-color: var(--text-muted); color: var(--bg); }
-    .btn svg { width: 14px; height: 14px; }
+    html.js .hero-car { animation: drive-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) 200ms both; }
+    @keyframes drive-in { from { transform: translateX(-120vw); } to { transform: translateX(0); } }
+    .car-bob { animation: bob 1.4s ease-in-out infinite; }
+    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+    .wheel-spin { animation: spin 0.8s linear infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .car-blink { transform-box: fill-box; transform-origin: center top; transform: scaleY(0); animation: blink 4.6s ease-in-out infinite; }
+    @keyframes blink { 0%, 93%, 100% { transform: scaleY(0); } 95.5%, 97% { transform: scaleY(1); } }
 
-    /* Contact */
-    .contact-list {
-      display: flex;
-      flex-direction: column;
-    }
-    .contact-row {
-      display: grid;
-      grid-template-columns: 90px 1fr auto;
-      gap: 20px;
-      align-items: center;
-      padding: 16px 0;
-      border-top: 1px solid var(--border);
-      color: var(--text);
-      text-decoration: none;
-      transition: padding var(--transition);
-    }
-    .contact-row:last-child { border-bottom: 1px solid var(--border); }
-    .contact-row:hover { padding-left: 8px; }
-    .contact-row:hover .contact-arrow { opacity: 1; transform: translate(2px, -2px); }
-    .contact-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-soft);
-    }
-    .contact-value { font-size: 15px; color: var(--text); }
-    .contact-arrow { color: var(--text-soft); opacity: 0.5; transition: all var(--transition); }
-
-    /* Footer */
-    footer {
-      padding: 32px 0 48px;
-      border-top: 1px solid var(--border);
-      margin-top: 64px;
-    }
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      color: var(--text-soft);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .footer-inner a {
-      color: var(--text-soft);
-      text-decoration: none;
-      transition: color var(--transition);
-    }
-    .footer-inner a:hover { color: var(--text); }
-
-    @media (max-width: 720px) {
-      .container { padding: 0 20px; }
-      .nav-inner { padding: 12px 20px; }
-      .nav-links { gap: 18px; }
-      .nav-brand { font-size: 16px; }
-      .nav-links a { font-size: 13px; }
-      .hero h1 { font-size: clamp(34px, 9vw, 44px); }
-      .hero .tagline { font-size: 16px; }
-      .about p { font-size: 16px; }
-      .resume-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .stat { padding: 16px; }
-      .stat-value { font-size: 24px; }
-      .stat-label { font-size: 12px; }
-      .project { grid-template-columns: 44px 1fr 16px; gap: 12px; padding: 18px 0; }
-      .project-main h3 { font-size: 18px; }
-      .project-main p { font-size: 13px; }
-      .contact-row { grid-template-columns: 72px 1fr auto; padding: 14px 0; }
-      .contact-value { font-size: 14px; }
-      section { padding: 56px 0 32px; }
-      section:first-of-type { padding-top: 56px; }
-      footer { margin-top: 48px; padding: 28px 0 36px; }
-      .footer-inner { font-size: 12px; }
-      .modal-overlay { padding: 16px; }
-      .modal-body { padding: 22px; }
-      .modal h3 { font-size: 22px; }
-      .modal-desc { font-size: 14px; }
-      .resume-actions { flex-direction: column; align-items: stretch; }
-      .btn { justify-content: center; }
-    }
-
-    @media (max-width: 460px) {
-      .nav-links a:nth-child(4) { display: none; }
-      .resume-grid { grid-template-columns: 1fr; }
-      .footer-inner { flex-direction: column; gap: 6px; align-items: flex-start; }
-    }
-
-    @media (hover: none) {
-      .project:hover, .contact-row:hover { padding-left: 0; }
-      .project:hover .project-arrow,
-      .contact-row:hover .contact-arrow { transform: none; }
-    }
-
-    /* Modal */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: color-mix(in srgb, var(--bg) 70%, transparent);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 24px;
+    .speedlines { position: absolute; bottom: 104px; right: 0; left: 0; height: 180px; z-index: 2; pointer-events: none; }
+    .sline {
+      position: absolute; height: 3px; border-radius: 3px;
+      background: linear-gradient(90deg, transparent, var(--yellow));
       opacity: 0;
-      visibility: hidden;
+      animation: shoot 1.5s ease-in infinite;
+    }
+    .sline.red { background: linear-gradient(90deg, transparent, var(--red-hot)); }
+    @keyframes shoot {
+      0% { transform: translateX(60vw); opacity: 0; }
+      15% { opacity: 0.85; }
+      60% { transform: translateX(-50vw); opacity: 0; }
+      100% { transform: translateX(-50vw); opacity: 0; }
+    }
+
+    .scroll-hint {
+      position: absolute; left: 50%; bottom: 126px; transform: translateX(-50%);
+      z-index: 4; color: var(--soft); font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      pointer-events: none;
+    }
+    .scroll-hint::after {
+      content: ''; width: 1px; height: 30px;
+      background: linear-gradient(var(--red), transparent);
+      animation: hint-drop 1.6s ease-in-out infinite;
+    }
+    @keyframes hint-drop { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+    /* ============ MARQUEE ============ */
+    .marquee {
+      background: var(--yellow);
+      border-top: 3px solid #0c0c0f; border-bottom: 3px solid #0c0c0f;
+      overflow: hidden; white-space: nowrap;
+      transform: rotate(-1.2deg) scale(1.02);
+      margin: -2px 0 20px;
+      position: relative; z-index: 5;
+    }
+    .marquee-inner {
+      display: inline-block; padding: 12px 0;
+      animation: marquee 26s linear infinite;
+    }
+    .marquee:hover .marquee-inner { animation-play-state: paused; }
+    .marquee span {
+      font-family: var(--font-display); font-style: italic;
+      font-size: 17px; letter-spacing: 0.05em; text-transform: uppercase;
+      color: #101013; padding: 0 14px;
+    }
+    .marquee .sep { color: var(--red); }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    /* ============ REVEAL ANIMATIONS ============ */
+    html.js .rv { opacity: 0; transform: translateY(28px); transition: opacity 700ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1); transition-delay: var(--d, 0ms); }
+    html.js .rv-left { transform: translateX(-40px); }
+    html.js .rv-right { transform: translateX(40px); }
+    html.js .rv-zoom { transform: scale(0.9); }
+    html.js .rv.in { opacity: 1; transform: none; }
+
+    /* ============ DRIVER PROFILE (ABOUT) ============ */
+    .about-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 48px; align-items: start; }
+    .about-copy p { font-size: 17px; color: var(--muted); font-weight: 300; margin-bottom: 18px; max-width: 560px; }
+    .about-copy p strong { color: var(--white); font-weight: 600; }
+    .about-copy p .hl { color: var(--yellow); font-weight: 600; }
+
+    .license {
+      background: linear-gradient(150deg, var(--panel-2), var(--panel));
+      border: 1px solid var(--line); border-radius: var(--radius);
+      overflow: hidden; position: relative;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    }
+    .license::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+      background: repeating-conic-gradient(#e9e6df 0% 25%, #101013 0% 50%) 0 0 / 16px 16px;
+    }
+    .license-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 22px 14px; border-bottom: 1px dashed var(--line);
+    }
+    .license-head .lt { font-family: var(--font-display); font-style: italic; font-size: 19px; letter-spacing: 0.04em; color: var(--white); text-transform: uppercase; }
+    .license-head .lt .accent { color: var(--red); }
+    .license-head svg { width: 26px; height: 26px; }
+    .license-body { padding: 18px 22px 22px; display: grid; gap: 11px; }
+    .lrow { display: grid; grid-template-columns: 108px 1fr; gap: 12px; font-family: var(--font-mono); font-size: 13px; }
+    .lrow dt { color: var(--soft); letter-spacing: 0.1em; text-transform: uppercase; font-size: 11px; padding-top: 1px; }
+    .lrow dd { color: var(--white); }
+    .lrow dd .status { display: inline-flex; align-items: center; gap: 8px; color: #4ade80; }
+    .lrow dd .status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 10px #4ade80; animation: pulse-dot 1.6s ease-in-out infinite; }
+    @keyframes pulse-dot { 50% { opacity: 0.4; } }
+    .license-bar {
+      margin: 8px 22px 22px; height: 34px; border-radius: 6px;
+      background: repeating-linear-gradient(90deg, #2c2c34 0 3px, transparent 3px 7px, #2c2c34 7px 8px, transparent 8px 13px);
+      opacity: 0.7;
+    }
+
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 52px; }
+    .stat {
+      background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 22px 20px 18px; position: relative; overflow: hidden;
+      transition: transform var(--t), border-color var(--t), box-shadow var(--t);
+    }
+    .stat:hover { transform: translateY(-4px); border-color: var(--red); box-shadow: 0 14px 40px rgba(232,52,44,0.18); }
+    .stat::after {
+      content: ''; position: absolute; left: 0; bottom: 0; height: 3px; width: 100%;
+      background: linear-gradient(90deg, var(--red), var(--yellow));
+      transform: scaleX(0); transform-origin: left; transition: transform 600ms ease;
+    }
+    .stat:hover::after { transform: scaleX(1); }
+    .stat-value {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(30px, 3.6vw, 42px); color: var(--yellow); line-height: 1;
+      margin-bottom: 8px; letter-spacing: 0.02em;
+    }
+    .stat-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--soft); line-height: 1.5; }
+
+    /* ============ GARAGE (PROJECTS) ============ */
+    .garage-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .build {
+      background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 26px 24px 22px; cursor: pointer; position: relative; overflow: hidden;
+      transition: border-color var(--t), box-shadow var(--t);
+      transform-style: preserve-3d; will-change: transform;
+    }
+    .build:hover { border-color: var(--red); box-shadow: 0 24px 60px rgba(232, 52, 44, 0.22); }
+    .build::before {
+      content: attr(data-num);
+      position: absolute; top: -18px; right: 2px;
+      font-family: var(--font-display); font-style: italic; font-size: 88px;
+      color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.09);
+      transition: -webkit-text-stroke-color var(--t);
+      pointer-events: none;
+    }
+    .build:hover::before { -webkit-text-stroke-color: rgba(255, 194, 26, 0.4); }
+    .build-year { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--red-hot); margin-bottom: 14px; }
+    .build h3 { font-family: var(--font-display); font-style: italic; font-size: 22px; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 10px; }
+    .build p { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.6; margin-bottom: 16px; min-height: 66px; }
+    .build-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 16px; }
+    .tag {
+      font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+      color: var(--yellow); background: rgba(255, 194, 26, 0.07);
+      border: 1px solid rgba(255, 194, 26, 0.25);
+      padding: 3px 9px; border-radius: 4px;
+    }
+    .build-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--white);
+    }
+    .build-cta .arr { color: var(--red-hot); transition: transform var(--t); }
+    .build:hover .build-cta .arr { transform: translateX(5px); }
+
+    /* ============ TIMELINE (EDUCATION) ============ */
+    .timeline { position: relative; padding-left: 46px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 14px; top: 6px; bottom: 6px; width: 3px;
+      background: var(--line); border-radius: 3px;
+    }
+    .timeline-progress {
+      position: absolute; left: 14px; top: 6px; bottom: 6px; width: 3px;
+      background: linear-gradient(var(--red), var(--yellow));
+      border-radius: 3px; transform-origin: top; transform: scaleY(0);
+      box-shadow: 0 0 12px rgba(232, 52, 44, 0.6);
+    }
+    .lap { position: relative; padding: 6px 0 42px; }
+    .lap:last-child { padding-bottom: 6px; }
+    .lap::before {
+      content: ''; position: absolute; left: -39px; top: 12px;
+      width: 15px; height: 15px; border-radius: 50%;
+      background: var(--asphalt); border: 3px solid var(--red);
+      box-shadow: 0 0 0 4px rgba(232, 52, 44, 0.15);
+    }
+    .lap-tag { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.24em; color: var(--yellow); text-transform: uppercase; margin-bottom: 8px; }
+    .lap-head { display: flex; justify-content: space-between; gap: 18px; align-items: baseline; flex-wrap: wrap; }
+    .lap h3 { font-family: var(--font-display); font-style: italic; font-size: 24px; text-transform: uppercase; letter-spacing: 0.02em; }
+    .lap-role { font-size: 14.5px; color: var(--muted); font-style: italic; margin-top: 3px; }
+    .lap-meta { font-family: var(--font-mono); font-size: 12px; color: var(--soft); text-align: right; white-space: nowrap; }
+    .lap-bullets { list-style: none; margin-top: 12px; }
+    .lap-bullets li { position: relative; padding-left: 22px; font-size: 14.5px; font-weight: 300; color: var(--muted); margin-bottom: 7px; line-height: 1.6; }
+    .lap-bullets li::before { content: '»'; position: absolute; left: 2px; top: 0; color: var(--red-hot); font-weight: 700; }
+
+    /* ============ ENTRIES (LEADERSHIP) — reuse lap list without rail ============ */
+    .crew-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .crew {
+      background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--red);
+      border-radius: 10px; padding: 24px 24px 20px;
+      transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+    }
+    .crew:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(0,0,0,0.45); border-color: var(--red); }
+    .crew-head { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 4px; }
+    .crew h3 { font-family: var(--font-display); font-style: italic; font-size: 19px; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.25; }
+    .crew-meta { font-family: var(--font-mono); font-size: 11px; color: var(--soft); text-align: right; white-space: nowrap; line-height: 1.7; }
+    .crew-role { color: var(--yellow); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+    .crew ul { list-style: none; }
+    .crew li { position: relative; padding-left: 20px; font-size: 14px; font-weight: 300; color: var(--muted); margin-bottom: 7px; line-height: 1.6; }
+    .crew li::before { content: '»'; position: absolute; left: 0; color: var(--red-hot); font-weight: 700; }
+
+    /* ============ TROPHY CASE (AWARDS) ============ */
+    .trophies { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .trophy {
+      display: grid; grid-template-columns: 64px 1fr; gap: 20px; align-items: start;
+      background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 24px;
+      transition: transform var(--t), border-color var(--t), box-shadow var(--t);
+    }
+    .trophy:hover { transform: translateY(-4px) rotate(-0.4deg); border-color: rgba(255, 194, 26, 0.6); box-shadow: 0 18px 44px rgba(255, 194, 26, 0.12); }
+    .trophy-icon {
+      width: 64px; height: 64px; border-radius: 12px; flex: none;
+      background: rgba(255, 194, 26, 0.06); border: 1px solid rgba(255, 194, 26, 0.25);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .trophy-icon svg { width: 36px; height: 36px; }
+    .trophy h3 { font-size: 16.5px; font-weight: 600; line-height: 1.4; margin-bottom: 6px; }
+    .trophy p { font-size: 13.5px; font-weight: 300; color: var(--muted); line-height: 1.6; }
+    .trophy .ty { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; color: var(--red-hot); margin-bottom: 6px; }
+
+    /* ============ RACE LOG (ACTIVITIES) ============ */
+    .log { display: flex; flex-direction: column; }
+    .log-row {
+      display: grid; grid-template-columns: 26px 1fr auto auto; gap: 16px; align-items: baseline;
+      padding: 15px 6px; border-top: 1px solid var(--line-soft);
+      transition: background var(--t), padding-left var(--t);
+    }
+    .log-row:last-child { border-bottom: 1px solid var(--line-soft); }
+    .log-row:hover { background: rgba(255,255,255,0.02); padding-left: 14px; }
+    .log-flag { font-size: 13px; }
+    .log-role { font-weight: 600; font-size: 15px; }
+    .log-org { color: var(--muted); font-weight: 300; font-size: 14px; text-align: right; }
+    .log-date { font-family: var(--font-mono); font-size: 11.5px; color: var(--soft); white-space: nowrap; }
+
+    /* ============ TELEMETRY (SKILLS) ============ */
+    .telemetry-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: start; }
+    .gauge { margin-bottom: 20px; }
+    .gauge-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .gauge-name { font-family: var(--font-mono); font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .gauge-val { font-family: var(--font-mono); font-size: 11px; color: var(--yellow); }
+    .gauge-track { height: 9px; background: #1c1c23; border-radius: 99px; overflow: hidden; border: 1px solid var(--line-soft); }
+    .gauge-fill {
+      height: 100%; width: 0%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--red-dark), var(--red) 65%, var(--yellow));
+      box-shadow: 0 0 12px rgba(232, 52, 44, 0.5);
+      transition: width 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+      transition-delay: var(--d, 0ms);
+    }
+    .pit-note { font-family: var(--font-mono); font-size: 11px; color: var(--soft); margin-top: 14px; letter-spacing: 0.06em; }
+    .kit h4 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--red-hot); margin: 26px 0 14px; }
+    .kit h4:first-child { margin-top: 4px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 9px; }
+    .pill {
+      font-size: 13px; font-weight: 400; color: var(--muted);
+      border: 1px solid var(--line); border-radius: 999px; padding: 7px 15px;
+      background: rgba(255,255,255,0.02); transition: all var(--t); cursor: default;
+    }
+    .pill:hover { border-color: var(--yellow); color: var(--yellow); transform: translateY(-2px); }
+    .resume-actions { margin-top: 34px; }
+
+    /* ============ CONTACT ============ */
+    .contact-wrap { max-width: 760px; }
+    .contact-list { display: flex; flex-direction: column; margin-bottom: 42px; }
+    .contact-row {
+      display: grid; grid-template-columns: 110px 1fr auto; gap: 20px; align-items: center;
+      padding: 18px 8px; border-top: 1px solid var(--line-soft);
+      color: var(--white); text-decoration: none;
+      transition: background var(--t), padding-left var(--t);
+    }
+    .contact-row:last-child { border-bottom: 1px solid var(--line-soft); }
+    .contact-row:hover { background: rgba(232, 52, 44, 0.05); padding-left: 18px; }
+    .contact-row:hover .contact-arrow { opacity: 1; transform: translate(3px, -3px); color: var(--yellow); }
+    .contact-label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red-hot); }
+    .contact-value { font-size: 15.5px; }
+    .contact-arrow { color: var(--soft); opacity: 0.6; transition: all var(--t); }
+    .contact-cta { text-align: center; padding: 20px 0 10px; }
+    .contact-cta .big {
+      display: block; font-family: var(--font-display); font-style: italic;
+      font-size: clamp(30px, 5vw, 48px); text-transform: uppercase; margin-bottom: 24px;
+    }
+    .contact-cta .big em { font-style: italic; color: var(--red); }
+
+    /* ============ FOOTER ============ */
+    footer { margin-top: 90px; }
+    .finish-line { height: 26px; background: repeating-conic-gradient(#e9e6df 0% 25%, #101013 0% 50%) 0 0 / 26px 26px; border-top: 3px solid #000; border-bottom: 3px solid #000; }
+    .footer-inner {
+      max-width: var(--max); margin: 0 auto; padding: 30px 24px 44px;
+      display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap;
+      font-family: var(--font-mono); font-size: 12px; color: var(--soft);
+    }
+    .footer-inner .kc { color: var(--yellow); font-style: italic; font-weight: 700; }
+
+    /* ============ MODAL ============ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 250;
+      background: rgba(8, 8, 10, 0.7);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      opacity: 0; visibility: hidden;
       transition: opacity 220ms ease, visibility 0s linear 220ms;
     }
-    .modal-overlay.open {
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 220ms ease, visibility 0s linear 0s;
-    }
+    .modal-overlay.open { opacity: 1; visibility: visible; transition: opacity 220ms ease, visibility 0s linear 0s; }
     .modal {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      max-width: 560px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      transform: translateY(12px) scale(0.98);
-      transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+      background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+      max-width: 580px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative;
+      transform: translateY(16px) scale(0.97);
+      transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 40px 120px rgba(0,0,0,0.7);
     }
     .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-checker { height: 10px; background: repeating-conic-gradient(#e9e6df 0% 25%, #101013 0% 50%) 0 0 / 20px 20px; }
     .modal-close {
-      position: absolute;
-      top: 16px; right: 16px;
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all var(--transition);
-      z-index: 2;
+      position: absolute; top: 20px; right: 16px; width: 34px; height: 34px; border-radius: 50%;
+      border: 1px solid var(--line); background: var(--asphalt); color: var(--muted);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all var(--t); z-index: 2;
     }
-    .modal-close:hover { color: var(--text); border-color: var(--text-soft); }
+    .modal-close:hover { color: var(--white); border-color: var(--red); transform: rotate(90deg); }
     .modal-close svg { width: 14px; height: 14px; }
     .modal-image {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background-size: cover;
-      background-position: center;
-      background-color: var(--bg-elev);
-      border-bottom: 1px solid var(--border);
+      width: 100%; aspect-ratio: 16 / 9;
+      background-size: cover; background-position: center; background-color: var(--asphalt-2);
+      border-bottom: 1px solid var(--line);
     }
     .modal-image.contain { background-size: contain; background-repeat: no-repeat; }
     .modal-body { padding: 28px; }
-    .modal-year {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 10px;
-    }
-    .modal h3 {
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
-      font-size: 26px;
-      letter-spacing: -0.01em;
-      margin-bottom: 14px;
-    }
+    .modal-year { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.24em; color: var(--red-hot); text-transform: uppercase; margin-bottom: 10px; }
+    .modal h3 { font-family: var(--font-display); font-style: italic; font-size: 27px; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 14px; }
     .modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-    .modal-desc {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 22px;
-    }
-    .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .modal-desc { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.65; margin-bottom: 24px; }
+    .modal-actions { display: flex; gap: 18px; flex-wrap: wrap; }
 
-    /* Reveal animation */
-    .reveal { opacity: 0; transform: translateY(8px); transition: opacity 600ms ease, transform 600ms ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* ============ KA-CHOW EASTER EGG ============ */
+    #kachow {
+      position: fixed; inset: 0; z-index: 400; pointer-events: none;
+      display: none; align-items: center; justify-content: center; overflow: hidden;
+    }
+    #kachow.zap { display: flex; }
+    #kachow .flash {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 194, 26, 0.5), rgba(232, 52, 44, 0.25) 45%, transparent 75%);
+      animation: kc-flash 850ms ease-out forwards;
+    }
+    #kachow .word {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(64px, 14vw, 190px); letter-spacing: 0.02em;
+      color: var(--yellow); text-shadow: 6px 6px 0 var(--red), 12px 12px 40px rgba(0,0,0,0.6);
+      transform: skewX(-8deg);
+      animation: kc-word 850ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    #kachow .dash-car { position: absolute; bottom: 12vh; left: 0; width: 220px; animation: kc-dash 850ms cubic-bezier(0.5, 0, 0.8, 1) forwards; }
+    @keyframes kc-flash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes kc-word { 0% { opacity: 0; transform: scale(0.3) skewX(-8deg); } 18% { opacity: 1; transform: scale(1.08) skewX(-8deg); } 30% { transform: scale(1) skewX(-8deg); } 78% { opacity: 1; } 100% { opacity: 0; transform: scale(1.05) skewX(-8deg); } }
+    @keyframes kc-dash { 0% { transform: translateX(-260px); } 100% { transform: translateX(110vw); } }
+    body.shake { animation: shake 320ms ease; }
+    @keyframes shake { 0%, 100% { transform: translate(0); } 20% { transform: translate(-5px, 2px); } 40% { transform: translate(5px, -2px); } 60% { transform: translate(-4px, -1px); } 80% { transform: translate(3px, 1px); } }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 900px) {
+      .about-grid, .telemetry-grid { grid-template-columns: 1fr; gap: 36px; }
+      .garage-grid { grid-template-columns: 1fr 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .crew-grid, .trophies { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 680px) {
+      section { padding: 76px 0 26px; }
+      .hero { padding-top: 104px; }
+      .hero-car { width: min(380px, 80vw); bottom: 74px; }
+      .hero-road { height: 100px; }
+      .scroll-hint { display: none; }
+      .garage-grid { grid-template-columns: 1fr; }
+      .build p { min-height: 0; }
+      .log-row { grid-template-columns: 20px 1fr auto; }
+      .log-org { display: none; }
+      .contact-row { grid-template-columns: 84px 1fr auto; }
+      .hero-ctas .btn { width: 100%; justify-content: center; }
+      .nav-links a { padding: 6px 7px; font-size: 11.5px; }
+      .lap-meta { text-align: left; }
+      .modal-body { padding: 22px; }
+    }
+    @media (hover: none) {
+      .log-row:hover, .contact-row:hover { padding-left: 6px; }
+    }
+
+    /* ============ REDUCED MOTION ============ */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      html.js .rv, html.js .hero h1 .l { opacity: 1; transform: none; animation: none; }
+      #preloader { display: none; }
+    }
   </style>
 </head>
-<body data-theme="light">
-  <nav class="top">
+<body>
+
+  <!-- ==================== SVG DEFS (shared car symbol) ==================== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="carBody" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff5147"/>
+        <stop offset="0.5" stop-color="#e8342c"/>
+        <stop offset="1" stop-color="#b31313"/>
+      </linearGradient>
+      <linearGradient id="goldCup" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffd75e"/>
+        <stop offset="1" stop-color="#d99a00"/>
+      </linearGradient>
+      <clipPath id="glassClip">
+        <path d="M128 40 C150 31 176 33 196 46 L184 64 C166 53 148 52 133 57 Z"/>
+      </clipPath>
+
+      <!-- Original cartoon race car (side view, facing right) -->
+      <g id="mcqueen">
+        <!-- ground shadow -->
+        <ellipse cx="180" cy="128" rx="150" ry="9" fill="#000" opacity="0.4"/>
+        <g class="car-bob">
+          <!-- spoiler -->
+          <path d="M16 58 L56 50 L60 61 L24 69 Z" fill="#a01212" stroke="#7e0e0e" stroke-width="2"/>
+          <path d="M34 66 L44 64 L46 76 L36 78 Z" fill="#8c0f0f"/>
+          <!-- body -->
+          <path d="M22 103 C14 90 18 76 36 72 L54 68 C64 44 90 33 122 31 C152 29 178 35 198 46 C234 52 282 60 316 76 C334 84 342 93 338 101 L330 106 L303 106 A32 32 0 0 0 239 106 L126 106 A32 32 0 0 0 62 106 L34 106 C27 106 23 105 22 103 Z"
+                fill="url(#carBody)" stroke="#7e0e0e" stroke-width="3" stroke-linejoin="round"/>
+          <!-- hood highlight -->
+          <path d="M204 50 C240 56 282 64 310 77 C296 74 246 64 206 58 Z" fill="#ffffff" opacity="0.14"/>
+          <!-- rear quarter window -->
+          <path d="M102 42 C110 36 118 34 124 35 L120 56 C113 54 106 51 102 49 Z" fill="#1c2a36" stroke="#7e0e0e" stroke-width="2"/>
+          <!-- windshield glass -->
+          <path d="M128 40 C150 31 176 33 196 46 L184 64 C166 53 148 52 133 57 Z" fill="#22323f" stroke="#7e0e0e" stroke-width="2.5"/>
+          <!-- eyes on the windshield -->
+          <g clip-path="url(#glassClip)">
+            <ellipse cx="152" cy="48" rx="10" ry="11.5" fill="#f6f9fb" transform="rotate(-8 152 48)"/>
+            <ellipse cx="176" cy="52" rx="10" ry="11.5" fill="#f6f9fb" transform="rotate(-8 176 52)"/>
+            <circle cx="155" cy="49" r="4.4" fill="#2b6bb5"/>
+            <circle cx="179" cy="53" r="4.4" fill="#2b6bb5"/>
+            <circle cx="156.5" cy="47.6" r="1.7" fill="#0e1620"/>
+            <circle cx="180.5" cy="51.6" r="1.7" fill="#0e1620"/>
+            <circle cx="153.4" cy="46" r="1.2" fill="#fff"/>
+            <circle cx="177.4" cy="50" r="1.2" fill="#fff"/>
+            <!-- confident half-lids -->
+            <path d="M140 34 L166 36 L165 43 L140 42 Z" fill="#22323f" transform="rotate(-8 152 40)"/>
+            <path d="M165 38 L190 42 L188 48 L164 45 Z" fill="#22323f" transform="rotate(-8 176 44)"/>
+            <!-- blink -->
+            <rect class="car-blink" x="138" y="34" width="30" height="26" fill="#22323f"/>
+            <rect class="car-blink" x="163" y="38" width="30" height="26" fill="#22323f"/>
+          </g>
+          <!-- number roundel -->
+          <circle cx="143" cy="80" r="20" fill="#f6f3ec" stroke="#7e0e0e" stroke-width="3"/>
+          <text x="143" y="81.5" text-anchor="middle" dominant-baseline="central"
+                font-family="'Racing Sans One', 'Arial Black', sans-serif" font-style="italic"
+                font-size="23" fill="#b31313" transform="skewX(-4)">95</text>
+          <!-- lightning decal -->
+          <path d="M262 58 L210 80 L228 83 L196 102 L256 78 L236 75 Z"
+                fill="#ffc21a" stroke="#d99a00" stroke-width="2" stroke-linejoin="round"/>
+          <!-- headlight sticker -->
+          <rect x="312" y="72" width="17" height="9" rx="4" fill="#fff3c4" opacity="0.9" transform="rotate(14 320 76)"/>
+          <!-- smile -->
+          <path d="M300 92 Q319 99 333 91" fill="none" stroke="#7e0e0e" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- front splitter -->
+          <path d="M236 104 L330 104 L324 112 L244 112 Z" fill="#141418"/>
+        </g>
+        <!-- wheels -->
+        <g>
+          <circle cx="94" cy="104" r="25" fill="#141419" stroke="#050507" stroke-width="5"/>
+          <g class="wheel-spin">
+            <circle cx="94" cy="104" r="12.5" fill="#23232a" stroke="#e8342c" stroke-width="2"/>
+            <line x1="94" y1="93.5" x2="94" y2="114.5" stroke="#9a9aa4" stroke-width="2.4"/>
+            <line x1="84.9" y1="98.75" x2="103.1" y2="109.25" stroke="#9a9aa4" stroke-width="2.4"/>
+            <line x1="84.9" y1="109.25" x2="103.1" y2="98.75" stroke="#9a9aa4" stroke-width="2.4"/>
+            <circle cx="94" cy="104" r="4.2" fill="#ffc21a"/>
+          </g>
+        </g>
+        <g>
+          <circle cx="271" cy="104" r="25" fill="#141419" stroke="#050507" stroke-width="5"/>
+          <g class="wheel-spin">
+            <circle cx="271" cy="104" r="12.5" fill="#23232a" stroke="#e8342c" stroke-width="2"/>
+            <line x1="271" y1="93.5" x2="271" y2="114.5" stroke="#9a9aa4" stroke-width="2.4"/>
+            <line x1="261.9" y1="98.75" x2="280.1" y2="109.25" stroke="#9a9aa4" stroke-width="2.4"/>
+            <line x1="261.9" y1="109.25" x2="280.1" y2="98.75" stroke="#9a9aa4" stroke-width="2.4"/>
+            <circle cx="271" cy="104" r="4.2" fill="#ffc21a"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- mini car for the progress bar -->
+      <g id="minicar">
+        <path d="M2 13 C2 9 5 7 10 6.5 L14 6 C16 2.5 21 1 26 1 C31 1 35 3 37 5.5 C40 6.5 43 8 44 10.5 C44.6 12 44 13 42 13.5 L4 13.5 C3 13.5 2 13.4 2 13 Z" fill="#e8342c" stroke="#7e0e0e" stroke-width="1.2"/>
+        <path d="M17 5.5 C20 3.5 25 3.2 28 5 L26.5 8 C23.5 6.6 20.5 6.8 18.5 7.6 Z" fill="#22323f"/>
+        <path d="M34 6 L26 9.5 L29.5 10 L24 13 L33 9.6 L30 9 Z" fill="#ffc21a"/>
+        <circle cx="12" cy="14" r="4" fill="#141419" stroke="#000" stroke-width="1"/>
+        <circle cx="12" cy="14" r="1.6" fill="#ffc21a"/>
+        <circle cx="34" cy="14" r="4" fill="#141419" stroke="#000" stroke-width="1"/>
+        <circle cx="34" cy="14" r="1.6" fill="#ffc21a"/>
+      </g>
+
+      <!-- lightning bolt icon -->
+      <g id="bolt">
+        <path d="M13 1 L3 13.5 L9 14 L7 23 L21 9.5 L13.5 9 L17 1 Z" fill="#ffc21a" stroke="#d99a00" stroke-width="1.2" stroke-linejoin="round"/>
+      </g>
+
+      <!-- trophy icon -->
+      <g id="trophy">
+        <path d="M10 4 H26 V8 C26 15 22.5 19.5 18 19.5 C13.5 19.5 10 15 10 8 Z" fill="url(#goldCup)" stroke="#a97a00" stroke-width="1.4"/>
+        <path d="M10 6 H5 C5 12 7 14.5 11 15" fill="none" stroke="#a97a00" stroke-width="2"/>
+        <path d="M26 6 H31 C31 12 29 14.5 25 15" fill="none" stroke="#a97a00" stroke-width="2"/>
+        <rect x="16" y="19.5" width="4" height="5" fill="#d99a00"/>
+        <path d="M11 27 H25 L26.5 31 H9.5 Z" fill="url(#goldCup)" stroke="#a97a00" stroke-width="1.4"/>
+        <path d="M18 7 L19.2 10 L22.3 10.2 L20 12.2 L20.8 15.2 L18 13.5 L15.2 15.2 L16 12.2 L13.7 10.2 L16.8 10 Z" fill="#fff3c4"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- ==================== PRELOADER ==================== -->
+  <div id="preloader" aria-hidden="true">
+    <div class="pl-lights">
+      <div class="pl-light"></div>
+      <div class="pl-light"></div>
+      <div class="pl-light"></div>
+      <div class="pl-light"></div>
+      <div class="pl-light"></div>
+    </div>
+    <div class="pl-word" id="pl-word">KA-CHOW!</div>
+    <div class="pl-sub">Lights out&hellip; and away we go</div>
+  </div>
+  <noscript><style>#preloader { display: none; }</style></noscript>
+
+  <!-- ==================== SCROLL PROGRESS ==================== -->
+  <div id="track" aria-hidden="true">
+    <div id="track-fill"></div>
+    <div id="track-finish"></div>
+  </div>
+  <svg id="track-car" viewBox="0 0 46 19" aria-hidden="true"><use href="#minicar"/></svg>
+
+  <!-- ==================== NAV ==================== -->
+  <nav class="top" id="nav">
     <div class="nav-inner">
-      <a href="#" class="nav-brand">Henry Zisow</a>
+      <a href="#" class="nav-brand">
+        <svg viewBox="0 0 24 24"><use href="#bolt"/></svg>
+        HENRY&nbsp;<span class="n95">№95</span>
+      </a>
       <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#education">Resume</a>
-        <a href="#contact">Contact</a>
+        <a href="#about" data-spy="about">Driver</a>
+        <a href="#projects" data-spy="projects">Garage</a>
+        <a href="#education" data-spy="education">Circuit</a>
+        <a href="#leadership" data-spy="leadership">Pit Crew</a>
+        <a href="#awards" data-spy="awards">Trophies</a>
+        <a href="#skills" data-spy="skills">Telemetry</a>
+        <a href="#contact" data-spy="contact">Radio</a>
       </div>
-      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      </button>
     </div>
   </nav>
 
+  <!-- ==================== HERO ==================== -->
+  <header class="hero" id="top">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-95" data-para="0.18" aria-hidden="true">95</div>
+
+    <div class="container hero-content">
+      <div class="hero-kicker">
+        <svg class="bolt" viewBox="0 0 24 24"><use href="#bolt"/></svg>
+        № 95 &middot; Boston, MA &middot; Built for speed
+      </div>
+      <h1 id="hero-title" aria-label="Henry Zisow">
+        <span class="row row-1" data-text="HENRY"></span>
+        <span class="row row-2" data-text="ZISOW"></span>
+      </h1>
+      <div class="hero-strip"><span>Builder &bull; Student &bull; Leader</span></div>
+      <p class="tagline">
+        Junior at <strong>Gann Academy</strong> and <strong>Massachusetts DECA State Co-President</strong>.
+        I build software at full throttle, compete in business, and never lift off the gas.
+        <strong>Speed? I've got it.</strong>
+      </p>
+      <div class="hero-chips">
+        <span class="chip">&#127937; ICDC Qualifier</span>
+        <span class="chip">&#9889; Top 5 at States</span>
+        <span class="chip">&#128736;&#65039; 3 Builds in the Garage</span>
+        <span class="chip">&#128205; Boston, MA</span>
+      </div>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#projects"><span>Enter the Garage</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </a>
+        <a class="btn" href="Henry Zisow Resume.pdf" download="Henry Zisow Resume.pdf"><span>Pit Pass / Resume</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="speedlines" aria-hidden="true">
+      <div class="sline" style="top: 18%; right: 6%; width: 130px; animation-delay: 0s;"></div>
+      <div class="sline red" style="top: 42%; right: 12%; width: 90px; animation-delay: 0.5s;"></div>
+      <div class="sline" style="top: 64%; right: 3%; width: 160px; animation-delay: 0.9s;"></div>
+      <div class="sline red" style="top: 84%; right: 18%; width: 70px; animation-delay: 1.2s;"></div>
+    </div>
+
+    <div class="scroll-hint">Scroll</div>
+
+    <svg class="hero-car" id="hero-car" viewBox="0 0 360 140" role="img" aria-label="Cartoon red race car number 95 — click for a surprise" title="Ka-chow!">
+      <use href="#mcqueen"/>
+    </svg>
+    <div class="hero-road" aria-hidden="true"></div>
+  </header>
+
+  <!-- ==================== MARQUEE ==================== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-inner" id="marquee-inner">
+      <span>Mass DECA State Co-President</span><span class="sep">&#9889;</span>
+      <span>ICDC Qualifier</span><span class="sep">&#9889;</span>
+      <span>Top 5 at States</span><span class="sep">&#9889;</span>
+      <span>Builder</span><span class="sep">&#9889;</span>
+      <span>GPA 4.4</span><span class="sep">&#9889;</span>
+      <span>Ka-chow!</span><span class="sep">&#9889;</span>
+      <span>Boston, MA</span><span class="sep">&#9889;</span>
+    </div>
+  </div>
+
   <main class="container">
-    <section class="hero">
-      <h1>Henry Zisow<br/><em>builder</em>, student, and leader.</h1>
-      <p class="tagline">Junior at Gann Academy, Massachusetts DECA State Co-President, builds things with code, competes in business.</p>
-      <div class="meta">
-        <span>Boston, MA</span>
+
+    <!-- ==================== DRIVER PROFILE (ABOUT) ==================== -->
+    <section id="about">
+      <div class="flag-label rv">Lap 01 &mdash; Driver Profile</div>
+      <h2 class="sec-title rv">Meet the <span class="accent">Driver</span></h2>
+      <p class="sec-sub rv">One driver. One dream. A whole lot of horsepower.</p>
+
+      <div class="about-grid">
+        <div class="about-copy">
+          <p class="rv">I'm a high school junior who <strong>builds software for fun</strong> — and like any good racer, I care about one thing: going from idea to finish line, fast. I spend my time prototyping with code, competing in DECA, and serving as a <span class="hl">Massachusetts DECA State Co-President</span>.</p>
+          <p class="rv" style="--d: 100ms">Recently I've been in the garage working on automation tools, small games, and utilities. This season I <strong>qualified for ICDC</strong> in Principles of Finance and placed <strong>Top 5 at States</strong> — podium finishes, no pit stops.</p>
+          <p class="rv" style="--d: 200ms">Off the track you'll find me on the golf course, on the basketball court, or behind a DJ deck. Everything else? Full send.</p>
+        </div>
+
+        <aside class="license rv-right rv" aria-label="Racing license card">
+          <div class="license-head">
+            <div class="lt">Racing <span class="accent">License</span></div>
+            <svg viewBox="0 0 24 24"><use href="#bolt"/></svg>
+          </div>
+          <dl class="license-body">
+            <div class="lrow"><dt>Driver</dt><dd>HENRY ZISOW</dd></div>
+            <div class="lrow"><dt>Car №</dt><dd>95</dd></div>
+            <div class="lrow"><dt>Team</dt><dd>GANN ACADEMY &middot; '28</dd></div>
+            <div class="lrow"><dt>Division</dt><dd>MASS DECA &middot; STATE CO-PRES</dd></div>
+            <div class="lrow"><dt>Home Track</dt><dd>BOSTON, MA</dd></div>
+            <div class="lrow"><dt>Status</dt><dd><span class="status">RACE READY</span></dd></div>
+          </dl>
+          <div class="license-bar" aria-hidden="true"></div>
+        </aside>
+      </div>
+
+      <div class="stats">
+        <div class="stat rv"><div class="stat-value" data-count="4.4" data-decimals="1">0.0</div><div class="stat-label">Weighted GPA &mdash; top gear</div></div>
+        <div class="stat rv" style="--d: 80ms"><div class="stat-value" data-count="13000" data-suffix="+">0</div><div class="stat-label">Competitors represented statewide</div></div>
+        <div class="stat rv" style="--d: 160ms"><div class="stat-value" data-count="1000" data-suffix="+">0</div><div class="stat-label">Delegates who elected me co-president</div></div>
+        <div class="stat rv" style="--d: 240ms"><div class="stat-value" data-count="5" data-prefix="TOP ">TOP 0</div><div class="stat-label">Principles of Finance &mdash; States</div></div>
       </div>
     </section>
 
-    <section id="about" class="about">
-      <div class="section-label">About</div>
-      <p>I'm a high school sophomore who builds software for fun. I spend my time prototyping with code, competing in DECA, and serving as a Massachusetts DECA State Co-President.</p>
-      <p>Recently I've been working on automation tools, small games, and utilities. I qualified for ICDC this year in Principles of Finance and placed Top 5 at States.</p>
-    </section>
-
+    <!-- ==================== GARAGE (PROJECTS) ==================== -->
     <section id="projects">
-      <div class="section-label">Projects</div>
-      <div class="projects-list">
-        <div class="project" data-project="brusher-games">
-          <div class="project-year">2025</div>
-          <div class="project-main">
-            <h3>Brusher Games</h3>
-            <p>A web-based platform that organizes and tracks school-wide elimination-style games with targets, eliminations, and live standings.</p>
-            <div class="project-tags"><span class="tag">Claude</span><span class="tag">AI</span><span class="tag">Vibecoding</span></div>
-          </div>
-          <div class="project-arrow">↗</div>
-        </div>
-        <div class="project" data-project="ai-tiktok">
-          <div class="project-year">2025</div>
-          <div class="project-main">
-            <h3>AI TikTok Video Automation</h3>
-            <p>A fully automated AI TikTok video generator and uploader using N8N, UploadPost API, OpenRouter, and Airtable.</p>
-            <div class="project-tags"><span class="tag">N8N</span><span class="tag">OpenRouter</span><span class="tag">Automation</span></div>
-          </div>
-          <div class="project-arrow">↗</div>
-        </div>
-        <div class="project" data-project="sora-downloader">
-          <div class="project-year">2025</div>
-          <div class="project-main">
-            <h3>OpenAI Sora Bulk Downloader</h3>
-            <p>Manage and bulk-download Sora AI videos with prompts as filenames for easy organization.</p>
-            <div class="project-tags"><span class="tag">Sora</span><span class="tag">OpenAI</span><span class="tag">Replit</span></div>
-          </div>
-          <div class="project-arrow">↗</div>
-        </div>
+      <div class="flag-label rv">Lap 02 &mdash; The Garage</div>
+      <h2 class="sec-title rv">Custom <span class="accent">Builds</span></h2>
+      <p class="sec-sub rv">Every machine in here was built from scratch. Kick the tires — click any build for the full spec sheet.</p>
+
+      <div class="garage-grid">
+        <article class="build tilt rv" data-project="brusher-games" data-num="01" tabindex="0" role="button" aria-haspopup="dialog">
+          <div class="build-year">2025 &middot; Build 01</div>
+          <h3>Brusher Games</h3>
+          <p>A web platform that runs school-wide elimination games — targets, eliminations, and live standings, all tracked in real time.</p>
+          <div class="build-tags"><span class="tag">Claude</span><span class="tag">AI</span><span class="tag">Vibecoding</span></div>
+          <span class="build-cta">Open Spec Sheet <span class="arr">&rarr;</span></span>
+        </article>
+
+        <article class="build tilt rv" style="--d: 100ms" data-project="ai-tiktok" data-num="02" tabindex="0" role="button" aria-haspopup="dialog">
+          <div class="build-year">2025 &middot; Build 02</div>
+          <h3>AI TikTok Automation</h3>
+          <p>A fully automated AI TikTok video generator and uploader — N8N, UploadPost API, OpenRouter, and Airtable running laps on autopilot.</p>
+          <div class="build-tags"><span class="tag">N8N</span><span class="tag">OpenRouter</span><span class="tag">Automation</span></div>
+          <span class="build-cta">Open Spec Sheet <span class="arr">&rarr;</span></span>
+        </article>
+
+        <article class="build tilt rv" style="--d: 200ms" data-project="sora-downloader" data-num="03" tabindex="0" role="button" aria-haspopup="dialog">
+          <div class="build-year">2025 &middot; Build 03</div>
+          <h3>Sora Bulk Downloader</h3>
+          <p>Manage and bulk-download OpenAI Sora videos with prompts as filenames — pit-stop-fast organization for AI video.</p>
+          <div class="build-tags"><span class="tag">Sora</span><span class="tag">OpenAI</span><span class="tag">Replit</span></div>
+          <span class="build-cta">Open Spec Sheet <span class="arr">&rarr;</span></span>
+        </article>
       </div>
     </section>
 
+    <!-- ==================== TRAINING CIRCUIT (EDUCATION) ==================== -->
     <section id="education">
-      <div class="section-label">Education</div>
-      <div class="entries">
-        <div class="entry">
-          <div>
-            <div class="entry-title">Gann Academy</div>
-            <div class="entry-role">Class of 2028 · Weighted GPA 4.4</div>
+      <div class="flag-label rv">Lap 03 &mdash; Training Circuit</div>
+      <h2 class="sec-title rv">Education <span class="accent">Laps</span></h2>
+      <p class="sec-sub rv">Every champion runs practice laps. Here's the circuit so far.</p>
+
+      <div class="timeline" id="edu-timeline">
+        <div class="timeline-progress" id="timeline-progress" aria-hidden="true"></div>
+
+        <div class="lap rv">
+          <div class="lap-tag">Current Circuit</div>
+          <div class="lap-head">
+            <div>
+              <h3>Gann Academy</h3>
+              <div class="lap-role">Class of 2028 &middot; Weighted GPA 4.4</div>
+            </div>
+            <div class="lap-meta">Waltham, MA<br/>2025&ndash;Present</div>
           </div>
-          <div class="entry-meta">
-            <div>Waltham, MA</div>
-            <div>2025–Present</div>
-          </div>
-          <ul class="entry-bullets">
+          <ul class="lap-bullets">
             <li>Selected coursework: AP Calculus BC, AP Computer Science A, AP Chemistry, Linear Algebra, Advanced CS II: Data Analysis and AI with Python, Advanced Precalculus BC, AP US History, AP Literature.</li>
           </ul>
         </div>
-        <div class="entry">
-          <div>
-            <div class="entry-title">Milton Academy</div>
-            <div class="entry-role">Grade 9</div>
+
+        <div class="lap rv">
+          <div class="lap-tag">Lap 2</div>
+          <div class="lap-head">
+            <div>
+              <h3>Milton Academy</h3>
+              <div class="lap-role">Grade 9</div>
+            </div>
+            <div class="lap-meta">Milton, MA<br/>2024&ndash;2025</div>
           </div>
-          <div class="entry-meta">
-            <div>Milton, MA</div>
-            <div>2024–2025</div>
-          </div>
-          <ul class="entry-bullets">
+          <ul class="lap-bullets">
             <li>Member, Investment Club and Sports Analytics Club.</li>
           </ul>
         </div>
-        <div class="entry">
-          <div>
-            <div class="entry-title">The Rashi School</div>
-            <div class="entry-role">Grades K–8 · Class of 2024</div>
-          </div>
-          <div class="entry-meta">
-            <div>Dedham, MA</div>
-            <div>2015–2024</div>
+
+        <div class="lap rv">
+          <div class="lap-tag">Lap 1 &mdash; Where it started</div>
+          <div class="lap-head">
+            <div>
+              <h3>The Rashi School</h3>
+              <div class="lap-role">Grades K&ndash;8 &middot; Class of 2024</div>
+            </div>
+            <div class="lap-meta">Dedham, MA<br/>2015&ndash;2024</div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- ==================== PIT CREW (LEADERSHIP) ==================== -->
     <section id="leadership">
-      <div class="section-label">Leadership &amp; Service</div>
-      <div class="entries">
-        <div class="entry">
-          <div>
-            <div class="entry-title">Massachusetts DECA</div>
-            <div class="entry-role">State Co-President</div>
+      <div class="flag-label rv">Lap 04 &mdash; Pit Crew Chief</div>
+      <h2 class="sec-title rv">Leadership &amp; <span class="accent">Service</span></h2>
+      <p class="sec-sub rv">Races aren't won alone. Here's where I lead the crew.</p>
+
+      <div class="crew-grid">
+        <div class="crew rv">
+          <div class="crew-head">
+            <h3>Massachusetts DECA</h3>
+            <div class="crew-meta">Boston, MA<br/>2026&ndash;Present</div>
           </div>
-          <div class="entry-meta">
-            <div>Boston, MA</div>
-            <div>2026–Present</div>
-          </div>
-          <ul class="entry-bullets">
+          <div class="crew-role">State Co-President</div>
+          <ul>
             <li>Elected by 1,000+ voting delegates at the State Career Development Conference, representing 13,000 competitors statewide — 1 of 2 sophomores elected to serve as state co-president.</li>
             <li>Lead and facilitate district competitions, delivering programming and mentorship to support member success at regional and state levels.</li>
           </ul>
         </div>
-        <div class="entry">
-          <div>
-            <div class="entry-title">Building Financial Futures of America</div>
-            <div class="entry-role">Boston Regional Cofounder / President</div>
+
+        <div class="crew rv" style="--d: 100ms">
+          <div class="crew-head">
+            <h3>Building Financial Futures of America</h3>
+            <div class="crew-meta">Boston, MA<br/>2026&ndash;Present</div>
           </div>
-          <div class="entry-meta">
-            <div>Boston, MA</div>
-            <div>2026–Present</div>
-          </div>
-          <ul class="entry-bullets">
+          <div class="crew-role">Boston Regional Cofounder / President</div>
+          <ul>
             <li>Student-led 501(c)(3) teaching free financial literacy to middle and high schoolers across 35 chapters in 11 states.</li>
             <li>Cofounded and lead BFF's Boston chapter, running financial literacy programming and school outreach while securing corporate sponsors and donations to expand access to financial education across Greater Boston.</li>
           </ul>
         </div>
-        <div class="entry">
-          <div>
-            <div class="entry-title">MAST Tutoring</div>
-            <div class="entry-role">Volunteer Tutor</div>
+
+        <div class="crew rv">
+          <div class="crew-head">
+            <h3>MAST Tutoring</h3>
+            <div class="crew-meta">Waltham, MA<br/>2025&ndash;Present</div>
           </div>
-          <div class="entry-meta">
-            <div>Waltham, MA</div>
-            <div>2025–Present</div>
-          </div>
-          <ul class="entry-bullets">
+          <div class="crew-role">Volunteer Tutor</div>
+          <ul>
             <li>Provide weekly one-on-one tutoring across four subjects to a middle school student, improving grades and study habits over the course of the year.</li>
           </ul>
         </div>
-        <div class="entry">
-          <div>
-            <div class="entry-title">The Rashi School</div>
-            <div class="entry-role">Student Government President</div>
+
+        <div class="crew rv" style="--d: 100ms">
+          <div class="crew-head">
+            <h3>The Rashi School</h3>
+            <div class="crew-meta">Dedham, MA<br/>2023&ndash;2024</div>
           </div>
-          <div class="entry-meta">
-            <div>Dedham, MA</div>
-            <div>2023–2024</div>
-          </div>
-          <ul class="entry-bullets">
+          <div class="crew-role">Student Government President</div>
+          <ul>
             <li>Collaborated with the Student Dean to organize school-wide charity initiatives and lead the student body, earning NASC Gold Recognition and ADL No Place for Hate certification.</li>
           </ul>
         </div>
       </div>
     </section>
 
+    <!-- ==================== TROPHY CASE (AWARDS) ==================== -->
     <section id="awards">
-      <div class="section-label">Awards &amp; Honors</div>
-      <div class="entries">
-        <div class="entry">
+      <div class="flag-label rv">Lap 05 &mdash; Trophy Case</div>
+      <h2 class="sec-title rv">Piston-Grade <span class="accent">Hardware</span></h2>
+      <p class="sec-sub rv">Polished, shelved, and ready for company.</p>
+
+      <div class="trophies">
+        <div class="trophy rv-zoom rv">
+          <div class="trophy-icon"><svg viewBox="0 0 36 34"><use href="#trophy"/></svg></div>
           <div>
-            <div class="entry-title">DECA International Career Development Conference Qualifier</div>
-            <div class="entry-role">Placed top 5 of 40 Principles of Finance competitors at the state level to advance to internationals.</div>
+            <div class="ty">2026</div>
+            <h3>DECA International Career Development Conference Qualifier</h3>
+            <p>Placed top 5 of 40 Principles of Finance competitors at the state level to advance to internationals.</p>
           </div>
-          <div class="entry-meta"><div>2026</div></div>
         </div>
-        <div class="entry">
+        <div class="trophy rv-zoom rv" style="--d: 90ms">
+          <div class="trophy-icon"><svg viewBox="0 0 36 34"><use href="#trophy"/></svg></div>
           <div>
-            <div class="entry-title">DECA State Career Development Conference Qualifier</div>
-            <div class="entry-role">Placed top 4 of 30 Principles of Finance competitors at the district level to advance to states.</div>
+            <div class="ty">2025</div>
+            <h3>DECA State Career Development Conference Qualifier</h3>
+            <p>Placed top 4 of 30 Principles of Finance competitors at the district level to advance to states.</p>
           </div>
-          <div class="entry-meta"><div>2025</div></div>
         </div>
-        <div class="entry">
+        <div class="trophy rv-zoom rv" style="--d: 180ms">
+          <div class="trophy-icon"><svg viewBox="0 0 36 34"><use href="#trophy"/></svg></div>
           <div>
-            <div class="entry-title">NASC Emerging Student Leader Award</div>
-            <div class="entry-role">Recognized nationally for distinction in public speaking, leadership, and service.</div>
+            <div class="ty">2022&ndash;2024</div>
+            <h3>NASC Emerging Student Leader Award</h3>
+            <p>Recognized nationally for distinction in public speaking, leadership, and service.</p>
           </div>
-          <div class="entry-meta"><div>2022–2024</div></div>
         </div>
-        <div class="entry">
+        <div class="trophy rv-zoom rv" style="--d: 270ms">
+          <div class="trophy-icon"><svg viewBox="0 0 36 34"><use href="#trophy"/></svg></div>
           <div>
-            <div class="entry-title">NASC National Council of Excellence Gold Recognition</div>
-            <div class="entry-role">Led effort as Student Government President to earn national recognition for student leadership, service, and engagement.</div>
+            <div class="ty">2023&ndash;2024</div>
+            <h3>NASC National Council of Excellence Gold Recognition</h3>
+            <p>Led effort as Student Government President to earn national recognition for student leadership, service, and engagement.</p>
           </div>
-          <div class="entry-meta"><div>2023–2024</div></div>
         </div>
       </div>
     </section>
 
+    <!-- ==================== RACE LOG (ACTIVITIES) ==================== -->
     <section id="activities">
-      <div class="section-label">Other Activities</div>
-      <div class="entries">
-        <div class="activity">
-          <span class="activity-role">International Competitor</span>
-          <span class="activity-org">Gann Academy DECA</span>
-          <span class="activity-date">2025–Present</span>
+      <div class="flag-label rv">Lap 06 &mdash; Race Log</div>
+      <h2 class="sec-title rv">Other <span class="accent">Circuits</span></h2>
+
+      <div class="log">
+        <div class="log-row rv">
+          <span class="log-flag">&#127937;</span>
+          <span class="log-role">International Competitor</span>
+          <span class="log-org">Gann Academy DECA</span>
+          <span class="log-date">2025&ndash;Present</span>
         </div>
-        <div class="activity">
-          <span class="activity-role">Vice President of Finance</span>
-          <span class="activity-org">Gann Academy DECA</span>
-          <span class="activity-date">2026–Present</span>
+        <div class="log-row rv" style="--d: 60ms">
+          <span class="log-flag">&#127937;</span>
+          <span class="log-role">Vice President of Finance</span>
+          <span class="log-org">Gann Academy DECA</span>
+          <span class="log-date">2026&ndash;Present</span>
         </div>
-        <div class="activity">
-          <span class="activity-role">Member</span>
-          <span class="activity-org">Gann Academy Stock Market Club</span>
-          <span class="activity-date">2025–Present</span>
+        <div class="log-row rv" style="--d: 120ms">
+          <span class="log-flag">&#127937;</span>
+          <span class="log-role">Member</span>
+          <span class="log-org">Gann Academy Stock Market Club</span>
+          <span class="log-date">2025&ndash;Present</span>
         </div>
-        <div class="activity">
-          <span class="activity-role">Lawyer</span>
-          <span class="activity-org">Gann Academy Mock Trial Team</span>
-          <span class="activity-date">2025</span>
+        <div class="log-row rv" style="--d: 180ms">
+          <span class="log-flag">&#127937;</span>
+          <span class="log-role">Lawyer</span>
+          <span class="log-org">Gann Academy Mock Trial Team</span>
+          <span class="log-date">2025</span>
         </div>
-        <div class="activity">
-          <span class="activity-role">Member</span>
-          <span class="activity-org">Milton Academy Investment Club</span>
-          <span class="activity-date">2024–2025</span>
+        <div class="log-row rv" style="--d: 240ms">
+          <span class="log-flag">&#127937;</span>
+          <span class="log-role">Member</span>
+          <span class="log-org">Milton Academy Investment Club</span>
+          <span class="log-date">2024&ndash;2025</span>
         </div>
       </div>
     </section>
 
+    <!-- ==================== TELEMETRY (SKILLS) ==================== -->
     <section id="skills">
-      <div class="section-label">Skills &amp; Interests</div>
-      <dl class="skills-list">
-        <dt>Skills</dt>
-        <dd>React, Supabase, JavaScript, Java, Python, REST APIs; AI-assisted development, 3D modeling and printing, AI automation tools</dd>
-        <dt>Interests</dt>
-        <dd>Finance, business, artificial intelligence, machine learning, technology, mathematics</dd>
-        <dt>Hobbies</dt>
-        <dd>Golf, basketball, coding, DJing</dd>
-      </dl>
-      <div class="resume-actions">
-        <a class="btn btn-primary" href="Henry Zisow Resume.pdf" download="Henry Zisow Resume.pdf">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          Download full resume (PDF)
-        </a>
-      </div>
-    </section>
+      <div class="flag-label rv">Lap 07 &mdash; Telemetry</div>
+      <h2 class="sec-title rv">Engine <span class="accent">Specs</span></h2>
+      <p class="sec-sub rv">Live readouts from the dyno. All systems race-tuned.</p>
 
-    <section id="contact">
-      <div class="section-label">Contact</div>
-      <div class="contact-list">
-        <a class="contact-row" href="mailto:hzisow@gmail.com">
-          <div class="contact-label">Email</div>
-          <div class="contact-value">hzisow@gmail.com</div>
-          <div class="contact-arrow">↗</div>
-        </a>
-        <a class="contact-row" href="tel:+16178930994">
-          <div class="contact-label">Phone</div>
-          <div class="contact-value">+1 (617) 893-0994</div>
-          <div class="contact-arrow">↗</div>
-        </a>
-        <a class="contact-row" href="https://www.linkedin.com/in/henryzisow" target="_blank">
-          <div class="contact-label">LinkedIn</div>
-          <div class="contact-value">Henry Zisow</div>
-          <div class="contact-arrow">↗</div>
-        </a>
-        <a class="contact-row" href="https://github.com/hzisow" target="_blank">
-          <div class="contact-label">GitHub</div>
-          <div class="contact-value">@hzisow</div>
-          <div class="contact-arrow">↗</div>
-        </a>
-      </div>
-    </section>
+      <div class="telemetry-grid">
+        <div class="rv">
+          <div class="gauge"><div class="gauge-head"><span class="gauge-name">AI-Assisted Development</span><span class="gauge-val" data-pct-label>95</span></div><div class="gauge-track"><div class="gauge-fill" data-pct="95"></div></div></div>
+          <div class="gauge"><div class="gauge-head"><span class="gauge-name">React</span><span class="gauge-val" data-pct-label>90</span></div><div class="gauge-track"><div class="gauge-fill" data-pct="90" style="--d: 80ms"></div></div></div>
+          <div class="gauge"><div class="gauge-head"><span class="gauge-name">JavaScript</span><span class="gauge-val" data-pct-label>88</span></div><div class="gauge-track"><div class="gauge-fill" data-pct="88" style="--d: 160ms"></div></div></div>
+          <div class="gauge"><div class="gauge-head"><span class="gauge-name">Python</span><span class="gauge-val" data-pct-label>86</span></div><div class="gauge-track"><div class="gauge-fill" data-pct="86" style="--d: 240ms"></div></div></div>
+          <div class="gauge"><div class="gauge-head"><span class="gauge-name">REST APIs</span><span class="gauge-val" data-pct-label>84</span></div><div class="gauge-track"><div class="gauge-fill" data-pct="84" style="--d: 320ms"></div></div></div>
+          <div class="gauge"><div class="gauge-head"><span class="gauge-name">Supabase</span><span class="gauge-val" data-pct-label>82</span></div><div class="gauge-track"><div class="gauge-fill" data-pct="82" style="--d: 400ms"></div></div></div>
+          <div class="gauge"><div class="gauge-head"><span class="gauge-name">Java</span><span class="gauge-val" data-pct-label>78</span></div><div class="gauge-track"><div class="gauge-fill" data-pct="78" style="--d: 480ms"></div></div></div>
+          <div class="gauge"><div class="gauge-head"><span class="gauge-name">3D Modeling &amp; Printing</span><span class="gauge-val" data-pct-label>74</span></div><div class="gauge-track"><div class="gauge-fill" data-pct="74" style="--d: 560ms"></div></div></div>
+          <div class="pit-note">// dyno note: AI-assisted development holds steady at 95. obviously.</div>
+        </div>
 
-    <div class="modal-overlay" id="modal">
-      <div class="modal" id="modal-inner">
-        <button class="modal-close" id="modal-close-btn" aria-label="Close">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
-        <div class="modal-image" id="modal-image"></div>
-        <div class="modal-body">
-          <div class="modal-year">2025</div>
-          <h3 id="modal-title"></h3>
-          <div class="modal-tags" id="modal-tags"></div>
-          <p class="modal-desc" id="modal-desc"></p>
-          <div class="modal-actions" id="modal-actions"></div>
+        <div class="kit rv" style="--d: 120ms">
+          <h4>Fuel (Interests)</h4>
+          <div class="pills">
+            <span class="pill">Finance</span><span class="pill">Business</span><span class="pill">Artificial Intelligence</span>
+            <span class="pill">Machine Learning</span><span class="pill">Technology</span><span class="pill">Mathematics</span>
+          </div>
+          <h4>Off-Track (Hobbies)</h4>
+          <div class="pills">
+            <span class="pill">Golf</span><span class="pill">Basketball</span><span class="pill">Coding</span><span class="pill">DJing</span>
+          </div>
+          <div class="resume-actions">
+            <a class="btn btn-primary" href="Henry Zisow Resume.pdf" download="Henry Zisow Resume.pdf">
+              <span>Download Full Resume</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <footer>
-      <div class="footer-inner">
-        <span>© 2026 Henry Zisow</span>
-        <span>Boston, MA</span>
+    <!-- ==================== RADIO (CONTACT) ==================== -->
+    <section id="contact">
+      <div class="flag-label rv">Final Lap &mdash; Radio the Crew</div>
+      <h2 class="sec-title rv">Get on the <span class="accent">Radio</span></h2>
+      <p class="sec-sub rv">Sponsorships, pit passes, collabs, or just to talk shop — the channel is open.</p>
+
+      <div class="contact-wrap">
+        <div class="contact-list">
+          <a class="contact-row rv" href="mailto:hzisow@gmail.com">
+            <div class="contact-label">Email</div>
+            <div class="contact-value">hzisow@gmail.com</div>
+            <div class="contact-arrow">&#8599;</div>
+          </a>
+          <a class="contact-row rv" style="--d: 70ms" href="tel:+16178930994">
+            <div class="contact-label">Phone</div>
+            <div class="contact-value">+1 (617) 893-0994</div>
+            <div class="contact-arrow">&#8599;</div>
+          </a>
+          <a class="contact-row rv" style="--d: 140ms" href="https://www.linkedin.com/in/henryzisow" target="_blank" rel="noopener noreferrer">
+            <div class="contact-label">LinkedIn</div>
+            <div class="contact-value">Henry Zisow</div>
+            <div class="contact-arrow">&#8599;</div>
+          </a>
+          <a class="contact-row rv" style="--d: 210ms" href="https://github.com/hzisow" target="_blank" rel="noopener noreferrer">
+            <div class="contact-label">GitHub</div>
+            <div class="contact-value">@hzisow</div>
+            <div class="contact-arrow">&#8599;</div>
+          </a>
+        </div>
+
+        <div class="contact-cta rv">
+          <span class="big">Ready when <em>you</em> are.</span>
+          <a class="btn btn-primary" href="mailto:hzisow@gmail.com"><span>Radio Me &mdash; Let's Race</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+          </a>
+        </div>
       </div>
-    </footer>
+    </section>
   </main>
 
-  <script>
-    const root = document.body;
-    const stored = localStorage.getItem('theme');
-    if (stored) root.setAttribute('data-theme', stored);
-    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) root.setAttribute('data-theme', 'dark');
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="finish-line" aria-hidden="true"></div>
+    <div class="footer-inner">
+      <span>&copy; 2026 Henry Zisow &middot; № 95</span>
+      <span class="kc">Built for speed. KA-CHOW.</span>
+      <span>Boston, MA &middot; press <strong>K</strong> anytime</span>
+    </div>
+  </footer>
 
-    function toggleTheme() {
-      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
+  <!-- ==================== PROJECT MODAL ==================== -->
+  <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal" id="modal-inner">
+      <div class="modal-checker" aria-hidden="true"></div>
+      <button class="modal-close" id="modal-close-btn" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <div class="modal-image" id="modal-image"></div>
+      <div class="modal-body">
+        <div class="modal-year" id="modal-year">2025 &middot; Spec Sheet</div>
+        <h3 id="modal-title"></h3>
+        <div class="modal-tags" id="modal-tags"></div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-actions" id="modal-actions"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== KA-CHOW OVERLAY ==================== -->
+  <div id="kachow" aria-hidden="true">
+    <div class="flash"></div>
+    <div class="word">KA-CHOW!</div>
+    <svg class="dash-car" viewBox="0 0 360 140"><use href="#mcqueen"/></svg>
+  </div>
+
+  <script>
+    document.documentElement.classList.add('js');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- Hero title: split letters with stagger ---------- */
+    document.querySelectorAll('#hero-title .row').forEach(function (row, r) {
+      var text = row.getAttribute('data-text') || '';
+      row.textContent = '';
+      text.split('').forEach(function (ch, i) {
+        var s = document.createElement('span');
+        s.className = 'l';
+        s.textContent = ch;
+        s.style.setProperty('--ld', (150 + r * 260 + i * 55) + 'ms');
+        row.appendChild(s);
+      });
+    });
+
+    /* ---------- Preloader: race start lights ---------- */
+    (function () {
+      var pre = document.getElementById('preloader');
+      if (!pre) return;
+      if (reduceMotion) { pre.remove(); return; }
+      var lights = pre.querySelectorAll('.pl-light');
+      var word = document.getElementById('pl-word');
+      var done = false;
+      function finish() {
+        if (done) return;
+        done = true;
+        pre.classList.add('done');
+        setTimeout(function () { pre.remove(); }, 700);
+      }
+      lights.forEach(function (l, i) {
+        setTimeout(function () { l.classList.add('on'); }, 180 + i * 170);
+      });
+      setTimeout(function () {
+        lights.forEach(function (l) { l.classList.remove('on'); l.classList.add('go'); });
+        word.classList.add('show');
+      }, 180 + lights.length * 170 + 220);
+      setTimeout(finish, 180 + lights.length * 170 + 950);
+      pre.addEventListener('click', finish);
+    })();
+
+    /* ---------- Scroll: progress track + car, nav hide, parallax ---------- */
+    var trackFill = document.getElementById('track-fill');
+    var trackCar = document.getElementById('track-car');
+    var nav = document.getElementById('nav');
+    var paras = document.querySelectorAll('[data-para]');
+    var tlProgress = document.getElementById('timeline-progress');
+    var tlWrap = document.getElementById('edu-timeline');
+    var lastY = 0, ticking = false;
+
+    function onScroll() {
+      var y = window.scrollY;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(1, y / max) : 0;
+
+      trackFill.style.width = (p * 100) + '%';
+      trackCar.style.transform = 'translateX(' + (p * (window.innerWidth - 48)) + 'px)';
+
+      if (y > 140 && y > lastY + 4) nav.classList.add('hidden');
+      else if (y < lastY - 4 || y <= 140) nav.classList.remove('hidden');
+
+      if (!reduceMotion && window.innerWidth > 680) {
+        paras.forEach(function (el) {
+          var speed = parseFloat(el.getAttribute('data-para')) || 0.15;
+          el.style.transform = 'translateY(' + (y * speed) + 'px)';
+        });
+      }
+
+      if (tlProgress && tlWrap) {
+        var r = tlWrap.getBoundingClientRect();
+        var vh = window.innerHeight;
+        var prog = (vh * 0.75 - r.top) / r.height;
+        tlProgress.style.transform = 'scaleY(' + Math.max(0, Math.min(1, prog)) + ')';
+      }
+
+      lastY = y;
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+    }, { passive: true });
+    onScroll();
+
+    /* ---------- Reveal on scroll ---------- */
+    var revealObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.rv').forEach(function (el) { revealObs.observe(el); });
+
+    /* ---------- Animated counters ---------- */
+    function animateCount(el) {
+      var target = parseFloat(el.getAttribute('data-count'));
+      var decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
+      var suffix = el.getAttribute('data-suffix') || '';
+      var prefix = el.getAttribute('data-prefix') || '';
+      var dur = 1400, t0 = null;
+      function frame(t) {
+        if (!t0) t0 = t;
+        var k = Math.min(1, (t - t0) / dur);
+        k = 1 - Math.pow(1 - k, 4);
+        var val = target * k;
+        el.textContent = prefix + (decimals ? val.toFixed(decimals) : Math.round(val).toLocaleString('en-US')) + suffix;
+        if (k < 1) requestAnimationFrame(frame);
+      }
+      if (reduceMotion) {
+        el.textContent = prefix + (decimals ? target.toFixed(decimals) : target.toLocaleString('en-US')) + suffix;
+      } else {
+        requestAnimationFrame(frame);
+      }
+    }
+    var countObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { animateCount(e.target); countObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('[data-count]').forEach(function (el) { countObs.observe(el); });
+
+    /* ---------- Telemetry gauges ---------- */
+    var gaugeObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.gauge-fill').forEach(function (f) {
+            f.style.width = f.getAttribute('data-pct') + '%';
+          });
+          gaugeObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    var telemetry = document.querySelector('.telemetry-grid');
+    if (telemetry) gaugeObs.observe(telemetry);
+
+    /* ---------- Scrollspy ---------- */
+    var spyLinks = document.querySelectorAll('[data-spy]');
+    var spyObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          spyLinks.forEach(function (a) {
+            a.classList.toggle('active', a.getAttribute('data-spy') === e.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    document.querySelectorAll('main section[id]').forEach(function (s) { spyObs.observe(s); });
+
+    /* ---------- 3D tilt on garage cards ---------- */
+    if (window.matchMedia('(hover: hover)').matches && !reduceMotion) {
+      document.querySelectorAll('.tilt').forEach(function (card) {
+        card.addEventListener('mousemove', function (e) {
+          var r = card.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width - 0.5;
+          var y = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = 'perspective(800px) rotateY(' + (x * 7) + 'deg) rotateX(' + (-y * 7) + 'deg) translateY(-3px)';
+        });
+        card.addEventListener('mouseleave', function () { card.style.transform = ''; });
+      });
     }
 
-    const projects = {
+    /* ---------- Project modal ---------- */
+    var projects = {
       'brusher-games': {
         title: 'Brusher Games',
         description: 'A web-based platform that organizes, manages, and tracks school-wide elimination-style games by assigning targets, recording eliminations, and displaying live standings.',
@@ -845,7 +1454,7 @@
         imageContain: false
       },
       'ai-tiktok': {
-        title: 'AI TikTok Video Automation',
+        title: 'AI TikTok Automation',
         description: 'A fully automated AI TikTok video generator and uploader. Uses N8N, UploadPost API, OpenRouter API, and Airtable.',
         tags: ['N8N', 'OpenRouter', 'Automation'],
         image: 'images/project-tiktok.png',
@@ -854,7 +1463,7 @@
         downloadLabel: 'Download N8N Workflow'
       },
       'sora-downloader': {
-        title: 'OpenAI Sora Bulk Downloader',
+        title: 'Sora Bulk Downloader',
         description: 'An easy way to manage and organize Sora AI video downloads. Takes in all the files Sora generates and lets you bulk download with the file name being the prompt, for easy organization.',
         tags: ['Sora', 'OpenAI', 'Replit'],
         image: 'images/project-sora.png',
@@ -863,42 +1472,62 @@
       }
     };
 
-    const modal = document.getElementById('modal');
+    var modal = document.getElementById('modal');
+    var arrowSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>';
+    var dlSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>';
 
     function openModal(id) {
-      const p = projects[id];
+      var p = projects[id];
       if (!p) return;
-      const img = document.getElementById('modal-image');
+      var img = document.getElementById('modal-image');
       img.style.backgroundImage = "url('" + p.image + "')";
       img.classList.toggle('contain', !!p.imageContain);
       document.getElementById('modal-title').textContent = p.title;
       document.getElementById('modal-desc').textContent = p.description;
-      document.getElementById('modal-tags').innerHTML = p.tags.map(t => '<span class="tag">' + t + '</span>').join('');
-      let actions = '';
-      if (p.link) actions += '<a class="btn btn-primary" href="' + p.link + '" target="_blank" rel="noopener noreferrer">Visit Site <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>';
-      if (p.download) actions += '<a class="btn" href="' + p.download + '" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> ' + p.downloadLabel + '</a>';
+      document.getElementById('modal-tags').innerHTML = p.tags.map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('');
+      var actions = '';
+      if (p.link) actions += '<a class="btn btn-primary" href="' + p.link + '" target="_blank" rel="noopener noreferrer"><span>Visit Site</span> ' + arrowSvg + '</a>';
+      if (p.download) actions += '<a class="btn" href="' + p.download + '" download><span>' + p.downloadLabel + '</span> ' + dlSvg + '</a>';
       document.getElementById('modal-actions').innerHTML = actions;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-
     function closeModal() {
       modal.classList.remove('open');
       document.body.style.overflow = '';
     }
-
-    document.querySelectorAll('.project').forEach(el => {
-      el.addEventListener('click', () => openModal(el.dataset.project));
+    document.querySelectorAll('.build').forEach(function (el) {
+      el.addEventListener('click', function () { openModal(el.dataset.project); });
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(el.dataset.project); }
+      });
     });
-
-    modal.addEventListener('click', e => {
-      if (e.target === modal) closeModal();
-    });
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
     document.getElementById('modal-close-btn').addEventListener('click', closeModal);
-    document.getElementById('modal-inner').addEventListener('click', e => e.stopPropagation());
+    document.getElementById('modal-inner').addEventListener('click', function (e) { e.stopPropagation(); });
 
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
+    /* ---------- KA-CHOW easter egg ---------- */
+    var kachow = document.getElementById('kachow');
+    var zapping = false;
+    function kaChow() {
+      if (zapping || reduceMotion) return;
+      zapping = true;
+      kachow.classList.add('zap');
+      document.body.classList.add('shake');
+      setTimeout(function () {
+        kachow.classList.remove('zap');
+        document.body.classList.remove('shake');
+        zapping = false;
+      }, 900);
+    }
+    document.getElementById('hero-car').addEventListener('click', kaChow);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { closeModal(); return; }
+      if ((e.key === 'k' || e.key === 'K') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        var t = e.target;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+        kaChow();
+      }
     });
   </script>
 </body>
