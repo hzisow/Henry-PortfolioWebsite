@@ -558,6 +558,15 @@
     <section id="projects">
       <div class="section-label">Projects</div>
       <div class="projects-list">
+        <div class="project" data-project="epiguide">
+          <div class="project-year">2026</div>
+          <div class="project-main">
+            <h3>EpiGuide</h3>
+            <p>A progressive web app that helps untrained bystanders recognize anaphylaxis symptoms and guides them through using an epinephrine auto-injector, with EMS handoff and an opt-in nearby volunteer responder network.</p>
+            <div class="project-tags"><span class="tag">PWA</span><span class="tag">Supabase</span><span class="tag">MobileNetV2</span><span class="tag">Claude</span></div>
+          </div>
+          <div class="project-arrow">↗</div>
+        </div>
         <div class="project" data-project="brusher-games">
           <div class="project-year">2025</div>
           <div class="project-main">
@@ -836,6 +845,14 @@
     }
 
     const projects = {
+      'epiguide': {
+        title: 'EpiGuide',
+        description: 'A progressive web app that uses a MobileNetV2 CNN and a logistic regression classifier (both trained on registry-grounded synthetic data) to help untrained bystanders recognize anaphylaxis symptoms, then guides them through using an epinephrine auto-injector, with EMS handoff and an opt-in nearby volunteer responder network. Built as a no-framework PWA (vanilla HTML/CSS/JS, ES modules) on Supabase (RLS, Edge Functions, realtime, web push), with Claude Haiku 4.5 scanning auto-injector labels. In active development, targeting the Congressional App Challenge (Oct 2026) and Blue Ocean (Feb 2027).',
+        tags: ['PWA', 'Supabase', 'MobileNetV2', 'Claude'],
+        image: 'images/project-epiguide.png',
+        link: 'https://hzisow.github.io/EpiGuide/',
+        imageContain: false
+      },
       'brusher-games': {
         title: 'Brusher Games',
         description: 'A web-based platform that organizes, manages, and tracks school-wide elimination-style games by assigning targets, recording eliminations, and displaying live standings.',
