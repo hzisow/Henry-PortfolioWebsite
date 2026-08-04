@@ -716,6 +716,15 @@
     <section id="projects">
       <h2 class="section-label">Projects</h2>
       <div class="projects-list">
+        <div class="project" data-project="epiguide">
+          <div class="project-year">2026</div>
+          <div class="project-main">
+            <h3>EpiGuide</h3>
+            <p>A Progressive Web App that helps untrained bystanders recognize anaphylaxis and walks them through using an EpiPen, offline if they need to.</p>
+            <div class="project-tags"><span class="tag">Claude API</span><span class="tag">Machine Learning</span><span class="tag">PWA</span></div>
+          </div>
+          <div class="project-arrow">↗</div>
+        </div>
         <div class="project" data-project="faceless-shorts">
           <div class="project-year">2026</div>
           <div class="project-main">
@@ -1004,6 +1013,13 @@
     }
 
     const projects = {
+      'epiguide': {
+        title: 'EpiGuide',
+        year: '2026',
+        description: "A Progressive Web App helping untrained bystanders recognize and respond to anaphylaxis emergencies. Uses AI-powered symptom classification (logistic regression + MobileNetV2 vision model trained on registry data), Claude Haiku for EpiPen label scanning, and a privacy-preserving volunteer responder network. Offline-capable core emergency flow with step-by-step injection guidance.",
+        tags: ['Supabase', 'Claude API', 'Machine Learning', 'PWA', 'MobileNetV2'],
+        link: 'https://hzisow.github.io/EpiGuide/'
+      },
       'faceless-shorts': {
         title: 'Faceless Shorts Engine',
         year: '2026',
