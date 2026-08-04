@@ -6,8 +6,20 @@
   <title>Henry Zisow | Portfolio</title>
   <meta name="description" content="Henry Zisow — junior at Gann Academy, Massachusetts DECA State Co-President. Builds software, competes in business." />
 
-  <!-- Set before first paint so scroll-reveal only hides content JS can bring back. -->
-  <script>document.documentElement.classList.add('js');</script>
+  <!-- Runs before first paint: arms scroll-reveal only when JS can undo it, and
+       settles the theme so dark-mode visitors never flash the light palette. -->
+  <script>
+    (function () {
+      document.documentElement.classList.add('js');
+      try {
+        var stored = localStorage.getItem('theme');
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
 
   <meta property="og:title" content="Henry Zisow | Portfolio" />
   <meta property="og:description" content="Personal portfolio showcasing projects and skills." />
@@ -19,10 +31,33 @@
   <meta name="twitter:image" content="https://henryzisow.com/opengraph.jpg" />
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="fonts/inter-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin />
   <style>
+    /* Self-hosted variable subsets (latin). Keeps text on one origin — no
+       render-blocking stylesheet from fonts.googleapis.com, no second handshake
+       to fonts.gstatic.com before the first glyph paints. */
+    @font-face {
+      font-family: 'Fraunces';
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url(fonts/fraunces-normal.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url(fonts/inter-normal.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      font-style: normal;
+      font-weight: 400 500;
+      font-display: swap;
+      src: url(fonts/jetbrains-mono-normal.woff2) format('woff2');
+    }
     :root {
       --bg: #f3f3f0;
       --bg-elev: #e7e7e2;
@@ -50,6 +85,8 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Beats the display values set on .modal-actions and friends. */
+    [hidden] { display: none !important; }
     html { scroll-behavior: smooth; }
     :focus-visible {
       outline: 2px solid var(--accent);
@@ -165,7 +202,7 @@
       line-height: 1.05;
       letter-spacing: -0.02em;
       color: var(--text);
-      margin-bottom: 22px;
+      margin-bottom: 24px;
     }
     .hero h1 em {
       font-style: italic;
@@ -193,6 +230,7 @@
     .section-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
+      font-weight: 400; /* these are <h2> now — don't inherit the UA bold */
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-soft);
@@ -232,10 +270,12 @@
       cursor: pointer;
     }
     .project:last-child { border-bottom: 1px solid var(--border); }
-    .project:hover, .project:focus-visible { padding-left: 10px; }
-    .project:hover .project-arrow,
+    /* Gated on :not(.is-scrolling) — otherwise rows nudge sideways just from the
+       cursor sweeping over them mid-scroll, which reads as the page glitching. */
+    html:not(.is-scrolling) .project:hover, .project:focus-visible { padding-left: 10px; }
+    html:not(.is-scrolling) .project:hover .project-arrow,
     .project:focus-visible .project-arrow { transform: translate(3px, -3px); opacity: 1; }
-    .project:hover .project-main h3 { color: var(--accent); }
+    html:not(.is-scrolling) .project:hover .project-main h3 { color: var(--accent); }
     .project-year {
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
@@ -265,7 +305,7 @@
       border-radius: 4px;
       transition: transform var(--transition), border-color var(--transition), color var(--transition);
     }
-    .tag:hover { transform: translateY(-2px); border-color: var(--text-soft); color: var(--text-muted); }
+    html:not(.is-scrolling) .tag:hover { transform: translateY(-2px); border-color: var(--text-soft); color: var(--text-muted); }
     .project-arrow {
       color: var(--text-soft);
       opacity: 0.6;
@@ -279,12 +319,10 @@
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 20px;
-      padding: 20px 0;
+      padding: 22px 0;
       border-top: 1px solid var(--border);
-      transition: padding 260ms var(--ease-out);
     }
     .entry:last-child { border-bottom: 1px solid var(--border); }
-    .entry:hover { padding-left: 6px; }
     .entry-title {
       font-family: 'Fraunces', serif;
       font-weight: 500;
@@ -309,7 +347,7 @@
     .entry-bullets {
       list-style: none;
       padding: 0;
-      margin-top: 10px;
+      margin-top: 12px;
       grid-column: 1 / -1;
     }
     .entry-bullets li {
@@ -317,7 +355,7 @@
       padding-left: 18px;
       font-size: 14px;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       line-height: 1.55;
     }
     .entry-bullets li::before {
@@ -336,13 +374,11 @@
       grid-template-columns: auto 1fr auto;
       gap: 16px;
       align-items: baseline;
-      padding: 12px 0;
+      padding: 16px 0;
       border-top: 1px solid var(--border);
       font-size: 15px;
-      transition: padding 260ms var(--ease-out);
     }
     .activity:last-child { border-bottom: 1px solid var(--border); }
-    .activity:hover { padding-left: 6px; }
     .activity-role { font-style: italic; color: var(--text); }
     .activity-org { color: var(--text-muted); }
     .activity-date {
@@ -355,7 +391,7 @@
     .skills-list {
       display: grid;
       grid-template-columns: 120px 1fr;
-      gap: 12px 24px;
+      gap: 16px 28px;
     }
     .skills-list dt {
       font-family: 'JetBrains Mono', monospace;
@@ -371,7 +407,7 @@
       line-height: 1.5;
     }
 
-    .resume-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+    .resume-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
     .btn {
       display: inline-flex;
       align-items: center;
@@ -388,7 +424,8 @@
       color: var(--text);
       font-family: inherit;
     }
-    .btn:hover { background: var(--hover); border-color: var(--text-soft); transform: translateY(-2px); }
+    .btn:hover { background: var(--hover); border-color: var(--text-soft); }
+    html:not(.is-scrolling) .btn:hover { transform: translateY(-2px); }
     .btn:active { transform: translateY(0); }
     .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
     .btn-primary:hover { background: var(--text-muted); border-color: var(--text-muted); color: var(--bg); }
@@ -411,8 +448,8 @@
       transition: padding 260ms var(--ease-out);
     }
     .contact-row:last-child { border-bottom: 1px solid var(--border); }
-    .contact-row:hover { padding-left: 10px; }
-    .contact-row:hover .contact-arrow { opacity: 1; transform: translate(3px, -3px); }
+    html:not(.is-scrolling) .contact-row:hover { padding-left: 10px; }
+    html:not(.is-scrolling) .contact-row:hover .contact-arrow { opacity: 1; transform: translate(3px, -3px); }
     .contact-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
@@ -423,11 +460,36 @@
     .contact-value { font-size: 15px; color: var(--text); }
     .contact-arrow { color: var(--text-soft); opacity: 0.5; transition: all var(--transition); }
 
+    /* Email row keeps mailto: on the address and adds an explicit copy control,
+       since mailto: is a dead end for anyone on webmail. */
+    .contact-row-email:hover { padding-left: 0; }
+    .contact-email-link { text-decoration: none; color: var(--text); justify-self: start; }
+    .contact-email-link:hover { color: var(--accent); }
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-soft);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .copy-btn svg { width: 13px; height: 13px; }
+    .copy-btn:hover { color: var(--text); border-color: var(--text-soft); }
+    .copy-btn.copied { color: var(--accent); border-color: var(--accent); }
+
     /* Footer */
     footer {
       padding: 32px 0 48px;
       border-top: 1px solid var(--border);
-      margin-top: 64px;
+      margin-top: 48px;
     }
     .footer-inner {
       display: flex;
@@ -457,7 +519,9 @@
       .project { grid-template-columns: 44px 1fr 16px; gap: 12px; padding: 18px 0; }
       .project-main h3 { font-size: 18px; }
       .project-main p { font-size: 13px; }
-      .contact-row { grid-template-columns: 72px 1fr auto; padding: 14px 0; }
+      .contact-row { grid-template-columns: 72px 1fr auto; padding: 16px 0; }
+      .entry { padding: 18px 0; }
+      .activity { padding: 14px 0; }
       .contact-value { font-size: 14px; }
       section { padding: 56px 0 32px; }
       section:first-of-type { padding-top: 56px; }
@@ -471,20 +535,40 @@
       .btn { justify-content: center; }
     }
 
+    /* Contact used to be dropped here to make the nav fit. On a portfolio that
+       is the worst link to lose, so shrink the row instead of hiding it. */
     @media (max-width: 460px) {
-      .nav-links a:nth-child(4) { display: none; }
+      :root { --nav-h: 51px; }
+      .container { padding: 0 16px; }
+      .nav-inner { padding: 10px 16px; gap: 8px; }
+      .nav-brand { font-size: 15px; }
+      .nav-links { gap: 13px; }
+      .nav-links a { font-size: 12px; }
+      .theme-toggle { width: 30px; height: 30px; flex: none; }
+      .theme-toggle svg { width: 14px; height: 14px; }
       .footer-inner { flex-direction: column; gap: 6px; align-items: flex-start; }
+      .contact-row { grid-template-columns: 64px 1fr auto; gap: 12px; }
+      .copy-btn-label { display: none; }
+      .copy-btn { padding: 6px; }
+    }
+
+    /* Below this the brand and four links genuinely cannot coexist. */
+    @media (max-width: 370px) {
+      .nav-brand { display: none; }
+      .nav-links { gap: 16px; }
     }
 
     /* Touch devices latch :hover after a tap — don't leave things nudged. */
     @media (hover: none) {
-      .project:hover, .contact-row:hover, .entry:hover, .activity:hover { padding-left: 0; }
-      .project:hover .project-arrow,
-      .contact-row:hover .contact-arrow { transform: none; }
-      .project:hover .project-main h3 { color: inherit; }
-      .btn:hover, .tag:hover, .nav-brand:hover, .nav-links a:hover { transform: none; }
-      .theme-toggle:hover { transform: none; }
-      .modal-close:hover { transform: none; }
+      html:not(.is-scrolling) .project:hover,
+      html:not(.is-scrolling) .contact-row:hover { padding-left: 0; }
+      html:not(.is-scrolling) .project:hover .project-arrow,
+      html:not(.is-scrolling) .contact-row:hover .contact-arrow { transform: none; }
+      html:not(.is-scrolling) .project:hover .project-main h3 { color: inherit; }
+      html:not(.is-scrolling) .btn:hover,
+      html:not(.is-scrolling) .tag:hover { transform: none; }
+      .nav-brand:hover, .nav-links a:hover,
+      .theme-toggle:hover, .modal-close:hover { transform: none; }
     }
 
     /* Modal */
@@ -596,7 +680,7 @@
     }
   </style>
 </head>
-<body data-theme="light">
+<body>
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
   <nav class="top">
     <div class="nav-inner">
@@ -624,14 +708,23 @@
     </section>
 
     <section id="about" class="about">
-      <div class="section-label">About</div>
+      <h2 class="section-label">About</h2>
       <p>I'm a high school junior who builds software for fun. I spend my time prototyping with code, competing in DECA, and serving as a Massachusetts DECA State Co-President.</p>
       <p>Recently I've been working on automation tools, small games, and utilities. I qualified for ICDC this year in Principles of Finance and placed Top 5 at States.</p>
     </section>
 
     <section id="projects">
-      <div class="section-label">Projects</div>
+      <h2 class="section-label">Projects</h2>
       <div class="projects-list">
+        <div class="project" data-project="faceless-shorts">
+          <div class="project-year">2026</div>
+          <div class="project-main">
+            <h3>Faceless Shorts Engine</h3>
+            <p>A fully autonomous content pipeline that turns Reddit stories into narrated vertical Shorts and publishes them to YouTube and TikTok — no server, no GPU, and no human in the loop.</p>
+            <div class="project-tags"><span class="tag">Python</span><span class="tag">FFmpeg</span><span class="tag">GitHub Actions</span></div>
+          </div>
+          <div class="project-arrow">↗</div>
+        </div>
         <div class="project" data-project="brusher-games">
           <div class="project-year">2025</div>
           <div class="project-main">
@@ -663,11 +756,11 @@
     </section>
 
     <section id="education">
-      <div class="section-label">Education</div>
+      <h2 class="section-label">Education</h2>
       <div class="entries">
         <div class="entry">
           <div>
-            <div class="entry-title">Gann Academy</div>
+            <h3 class="entry-title">Gann Academy</h3>
             <div class="entry-role">Class of 2028 · Weighted GPA 4.4</div>
           </div>
           <div class="entry-meta">
@@ -680,7 +773,7 @@
         </div>
         <div class="entry">
           <div>
-            <div class="entry-title">Milton Academy</div>
+            <h3 class="entry-title">Milton Academy</h3>
             <div class="entry-role">Grade 9</div>
           </div>
           <div class="entry-meta">
@@ -693,7 +786,7 @@
         </div>
         <div class="entry">
           <div>
-            <div class="entry-title">The Rashi School</div>
+            <h3 class="entry-title">The Rashi School</h3>
             <div class="entry-role">Grades K–8 · Class of 2024</div>
           </div>
           <div class="entry-meta">
@@ -705,11 +798,11 @@
     </section>
 
     <section id="leadership">
-      <div class="section-label">Leadership &amp; Service</div>
+      <h2 class="section-label">Leadership &amp; Service</h2>
       <div class="entries">
         <div class="entry">
           <div>
-            <div class="entry-title">Massachusetts DECA</div>
+            <h3 class="entry-title">Massachusetts DECA</h3>
             <div class="entry-role">State Co-President</div>
           </div>
           <div class="entry-meta">
@@ -723,7 +816,7 @@
         </div>
         <div class="entry">
           <div>
-            <div class="entry-title">Building Financial Futures of America</div>
+            <h3 class="entry-title">Building Financial Futures of America</h3>
             <div class="entry-role">Boston Regional Cofounder / President</div>
           </div>
           <div class="entry-meta">
@@ -737,7 +830,7 @@
         </div>
         <div class="entry">
           <div>
-            <div class="entry-title">MAST Tutoring</div>
+            <h3 class="entry-title">MAST Tutoring</h3>
             <div class="entry-role">Coordinator and Volunteer Tutor</div>
           </div>
           <div class="entry-meta">
@@ -750,7 +843,7 @@
         </div>
         <div class="entry">
           <div>
-            <div class="entry-title">The Rashi School</div>
+            <h3 class="entry-title">The Rashi School</h3>
             <div class="entry-role">Student Government President</div>
           </div>
           <div class="entry-meta">
@@ -765,32 +858,32 @@
     </section>
 
     <section id="awards">
-      <div class="section-label">Awards &amp; Honors</div>
+      <h2 class="section-label">Awards &amp; Honors</h2>
       <div class="entries">
         <div class="entry">
           <div>
-            <div class="entry-title">DECA International Career Development Conference Qualifier</div>
+            <h3 class="entry-title">DECA International Career Development Conference Qualifier</h3>
             <div class="entry-role">Placed top 5 of 40 Principles of Finance competitors at the state level to advance to internationals.</div>
           </div>
           <div class="entry-meta"><div>2026</div></div>
         </div>
         <div class="entry">
           <div>
-            <div class="entry-title">DECA State Career Development Conference Qualifier</div>
+            <h3 class="entry-title">DECA State Career Development Conference Qualifier</h3>
             <div class="entry-role">Placed top 4 of 30 Principles of Finance competitors at the district level to advance to states.</div>
           </div>
           <div class="entry-meta"><div>2025</div></div>
         </div>
         <div class="entry">
           <div>
-            <div class="entry-title">NASC Emerging Student Leader Award</div>
+            <h3 class="entry-title">NASC Emerging Student Leader Award</h3>
             <div class="entry-role">Recognized nationally for distinction in public speaking, leadership, and service.</div>
           </div>
           <div class="entry-meta"><div>2022–2024</div></div>
         </div>
         <div class="entry">
           <div>
-            <div class="entry-title">NASC National Council of Excellence Gold Recognition</div>
+            <h3 class="entry-title">NASC National Council of Excellence Gold Recognition</h3>
             <div class="entry-role">Led effort as Student Government President to earn national recognition for student leadership, service, and engagement.</div>
           </div>
           <div class="entry-meta"><div>2023–2024</div></div>
@@ -799,7 +892,7 @@
     </section>
 
     <section id="activities">
-      <div class="section-label">Other Activities</div>
+      <h2 class="section-label">Other Activities</h2>
       <div class="entries">
         <div class="activity">
           <span class="activity-role">International Competitor</span>
@@ -830,7 +923,7 @@
     </section>
 
     <section id="skills">
-      <div class="section-label">Skills &amp; Interests</div>
+      <h2 class="section-label">Skills &amp; Interests</h2>
       <dl class="skills-list">
         <dt>Skills</dt>
         <dd>React, Supabase, JavaScript, Java, Python, AI-assisted development, 3D modeling and printing, AI automation tools</dd>
@@ -840,7 +933,7 @@
         <dd>Golf, basketball, coding, DJing</dd>
       </dl>
       <div class="resume-actions">
-        <a class="btn btn-primary" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
+        <a class="btn btn-primary" id="resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
           View full resume (PDF)
         </a>
@@ -848,13 +941,16 @@
     </section>
 
     <section id="contact">
-      <div class="section-label">Contact</div>
+      <h2 class="section-label">Contact</h2>
       <div class="contact-list">
-        <a class="contact-row" href="mailto:hzisow@gmail.com">
+        <div class="contact-row contact-row-email">
           <div class="contact-label">Email</div>
-          <div class="contact-value">hzisow@gmail.com</div>
-          <div class="contact-arrow">↗</div>
-        </a>
+          <a class="contact-value contact-email-link" href="mailto:hzisow@gmail.com">hzisow@gmail.com</a>
+          <button type="button" class="copy-btn" id="copy-email" data-copy="hzisow@gmail.com" aria-label="Copy email address to clipboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="13" height="13" x="9" y="9" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span class="copy-btn-label">Copy</span>
+          </button>
+        </div>
         <a class="contact-row" href="tel:+16178930994">
           <div class="contact-label">Phone</div>
           <div class="contact-value">+1 (617) 893-0994</div>
@@ -898,24 +994,28 @@
   </main>
 
   <script>
-    const root = document.body;
-    const stored = localStorage.getItem('theme');
-    if (stored) root.setAttribute('data-theme', stored);
-    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) root.setAttribute('data-theme', 'dark');
+    // The theme itself is applied in <head>, before first paint.
+    const root = document.documentElement;
 
     function toggleTheme() {
       const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
     }
 
     const projects = {
+      'faceless-shorts': {
+        title: 'Faceless Shorts Engine',
+        year: '2026',
+        description: "A faceless YouTube/TikTok channel that runs itself. Every step — story selection, narration, caption timing, video rendering, and publishing — happens inside a GitHub Actions workflow with no server and no manual input. Stories are narrated with Piper (open-source, CPU-only TTS), then re-transcribed with faster-whisper to recover word-level timings for the one-word-at-a-time caption style. FFmpeg composites the narration over looping gameplay footage with a color grade and a Reddit-style title card. Both platforms publish through a single API call. The posting schedule is intentionally stochastic — randomized dice plus a random delay — so the cadence never looks automated.",
+        tags: ['Python', 'FFmpeg', 'GitHub Actions', 'Piper TTS', 'faster-whisper', 'CI/CD Automation']
+      },
       'brusher-games': {
         title: 'Brusher Games',
         year: '2025',
         description: 'A web-based platform that organizes, manages, and tracks school-wide elimination-style games by assigning targets, recording eliminations, and displaying live standings.',
         tags: ['Claude', 'AI', 'Vibecoding'],
-        image: 'images/project-brusher.png',
+        image: 'images/project-brusher.webp',
         link: 'https://brushergames.replit.app',
         imageContain: false
       },
@@ -924,7 +1024,7 @@
         year: '2025',
         description: 'A fully automated AI TikTok video generator and uploader. Uses N8N, UploadPost API, OpenRouter API, and Airtable.',
         tags: ['N8N', 'OpenRouter', 'Automation'],
-        image: 'images/project-tiktok.png',
+        image: 'images/project-tiktok.webp',
         imageContain: true,
         download: 'Airtable_to_Platforms.json',
         downloadLabel: 'Download N8N Workflow'
@@ -934,7 +1034,7 @@
         year: '2025',
         description: 'An easy way to manage and organize Sora AI video downloads. Takes in all the files Sora generates and lets you bulk download with the file name being the prompt, for easy organization.',
         tags: ['Sora', 'OpenAI', 'Replit'],
-        image: 'images/project-sora.png',
+        image: 'images/project-sora.webp',
         link: 'https://sora-batch-gen--hzisow.replit.app/',
         imageContain: false
       }
@@ -949,9 +1049,14 @@
       const p = projects[id];
       if (!p) return;
       lastFocused = document.activeElement;
+      // Not every project has a screenshot — collapse the frame rather than
+      // showing an empty grey block.
       const img = document.getElementById('modal-image');
-      img.style.backgroundImage = "url('" + p.image + "')";
-      img.classList.toggle('contain', !!p.imageContain);
+      img.hidden = !p.image;
+      if (p.image) {
+        img.style.backgroundImage = "url('" + p.image + "')";
+        img.classList.toggle('contain', !!p.imageContain);
+      }
       document.getElementById('modal-year').textContent = p.year || '';
       document.getElementById('modal-title').textContent = p.title;
       document.getElementById('modal-desc').textContent = p.description;
@@ -959,7 +1064,9 @@
       let actions = '';
       if (p.link) actions += '<a class="btn btn-primary" href="' + p.link + '" target="_blank" rel="noopener noreferrer">Visit Site <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>';
       if (p.download) actions += '<a class="btn" href="' + p.download + '" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> ' + p.downloadLabel + '</a>';
-      document.getElementById('modal-actions').innerHTML = actions;
+      const actionsEl = document.getElementById('modal-actions');
+      actionsEl.innerHTML = actions;
+      actionsEl.hidden = !actions;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
       modalCloseBtn.focus();
@@ -1002,6 +1109,17 @@
           openModal(el.dataset.project);
         }
       });
+      // Warm the screenshot before the modal asks for it, so it doesn't
+      // open to an empty frame. Fires once per card.
+      let warmed = false;
+      const warm = () => {
+        if (warmed) return;
+        warmed = true;
+        const src = (projects[el.dataset.project] || {}).image;
+        if (src) new Image().src = src;
+      };
+      el.addEventListener('mouseenter', warm, { once: true });
+      el.addEventListener('focus', warm, { once: true });
     });
 
     modal.addEventListener('click', e => {
@@ -1012,6 +1130,52 @@
 
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeModal();
+    });
+
+    /* ---------- Resume: open in a tab and save a copy ---------- */
+    // The anchor's own target="_blank" handles the tab; this adds the download,
+    // which a single <a> cannot do alongside navigation.
+    document.getElementById('resume-link').addEventListener('click', () => {
+      const saver = document.createElement('a');
+      saver.href = 'Henry%20Zisow%20Resume.pdf';
+      saver.download = 'Henry Zisow Resume.pdf';
+      document.body.appendChild(saver);
+      saver.click();
+      document.body.removeChild(saver);
+    });
+
+    /* ---------- Copy email ---------- */
+    const copyBtn = document.getElementById('copy-email');
+    const copyLabel = copyBtn.querySelector('.copy-btn-label');
+    let copyResetTimer = null;
+
+    copyBtn.addEventListener('click', async () => {
+      const value = copyBtn.dataset.copy;
+      let ok = true;
+      try {
+        await navigator.clipboard.writeText(value);
+      } catch (e) {
+        // Older browsers, and any non-secure origin, reject the async API.
+        try {
+          const scratch = document.createElement('textarea');
+          scratch.value = value;
+          scratch.setAttribute('readonly', '');
+          scratch.style.cssText = 'position:absolute;left:-9999px';
+          document.body.appendChild(scratch);
+          scratch.select();
+          ok = document.execCommand('copy');
+          document.body.removeChild(scratch);
+        } catch (e2) {
+          ok = false;
+        }
+      }
+      copyLabel.textContent = ok ? 'Copied' : 'Press ⌘C';
+      copyBtn.classList.toggle('copied', ok);
+      clearTimeout(copyResetTimer);
+      copyResetTimer = setTimeout(() => {
+        copyLabel.textContent = 'Copy';
+        copyBtn.classList.remove('copied');
+      }, 2000);
     });
 
     /* ---------- Scroll reveal ---------- */
@@ -1071,36 +1235,70 @@
     const progressBar = document.getElementById('scroll-progress');
     const navLinks = Array.from(document.querySelectorAll('.nav-links a'));
     const spySections = Array.from(document.querySelectorAll('section[id]'));
-    let ticking = false;
+
+    // Everything layout-dependent is measured here, never inside the scroll
+    // handler — reading offsetTop/scrollHeight per frame forces sync layout.
+    let docMax = 0, navH = 63, sectionTops = [];
+    function measure() {
+      docMax = document.documentElement.scrollHeight - window.innerHeight;
+      navH = parseInt(getComputedStyle(root).getPropertyValue('--nav-h'), 10) || 63;
+      sectionTops = spySections.map(s => ({ id: s.id, top: s.offsetTop }));
+    }
+
+    let ticking = false, revealSafetyDone = false, scrollIdleTimer = null, activeHref = null;
 
     function onScroll() {
+      ticking = false;
       const scrolled = window.scrollY;
 
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      progressBar.style.transform = 'scaleX(' + (max > 0 ? Math.min(scrolled / max, 1) : 0) + ')';
+      progressBar.style.transform = 'scaleX(' + (docMax > 0 ? Math.min(scrolled / docMax, 1) : 0) + ')';
+
+      const line = scrolled + navH + 40;
+      let currentId = null;
+      for (let i = 0; i < sectionTops.length; i++) {
+        if (sectionTops[i].top <= line) currentId = sectionTops[i].id;
+      }
+      const href = currentId && NAV_SECTION_MAP[currentId] ? '#' + NAV_SECTION_MAP[currentId] : null;
+      if (href !== activeHref) {
+        activeHref = href;
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === href));
+      }
 
       // Safety net: content must never stay invisible. If anything is still
       // unrevealed once we're at the bottom, there is no scroll left to trigger it.
-      if (max > 0 && scrolled >= max - 2) {
+      if (!revealSafetyDone && docMax > 0 && scrolled >= docMax - 2) {
+        revealSafetyDone = true;
         document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
       }
-
-      const line = scrolled + (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'), 10) || 63) + 40;
-      let currentId = null;
-      spySections.forEach(s => { if (s.offsetTop <= line) currentId = s.id; });
-      const target = currentId ? NAV_SECTION_MAP[currentId] : null;
-      navLinks.forEach(a => a.classList.toggle('active', !!target && a.getAttribute('href') === '#' + target));
-
-      ticking = false;
     }
 
     window.addEventListener('scroll', () => {
+      // Suppress hover motion while the page moves, so rows passing under a
+      // stationary cursor don't twitch. Cleared shortly after scrolling stops.
+      if (!scrollIdleTimer) root.classList.add('is-scrolling');
+      clearTimeout(scrollIdleTimer);
+      scrollIdleTimer = setTimeout(() => {
+        scrollIdleTimer = null;
+        root.classList.remove('is-scrolling');
+      }, 140);
+
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(onScroll);
     }, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { measure(); onScroll(); }, 150);
+    }, { passive: true });
+
+    measure();
     onScroll();
+    window.addEventListener('load', () => { measure(); onScroll(); });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => { measure(); onScroll(); });
+    }
   </script>
 </body>
 </html>
