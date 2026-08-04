@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Henry Zisow | Portfolio</title>
+  <meta name="description" content="Henry Zisow — junior at Gann Academy, Massachusetts DECA State Co-President. Builds software, competes in business." />
+
+  <!-- Set before first paint so scroll-reveal only hides content JS can bring back. -->
+  <script>document.documentElement.classList.add('js');</script>
 
   <meta property="og:title" content="Henry Zisow | Portfolio" />
   <meta property="og:description" content="Personal portfolio showcasing projects and skills." />
@@ -31,6 +35,8 @@
       --radius: 10px;
       --max: 920px;
       --transition: 180ms ease;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --nav-h: 63px;
     }
     [data-theme="dark"] {
       --bg: #141413;
@@ -45,6 +51,24 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+
+    /* Scroll progress */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+      z-index: 60;
+      pointer-events: none;
+    }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
@@ -81,16 +105,32 @@
       letter-spacing: -0.01em;
       color: var(--text);
       text-decoration: none;
+      transition: transform var(--transition);
     }
+    .nav-brand:hover { transform: translateY(-1px); }
     .nav-links { display: flex; gap: 28px; }
     .nav-links a {
+      position: relative;
       color: var(--text-muted);
       text-decoration: none;
       font-size: 14px;
       font-weight: 500;
-      transition: color var(--transition);
+      transition: color var(--transition), transform var(--transition);
     }
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -3px;
+      height: 1px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+      transition: transform 240ms var(--ease-out);
+    }
+    .nav-links a:hover { color: var(--text); transform: translateY(-1px); }
+    .nav-links a.active { color: var(--text); }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { transform: scaleX(1); }
 
     .theme-toggle {
       background: transparent;
@@ -104,7 +144,8 @@
       justify-content: center;
       transition: all var(--transition);
     }
-    .theme-toggle:hover { color: var(--text); border-color: var(--text-muted); }
+    .theme-toggle:hover { color: var(--text); border-color: var(--text-muted); transform: scale(1.08); }
+    .theme-toggle:active { transform: scale(0.94); }
     .theme-toggle svg { width: 16px; height: 16px; }
     [data-theme="dark"] .sun { display: block; }
     [data-theme="dark"] .moon { display: none; }
@@ -112,7 +153,8 @@
     .moon { display: block; }
 
     /* Sections */
-    section { padding: 80px 0 48px; }
+    /* Land the section edge just under the sticky nav; its own padding is the gap. */
+    section { padding: 80px 0 48px; scroll-margin-top: var(--nav-h); }
     section:first-of-type { padding-top: 96px; }
 
     /* Hero */
@@ -186,12 +228,14 @@
       border-top: 1px solid var(--border);
       text-decoration: none;
       color: var(--text);
-      transition: padding var(--transition);
+      transition: padding 260ms var(--ease-out);
       cursor: pointer;
     }
     .project:last-child { border-bottom: 1px solid var(--border); }
-    .project:hover { padding-left: 8px; }
-    .project:hover .project-arrow { transform: translate(2px, -2px); opacity: 1; }
+    .project:hover, .project:focus-visible { padding-left: 10px; }
+    .project:hover .project-arrow,
+    .project:focus-visible .project-arrow { transform: translate(3px, -3px); opacity: 1; }
+    .project:hover .project-main h3 { color: var(--accent); }
     .project-year {
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
@@ -203,6 +247,7 @@
       font-size: 20px;
       letter-spacing: -0.01em;
       margin-bottom: 6px;
+      transition: color var(--transition);
     }
     .project-main p {
       font-size: 14px;
@@ -218,7 +263,9 @@
       padding: 2px 8px;
       border: 1px solid var(--border);
       border-radius: 4px;
+      transition: transform var(--transition), border-color var(--transition), color var(--transition);
     }
+    .tag:hover { transform: translateY(-2px); border-color: var(--text-soft); color: var(--text-muted); }
     .project-arrow {
       color: var(--text-soft);
       opacity: 0.6;
@@ -234,8 +281,10 @@
       gap: 20px;
       padding: 20px 0;
       border-top: 1px solid var(--border);
+      transition: padding 260ms var(--ease-out);
     }
     .entry:last-child { border-bottom: 1px solid var(--border); }
+    .entry:hover { padding-left: 6px; }
     .entry-title {
       font-family: 'Fraunces', serif;
       font-weight: 500;
@@ -290,8 +339,10 @@
       padding: 12px 0;
       border-top: 1px solid var(--border);
       font-size: 15px;
+      transition: padding 260ms var(--ease-out);
     }
     .activity:last-child { border-bottom: 1px solid var(--border); }
+    .activity:hover { padding-left: 6px; }
     .activity-role { font-style: italic; color: var(--text); }
     .activity-org { color: var(--text-muted); }
     .activity-date {
@@ -337,7 +388,8 @@
       color: var(--text);
       font-family: inherit;
     }
-    .btn:hover { background: var(--hover); border-color: var(--text-soft); }
+    .btn:hover { background: var(--hover); border-color: var(--text-soft); transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
     .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
     .btn-primary:hover { background: var(--text-muted); border-color: var(--text-muted); color: var(--bg); }
     .btn svg { width: 14px; height: 14px; }
@@ -356,11 +408,11 @@
       border-top: 1px solid var(--border);
       color: var(--text);
       text-decoration: none;
-      transition: padding var(--transition);
+      transition: padding 260ms var(--ease-out);
     }
     .contact-row:last-child { border-bottom: 1px solid var(--border); }
-    .contact-row:hover { padding-left: 8px; }
-    .contact-row:hover .contact-arrow { opacity: 1; transform: translate(2px, -2px); }
+    .contact-row:hover { padding-left: 10px; }
+    .contact-row:hover .contact-arrow { opacity: 1; transform: translate(3px, -3px); }
     .contact-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
@@ -393,6 +445,7 @@
     .footer-inner a:hover { color: var(--text); }
 
     @media (max-width: 720px) {
+      :root { --nav-h: 59px; }
       .container { padding: 0 20px; }
       .nav-inner { padding: 12px 20px; }
       .nav-links { gap: 18px; }
@@ -401,10 +454,6 @@
       .hero h1 { font-size: clamp(34px, 9vw, 44px); }
       .hero .tagline { font-size: 16px; }
       .about p { font-size: 16px; }
-      .resume-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .stat { padding: 16px; }
-      .stat-value { font-size: 24px; }
-      .stat-label { font-size: 12px; }
       .project { grid-template-columns: 44px 1fr 16px; gap: 12px; padding: 18px 0; }
       .project-main h3 { font-size: 18px; }
       .project-main p { font-size: 13px; }
@@ -424,14 +473,18 @@
 
     @media (max-width: 460px) {
       .nav-links a:nth-child(4) { display: none; }
-      .resume-grid { grid-template-columns: 1fr; }
       .footer-inner { flex-direction: column; gap: 6px; align-items: flex-start; }
     }
 
+    /* Touch devices latch :hover after a tap — don't leave things nudged. */
     @media (hover: none) {
-      .project:hover, .contact-row:hover { padding-left: 0; }
+      .project:hover, .contact-row:hover, .entry:hover, .activity:hover { padding-left: 0; }
       .project:hover .project-arrow,
       .contact-row:hover .contact-arrow { transform: none; }
+      .project:hover .project-main h3 { color: inherit; }
+      .btn:hover, .tag:hover, .nav-brand:hover, .nav-links a:hover { transform: none; }
+      .theme-toggle:hover { transform: none; }
+      .modal-close:hover { transform: none; }
     }
 
     /* Modal */
@@ -482,7 +535,7 @@
       transition: all var(--transition);
       z-index: 2;
     }
-    .modal-close:hover { color: var(--text); border-color: var(--text-soft); }
+    .modal-close:hover { color: var(--text); border-color: var(--text-soft); transform: rotate(90deg); }
     .modal-close svg { width: 14px; height: 14px; }
     .modal-image {
       width: 100%;
@@ -518,12 +571,33 @@
     }
     .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
-    /* Reveal animation */
-    .reveal { opacity: 0; transform: translateY(8px); transition: opacity 600ms ease, transform 600ms ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* Scroll reveal — only armed once JS confirms it can un-hide these again */
+    html.js .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition:
+        opacity 700ms var(--ease-out),
+        transform 700ms var(--ease-out);
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+    html.js .reveal.visible { opacity: 1; transform: none; }
+
+    /* Motion is decoration here — drop all of it when the OS asks. */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      html.js .reveal { opacity: 1; transform: none; transition: none; }
+      .scroll-progress { display: none; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
 </head>
 <body data-theme="light">
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
   <nav class="top">
     <div class="nav-inner">
       <a href="#" class="nav-brand">Henry Zisow</a>
@@ -766,9 +840,9 @@
         <dd>Golf, basketball, coding, DJing</dd>
       </dl>
       <div class="resume-actions">
-        <a class="btn btn-primary" href="Henry Zisow Resume.pdf" download="Henry Zisow Resume.pdf">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-          Download full resume (PDF)
+        <a class="btn btn-primary" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          View full resume (PDF)
         </a>
       </div>
     </section>
@@ -800,13 +874,13 @@
     </section>
 
     <div class="modal-overlay" id="modal">
-      <div class="modal" id="modal-inner">
+      <div class="modal" id="modal-inner" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <button class="modal-close" id="modal-close-btn" aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
         <div class="modal-image" id="modal-image"></div>
         <div class="modal-body">
-          <div class="modal-year">2025</div>
+          <div class="modal-year" id="modal-year"></div>
           <h3 id="modal-title"></h3>
           <div class="modal-tags" id="modal-tags"></div>
           <p class="modal-desc" id="modal-desc"></p>
@@ -838,6 +912,7 @@
     const projects = {
       'brusher-games': {
         title: 'Brusher Games',
+        year: '2025',
         description: 'A web-based platform that organizes, manages, and tracks school-wide elimination-style games by assigning targets, recording eliminations, and displaying live standings.',
         tags: ['Claude', 'AI', 'Vibecoding'],
         image: 'images/project-brusher.png',
@@ -846,6 +921,7 @@
       },
       'ai-tiktok': {
         title: 'AI TikTok Video Automation',
+        year: '2025',
         description: 'A fully automated AI TikTok video generator and uploader. Uses N8N, UploadPost API, OpenRouter API, and Airtable.',
         tags: ['N8N', 'OpenRouter', 'Automation'],
         image: 'images/project-tiktok.png',
@@ -855,6 +931,7 @@
       },
       'sora-downloader': {
         title: 'OpenAI Sora Bulk Downloader',
+        year: '2025',
         description: 'An easy way to manage and organize Sora AI video downloads. Takes in all the files Sora generates and lets you bulk download with the file name being the prompt, for easy organization.',
         tags: ['Sora', 'OpenAI', 'Replit'],
         image: 'images/project-sora.png',
@@ -864,13 +941,18 @@
     };
 
     const modal = document.getElementById('modal');
+    const modalInner = document.getElementById('modal-inner');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    let lastFocused = null;
 
     function openModal(id) {
       const p = projects[id];
       if (!p) return;
+      lastFocused = document.activeElement;
       const img = document.getElementById('modal-image');
       img.style.backgroundImage = "url('" + p.image + "')";
       img.classList.toggle('contain', !!p.imageContain);
+      document.getElementById('modal-year').textContent = p.year || '';
       document.getElementById('modal-title').textContent = p.title;
       document.getElementById('modal-desc').textContent = p.description;
       document.getElementById('modal-tags').innerHTML = p.tags.map(t => '<span class="tag">' + t + '</span>').join('');
@@ -880,15 +962,46 @@
       document.getElementById('modal-actions').innerHTML = actions;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
+      modalCloseBtn.focus();
     }
 
     function closeModal() {
+      if (!modal.classList.contains('open')) return;
       modal.classList.remove('open');
       document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+      lastFocused = null;
     }
 
+    // Keep Tab inside the dialog while it's open.
+    modalInner.addEventListener('keydown', e => {
+      if (e.key !== 'Tab') return;
+      const focusable = modalInner.querySelectorAll('a[href], button:not([disabled])');
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+
+    // The cards are divs, so they need the button affordances spelled out.
     document.querySelectorAll('.project').forEach(el => {
+      const heading = el.querySelector('h3');
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      if (heading) el.setAttribute('aria-label', heading.textContent + ' — view details');
       el.addEventListener('click', () => openModal(el.dataset.project));
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal(el.dataset.project);
+        }
+      });
     });
 
     modal.addEventListener('click', e => {
@@ -900,6 +1013,94 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeModal();
     });
+
+    /* ---------- Scroll reveal ---------- */
+    // Stagger restarts per section so a long list never trails far behind the scroll.
+    const REVEAL_STEP = 70;
+    const REVEAL_MAX_STEPS = 5;
+    const REVEAL_GROUPS = [
+      ['.hero', 'h1, .tagline, .meta'],
+      ['#about', '.section-label, p'],
+      ['#projects', '.section-label, .project'],
+      ['#education', '.section-label, .entry'],
+      ['#leadership', '.section-label, .entry'],
+      ['#awards', '.section-label, .entry'],
+      ['#activities', '.section-label, .activity'],
+      ['#skills', '.section-label, .skills-list, .resume-actions'],
+      ['#contact', '.section-label, .contact-row'],
+      ['footer', '.footer-inner']
+    ];
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        });
+      // Keep the bottom inset small: the footer sits only ~32px off the page
+      // bottom, and a larger inset would exclude it from the root entirely.
+      }, { rootMargin: '0px 0px -24px 0px', threshold: 0.05 });
+
+      REVEAL_GROUPS.forEach(([containerSel, childSel]) => {
+        const container = document.querySelector(containerSel);
+        if (!container) return;
+        container.querySelectorAll(childSel).forEach((el, i) => {
+          el.style.setProperty('--reveal-delay', Math.min(i, REVEAL_MAX_STEPS) * REVEAL_STEP + 'ms');
+          el.classList.add('reveal');
+          revealObserver.observe(el);
+        });
+      });
+    }
+
+    /* ---------- Scroll progress + active nav link ---------- */
+    // Every resume-ish section lights up the one "Resume" link in the nav.
+    const NAV_SECTION_MAP = {
+      about: 'about',
+      projects: 'projects',
+      education: 'education',
+      leadership: 'education',
+      awards: 'education',
+      activities: 'education',
+      skills: 'education',
+      contact: 'contact'
+    };
+
+    const progressBar = document.getElementById('scroll-progress');
+    const navLinks = Array.from(document.querySelectorAll('.nav-links a'));
+    const spySections = Array.from(document.querySelectorAll('section[id]'));
+    let ticking = false;
+
+    function onScroll() {
+      const scrolled = window.scrollY;
+
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.transform = 'scaleX(' + (max > 0 ? Math.min(scrolled / max, 1) : 0) + ')';
+
+      // Safety net: content must never stay invisible. If anything is still
+      // unrevealed once we're at the bottom, there is no scroll left to trigger it.
+      if (max > 0 && scrolled >= max - 2) {
+        document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+      }
+
+      const line = scrolled + (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'), 10) || 63) + 40;
+      let currentId = null;
+      spySections.forEach(s => { if (s.offsetTop <= line) currentId = s.id; });
+      const target = currentId ? NAV_SECTION_MAP[currentId] : null;
+      navLinks.forEach(a => a.classList.toggle('active', !!target && a.getAttribute('href') === '#' + target));
+
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(onScroll);
+    }, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onScroll();
   </script>
 </body>
 </html>
