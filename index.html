@@ -64,8 +64,9 @@
       --border: #bdbdb4;
       --text: #131313;
       --text-muted: #494945;
-      --text-soft: #6c6c66;
+      --text-soft: #63635c;
       --accent: #3b85c7;
+      --accent-text: #256199; /* clears 4.5:1 on both --bg and --bg-elev */
       --hover: #dbdbd3;
       --radius: 10px;
       --max: 920px;
@@ -81,6 +82,7 @@
       --text-muted: #a8a49b;
       --text-soft: #8a857a; /* 5.02:1 on --bg; #6f6c64 was 3.52 and failed WCAG AA */
       --accent: #7eb8e8;
+      --accent-text: #7eb8e8; /* 8.70:1 — already safe */
       --hover: #22221f;
     }
 
@@ -226,6 +228,8 @@
     }
     .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-soft); }
 
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+
     /* Section label */
     .section-label {
       font-family: 'JetBrains Mono', monospace;
@@ -256,47 +260,57 @@
     .about p + p { color: var(--text-muted); }
     .about p:last-child { margin-bottom: 0; }
 
-    /* Projects list */
-    .projects-list { display: flex; flex-direction: column; }
-    .project {
+    /* Projects — cards, so the work reads differently from the resume lists */
+    .projects-list {
       display: grid;
-      grid-template-columns: 60px 1fr auto;
-      gap: 20px;
-      align-items: baseline;
-      padding: 24px 0;
-      border-top: 1px solid var(--border);
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .project {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
       text-decoration: none;
       color: var(--text);
-      transition: padding 260ms var(--ease-out);
       cursor: pointer;
+      transition: transform 260ms var(--ease-out), border-color var(--transition), background var(--transition);
     }
-    .project:last-child { border-bottom: 1px solid var(--border); }
-    /* Gated on :not(.is-scrolling) — otherwise rows nudge sideways just from the
-       cursor sweeping over them mid-scroll, which reads as the page glitching. */
-    html:not(.is-scrolling) .project:hover, .project:focus-visible { padding-left: 10px; }
-    html:not(.is-scrolling) .project:hover .project-arrow,
-    .project:focus-visible .project-arrow { transform: translate(3px, -3px); opacity: 1; }
-    html:not(.is-scrolling) .project:hover .project-main h3 { color: var(--accent); }
+    html:not(.is-scrolling) .projects-list .project:hover {
+      transform: translateY(-3px);
+      border-color: var(--text-soft);
+    }
+    html:not(.is-scrolling) .projects-list .project:hover .project-arrow { transform: translate(3px, -3px); opacity: 1; }
+    html:not(.is-scrolling) .projects-list .project:hover h3 { color: var(--accent-text); }
+    .project:focus-visible { border-color: var(--text-soft); }
+    .project-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
     .project-year {
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
-      color: var(--text-soft);
+      color: var(--accent-text);
     }
-    .project-main h3 {
+    .project h3 {
       font-family: 'Fraunces', serif;
       font-weight: 500;
-      font-size: 20px;
+      font-size: 21px;
       letter-spacing: -0.01em;
       margin-bottom: 8px;
       transition: color var(--transition);
     }
-    .project-main p {
+    .project p {
       font-size: 14px;
       color: var(--text-muted);
-      margin-bottom: 12px;
-      line-height: 1.5;
+      margin-bottom: 20px;
+      line-height: 1.55;
     }
-    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
     .tag {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
@@ -337,6 +351,15 @@
       font-size: 14px;
       color: var(--text-muted);
       font-style: italic;
+    }
+    /* Awards use this slot for a description, not a title — italic there read
+       as a second job title. Same size as the bullet copy it sits beside. */
+    .entry-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-top: 4px;
+      max-width: 62ch;
     }
     .entry-meta {
       font-family: 'JetBrains Mono', monospace;
@@ -518,9 +541,10 @@
       .hero h1 { font-size: clamp(34px, 9vw, 44px); }
       .hero .tagline { font-size: 16px; }
       .about p { font-size: 16px; }
-      .project { grid-template-columns: 44px 1fr 16px; gap: 12px; padding: 20px 0; }
-      .project-main h3 { font-size: 18px; }
-      .project-main p { font-size: 13px; }
+      .projects-list { grid-template-columns: 1fr; }
+      .project { padding: 20px; }
+      .project h3 { font-size: 19px; }
+      .project p { font-size: 13px; }
       .contact-row { grid-template-columns: 72px 1fr auto; padding: 16px 0; }
       .entry { padding: 20px 0; }
       .contact-value { font-size: 14px; }
@@ -561,11 +585,11 @@
 
     /* Touch devices latch :hover after a tap — don't leave things nudged. */
     @media (hover: none) {
-      html:not(.is-scrolling) .project:hover,
       html:not(.is-scrolling) .contact-row:hover { padding-left: 0; }
+      html:not(.is-scrolling) .projects-list .project:hover { transform: none; }
       html:not(.is-scrolling) .project:hover .project-arrow,
       html:not(.is-scrolling) .contact-row:hover .contact-arrow { transform: none; }
-      html:not(.is-scrolling) .project:hover .project-main h3 { color: inherit; }
+      html:not(.is-scrolling) .project:hover h3 { color: inherit; }
       html:not(.is-scrolling) .btn:hover,
       html:not(.is-scrolling) .tag:hover { transform: none; }
       .nav-brand:hover, .nav-links a:hover,
@@ -706,6 +730,13 @@
       <div class="meta">
         <span>Boston, MA</span>
       </div>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">View projects</a>
+        <a class="btn resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+          Resume
+        </a>
+      </div>
     </section>
 
     <section id="about" class="about">
@@ -718,49 +749,49 @@
       <h2 class="section-label">Projects</h2>
       <div class="projects-list">
         <div class="project" data-project="epiguide">
-          <div class="project-year">2026</div>
-          <div class="project-main">
-            <h3>EpiGuide</h3>
-            <p>A Progressive Web App that helps untrained bystanders recognize anaphylaxis and walks them through using an EpiPen, offline if they need to.</p>
-            <div class="project-tags"><span class="tag">Claude API</span><span class="tag">Machine Learning</span><span class="tag">PWA</span></div>
+          <div class="project-head">
+            <span class="project-year">2026</span>
+            <span class="project-arrow">↗</span>
           </div>
-          <div class="project-arrow">↗</div>
+          <h3>EpiGuide</h3>
+          <p>A Progressive Web App that helps untrained bystanders recognize anaphylaxis and walks them through using an EpiPen, offline if they need to.</p>
+          <div class="project-tags"><span class="tag">Claude API</span><span class="tag">Machine Learning</span><span class="tag">PWA</span></div>
         </div>
         <div class="project" data-project="faceless-shorts">
-          <div class="project-year">2026</div>
-          <div class="project-main">
-            <h3>Faceless Shorts Engine</h3>
-            <p>Turns Reddit stories into narrated vertical Shorts and posts them to YouTube and TikTok without me. Runs on free GitHub Actions minutes.</p>
-            <div class="project-tags"><span class="tag">Python</span><span class="tag">FFmpeg</span><span class="tag">GitHub Actions</span></div>
+          <div class="project-head">
+            <span class="project-year">2026</span>
+            <span class="project-arrow">↗</span>
           </div>
-          <div class="project-arrow">↗</div>
+          <h3>Faceless Shorts Engine</h3>
+          <p>Turns Reddit stories into narrated vertical Shorts and posts them to YouTube and TikTok without me. Runs on free GitHub Actions minutes.</p>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">FFmpeg</span><span class="tag">GitHub Actions</span></div>
         </div>
         <div class="project" data-project="brusher-games">
-          <div class="project-year">2025</div>
-          <div class="project-main">
-            <h3>Brusher Games</h3>
-            <p>A web-based platform that organizes and tracks school-wide elimination-style games with targets, eliminations, and live standings.</p>
-            <div class="project-tags"><span class="tag">Claude</span><span class="tag">AI</span><span class="tag">Vibecoding</span></div>
+          <div class="project-head">
+            <span class="project-year">2025</span>
+            <span class="project-arrow">↗</span>
           </div>
-          <div class="project-arrow">↗</div>
+          <h3>Brusher Games</h3>
+          <p>A web-based platform that organizes and tracks school-wide elimination-style games with targets, eliminations, and live standings.</p>
+          <div class="project-tags"><span class="tag">Claude</span><span class="tag">AI</span><span class="tag">Vibecoding</span></div>
         </div>
         <div class="project" data-project="ai-tiktok">
-          <div class="project-year">2025</div>
-          <div class="project-main">
-            <h3>AI TikTok Video Automation (Inactive)</h3>
-            <p>A fully automated AI TikTok video generator and uploader using N8N, UploadPost API, OpenRouter, and Airtable.</p>
-            <div class="project-tags"><span class="tag">N8N</span><span class="tag">OpenRouter</span><span class="tag">Automation</span></div>
+          <div class="project-head">
+            <span class="project-year">2025</span>
+            <span class="project-arrow">↗</span>
           </div>
-          <div class="project-arrow">↗</div>
+          <h3>AI TikTok Video Automation (Inactive)</h3>
+          <p>A fully automated AI TikTok video generator and uploader using N8N, UploadPost API, OpenRouter, and Airtable.</p>
+          <div class="project-tags"><span class="tag">N8N</span><span class="tag">OpenRouter</span><span class="tag">Automation</span></div>
         </div>
         <div class="project" data-project="sora-downloader">
-          <div class="project-year">2025</div>
-          <div class="project-main">
-            <h3>OpenAI Sora Bulk Downloader (Inactive)</h3>
-            <p>Manage and bulk-download Sora AI videos with prompts as filenames for easy organization.</p>
-            <div class="project-tags"><span class="tag">Sora</span><span class="tag">OpenAI</span><span class="tag">Replit</span></div>
+          <div class="project-head">
+            <span class="project-year">2025</span>
+            <span class="project-arrow">↗</span>
           </div>
-          <div class="project-arrow">↗</div>
+          <h3>OpenAI Sora Bulk Downloader (Inactive)</h3>
+          <p>Manage and bulk-download Sora AI videos with prompts as filenames for easy organization.</p>
+          <div class="project-tags"><span class="tag">Sora</span><span class="tag">OpenAI</span><span class="tag">Replit</span></div>
         </div>
       </div>
     </section>
@@ -873,28 +904,28 @@
         <div class="entry">
           <div>
             <h3 class="entry-title">DECA International Career Development Conference Qualifier</h3>
-            <div class="entry-role">Placed top 5 of 40 Principles of Finance competitors at the state level to advance to internationals.</div>
+            <div class="entry-desc">Placed top 5 of 40 Principles of Finance competitors at the state level to advance to internationals.</div>
           </div>
           <div class="entry-meta"><div>2026</div></div>
         </div>
         <div class="entry">
           <div>
             <h3 class="entry-title">DECA State Career Development Conference Qualifier</h3>
-            <div class="entry-role">Placed top 4 of 30 Principles of Finance competitors at the district level to advance to states.</div>
+            <div class="entry-desc">Placed top 4 of 30 Principles of Finance competitors at the district level to advance to states.</div>
           </div>
           <div class="entry-meta"><div>2025</div></div>
         </div>
         <div class="entry">
           <div>
             <h3 class="entry-title">NASC Emerging Student Leader Award</h3>
-            <div class="entry-role">Recognized nationally for distinction in public speaking, leadership, and service.</div>
+            <div class="entry-desc">Recognized nationally for distinction in public speaking, leadership, and service.</div>
           </div>
           <div class="entry-meta"><div>2022–2024</div></div>
         </div>
         <div class="entry">
           <div>
             <h3 class="entry-title">NASC National Council of Excellence Gold Recognition</h3>
-            <div class="entry-role">Led effort as Student Government President to earn national recognition for student leadership, service, and engagement.</div>
+            <div class="entry-desc">Led effort as Student Government President to earn national recognition for student leadership, service, and engagement.</div>
           </div>
           <div class="entry-meta"><div>2023–2024</div></div>
         </div>
@@ -943,7 +974,7 @@
         <dd>Golf, basketball, coding, DJing</dd>
       </dl>
       <div class="resume-actions">
-        <a class="btn btn-primary" id="resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
+        <a class="btn btn-primary resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
           View full resume (PDF)
         </a>
@@ -1146,14 +1177,14 @@
     /* ---------- Resume: open in a tab and save a copy ---------- */
     // The anchor's own target="_blank" handles the tab; this adds the download,
     // which a single <a> cannot do alongside navigation.
-    document.getElementById('resume-link').addEventListener('click', () => {
+    document.querySelectorAll('.resume-link').forEach(el => el.addEventListener('click', () => {
       const saver = document.createElement('a');
       saver.href = 'Henry%20Zisow%20Resume.pdf';
       saver.download = 'Henry Zisow Resume.pdf';
       document.body.appendChild(saver);
       saver.click();
       document.body.removeChild(saver);
-    });
+    }));
 
     /* ---------- Copy email ---------- */
     const copyBtn = document.getElementById('copy-email');
