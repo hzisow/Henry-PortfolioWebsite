@@ -720,7 +720,7 @@
           <div class="project-year">2026</div>
           <div class="project-main">
             <h3>Faceless Shorts Engine</h3>
-            <p>A fully autonomous content pipeline that turns Reddit stories into narrated vertical Shorts and publishes them to YouTube and TikTok — no server, no GPU, and no human in the loop.</p>
+            <p>Turns Reddit stories into narrated vertical Shorts and posts them to YouTube and TikTok without me. Runs on free GitHub Actions minutes.</p>
             <div class="project-tags"><span class="tag">Python</span><span class="tag">FFmpeg</span><span class="tag">GitHub Actions</span></div>
           </div>
           <div class="project-arrow">↗</div>
@@ -1007,7 +1007,7 @@
       'faceless-shorts': {
         title: 'Faceless Shorts Engine',
         year: '2026',
-        description: "A faceless YouTube/TikTok channel that runs itself. Every step — story selection, narration, caption timing, video rendering, and publishing — happens inside a GitHub Actions workflow with no server and no manual input. Stories are narrated with Piper (open-source, CPU-only TTS), then re-transcribed with faster-whisper to recover word-level timings for the one-word-at-a-time caption style. FFmpeg composites the narration over looping gameplay footage with a color grade and a Reddit-style title card. Both platforms publish through a single API call. The posting schedule is intentionally stochastic — randomized dice plus a random delay — so the cadence never looks automated.",
+        description: "Every day I was picking a story, recording narration, timing captions, rendering, and uploading. So I moved all of it into a GitHub Actions workflow and stopped touching it. The job pulls an unused story from a cache of about 6,500, narrates it with Piper, and renders a 1080x1920 video in FFmpeg over looping gameplay with a title card and color grade. Piper doesn't emit word-level timestamps, so the audio goes back through faster-whisper to recover them for the one-word captions. Posting is deliberately irregular so the channel doesn't look scheduled. It all runs on free CI minutes with no server and no GPU.",
         tags: ['Python', 'FFmpeg', 'GitHub Actions', 'Piper TTS', 'faster-whisper', 'CI/CD Automation']
       },
       'brusher-games': {
