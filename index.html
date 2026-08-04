@@ -1007,7 +1007,7 @@
       'faceless-shorts': {
         title: 'Faceless Shorts Engine',
         year: '2026',
-        description: "Every day I was picking a story, recording narration, timing captions, rendering, and uploading. So I moved all of it into a GitHub Actions workflow and stopped touching it. The job pulls an unused story from a cache of about 6,500, narrates it with Piper, and renders a 1080x1920 video in FFmpeg over looping gameplay with a title card and color grade. Piper doesn't emit word-level timestamps, so the audio goes back through faster-whisper to recover them for the one-word captions. Posting is deliberately irregular so the channel doesn't look scheduled. It all runs on free CI minutes with no server and no GPU.",
+        description: "A GitHub Actions workflow that renders and publishes a full video start to finish. It pulls an unused story from a cache of about 6,500, narrates it with Piper, and builds a 1080x1920 video in FFmpeg over looping gameplay with a title card and color grade. Piper doesn't emit word-level timestamps, so the audio goes back through faster-whisper to recover them for the one-word captions. YouTube and TikTok both publish through one API call. Posting is deliberately irregular so the channel doesn't look scheduled, and the whole thing runs on free CI minutes with no server and no GPU.",
         tags: ['Python', 'FFmpeg', 'GitHub Actions', 'Piper TTS', 'faster-whisper', 'CI/CD Automation']
       },
       'brusher-games': {
