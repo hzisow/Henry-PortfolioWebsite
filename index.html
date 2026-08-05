@@ -307,7 +307,13 @@
       margin-bottom: 20px;
       line-height: 1.55;
       max-width: 64ch; /* keeps the full-width card readable */
+      /* Blurbs run 13-26 words. A three-line floor keeps the gap above the
+         tags identical across cards; no clamp, so nothing is ever truncated.
+         Every blurb is written to fit three lines at this width. */
+      min-height: 4.65em;
     }
+    /* The wide card is a different shape; let it size to its own copy. */
+    .project:last-child:nth-child(odd) p { min-height: 0; }
     /* Tags and the arrow share one baseline row, so the card has a footer
        instead of an empty band across the top. */
     .project-foot {
@@ -550,6 +556,7 @@
       .about p { font-size: 16px; }
       .projects-list { grid-template-columns: 1fr; }
       .project { padding: 20px; }
+      .project p { min-height: 0; }
       .project h3 { font-size: 19px; }
       .project p { font-size: 13px; }
       .contact-row { grid-template-columns: 72px 1fr auto; padding: 16px 0; }
@@ -771,7 +778,7 @@
             <span class="project-year">2026</span>
           </div>
           <h3>BFF Classroom</h3>
-          <p>Free financial literacy platform for middle and high schoolers, built for a student-run nonprofit (Building Financial Futures of America). Teachers run interactive lessons with a class, or students take them alone.</p>
+          <p>Free financial literacy platform for middle and high schoolers, built for a student-run nonprofit. Teachers run lessons with a class, or students take them alone.</p>
           <div class="project-foot">
             <div class="project-tags"><span class="tag">TypeScript</span><span class="tag">React</span><span class="tag">Supabase</span></div>
             <span class="project-arrow">↗</span>
