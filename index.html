@@ -21,23 +21,20 @@
     })();
   </script>
 
-  <!-- Square 512px icon, not a banner: with twitter:card=summary this renders
-       as a small thumbnail beside the title rather than a full-width card. -->
+  <!-- Deliberately no og:image / twitter:image. Any og:image makes iMessage
+       render a full-bleed image card; with none, it falls back to the touch
+       icon and shows the compact title + URL bubble instead. -->
   <meta property="og:title" content="Henry Zisow" />
   <meta property="og:description" content="Junior at Gann Academy and Massachusetts DECA State Co-President. Builds software, competes in business." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://henryzisow.com/" />
-  <meta property="og:image" content="https://henryzisow.com/icon-512.png" />
-  <meta property="og:image:width" content="512" />
-  <meta property="og:image:height" content="512" />
-  <meta property="og:image:alt" content="Henry Zisow" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Henry Zisow" />
   <meta name="twitter:description" content="Junior at Gann Academy and Massachusetts DECA State Co-President. Builds software, competes in business." />
-  <meta name="twitter:image" content="https://henryzisow.com/icon-512.png" />
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="apple-touch-icon" href="icon-512.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="preload" href="fonts/inter-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin />
   <style>
