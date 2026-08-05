@@ -68,6 +68,7 @@
       --accent: #3b85c7;
       --accent-text: #256199; /* clears 4.5:1 on both --bg and --bg-elev */
       --hover: #dbdbd3;
+      --stone: #dedcd5;
       --radius: 10px;
       --max: 920px;
       --transition: 180ms ease;
@@ -84,6 +85,7 @@
       --accent: #7eb8e8;
       --accent-text: #7eb8e8; /* 8.70:1 — already safe */
       --hover: #22221f;
+      --stone: #232320;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -350,6 +352,61 @@
     }
     html:not(.is-scrolling) .tag:hover { transform: translateY(-2px); border-color: var(--text-soft); color: var(--text-muted); }
 
+    /* Graveyard — retired projects as headstones. The arch is one border-radius;
+       Fraunces is already the display serif, which is what headstones use. */
+    .graveyard {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      align-items: flex-end;
+      justify-content: center;
+      border-bottom: 1px solid var(--border); /* stones stand on the ground line */
+    }
+    .grave {
+      --tilt: -1.5deg;
+      width: 250px;
+      min-height: 248px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: var(--stone);
+      border: 1px solid var(--border);
+      border-radius: 125px 125px 6px 6px;
+      padding: 58px 24px 28px;
+      cursor: pointer;
+      transform: rotate(var(--tilt)); /* settled, not stamped out */
+      transition: transform 260ms var(--ease-out), border-color var(--transition);
+    }
+    .grave:nth-child(even) { --tilt: 1.3deg; }
+    html:not(.is-scrolling) .graveyard .grave:hover {
+      transform: rotate(var(--tilt)) translateY(-5px);
+      border-color: var(--text-soft);
+    }
+    .grave:focus-visible { border-color: var(--text-soft); }
+    .grave h3 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 17px;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    /* --text-soft fails contrast on the stone fill, so these use --text-muted. */
+    .grave-dates {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .grave-epitaph {
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 24ch;
+    }
+
     /* Resume entries */
     .entries { display: flex; flex-direction: column; }
     .entry {
@@ -570,6 +627,8 @@
         row-gap: 0;
       }
       .project-tags { margin-top: 16px; justify-content: flex-start; }
+      .graveyard { gap: 20px; }
+      .grave { width: 100%; max-width: 260px; }
       .project h3 { font-size: 19px; }
       .project p { font-size: 13px; }
       .contact-row { grid-template-columns: 72px 1fr auto; padding: 16px 0; }
@@ -821,23 +880,21 @@
           <p>A web-based platform that organizes and tracks school-wide elimination-style games with targets, eliminations, and live standings.</p>
           <div class="project-tags"><span class="tag">Claude</span><span class="tag">AI</span><span class="tag">Vibecoding</span></div>
         </div>
-        <div class="project" data-project="ai-tiktok">
-          <div class="project-head">
-            <span class="project-year">2025</span>
-            <span class="project-arrow">↗</span>
-          </div>
-          <h3>AI TikTok Video Automation (Inactive)</h3>
-          <p>A fully automated AI TikTok video generator and uploader using N8N, UploadPost API, OpenRouter, and Airtable.</p>
-          <div class="project-tags"><span class="tag">N8N</span><span class="tag">OpenRouter</span><span class="tag">Automation</span></div>
+      </div>
+    </section>
+
+    <section id="graveyard">
+      <h2 class="section-label">Graveyard</h2>
+      <div class="graveyard">
+        <div class="grave" data-project="ai-tiktok">
+          <h3>AI TikTok Video Automation</h3>
+          <div class="grave-dates">2025 &ndash; 2026</div>
+          <p class="grave-epitaph">Superseded by a pipeline that didn&rsquo;t need babysitting.</p>
         </div>
-        <div class="project" data-project="sora-downloader">
-          <div class="project-head">
-            <span class="project-year">2025</span>
-            <span class="project-arrow">↗</span>
-          </div>
-          <h3>OpenAI Sora Bulk Downloader (Inactive)</h3>
-          <p>Manage and bulk-download Sora AI videos with prompts as filenames for easy organization.</p>
-          <div class="project-tags"><span class="tag">Sora</span><span class="tag">OpenAI</span><span class="tag">Replit</span></div>
+        <div class="grave" data-project="sora-downloader">
+          <h3>OpenAI Sora Bulk Downloader</h3>
+          <div class="grave-dates">2025 &ndash; 2026</div>
+          <p class="grave-epitaph">Sora moved on. The downloader didn&rsquo;t.</p>
         </div>
       </div>
     </section>
@@ -1135,7 +1192,7 @@
         repo: 'https://github.com/hzisow/brusher-games'
       },
       'ai-tiktok': {
-        title: 'AI TikTok Video Automation (Inactive)',
+        title: 'AI TikTok Video Automation',
         year: '2025',
         description: 'A fully automated AI TikTok video generator and uploader. Uses N8N, UploadPost API, OpenRouter API, and Airtable.',
         tags: ['N8N', 'OpenRouter', 'Automation'],
@@ -1143,7 +1200,7 @@
         downloadLabel: 'Download N8N Workflow'
       },
       'sora-downloader': {
-        title: 'OpenAI Sora Bulk Downloader (Inactive)',
+        title: 'OpenAI Sora Bulk Downloader',
         year: '2025',
         description: 'An easy way to manage and organize Sora AI video downloads. Takes in all the files Sora generates and lets you bulk download with the file name being the prompt, for easy organization.',
         tags: ['Sora', 'OpenAI', 'Replit'],
@@ -1217,7 +1274,7 @@
     });
 
     // The cards are divs, so they need the button affordances spelled out.
-    document.querySelectorAll('.project').forEach(el => {
+    document.querySelectorAll('[data-project]').forEach(el => {
       const heading = el.querySelector('h3');
       el.setAttribute('role', 'button');
       el.setAttribute('tabindex', '0');
@@ -1306,6 +1363,7 @@
       ['.hero', 'h1, .tagline, .meta'],
       ['#about', '.section-label, p'],
       ['#projects', '.section-label, .project'],
+      ['#graveyard', '.section-label, .graveyard'],
       ['#education', '.section-label, .entry'],
       ['#leadership', '.section-label, .entry'],
       ['#awards', '.section-label, .entry'],
@@ -1344,6 +1402,7 @@
     const NAV_SECTION_MAP = {
       about: 'about',
       projects: 'projects',
+      graveyard: 'projects',
       education: 'education',
       leadership: 'education',
       awards: 'education',
