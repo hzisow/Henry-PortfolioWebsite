@@ -260,21 +260,21 @@
     .about p + p { color: var(--text-muted); }
     .about p:last-child { margin-bottom: 0; }
 
-    /* Projects — cards, so the work reads differently from the resume lists */
-    .projects-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-    /* An odd final card spans the row rather than leaving a hole beside it. */
-    .project:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    /* Projects — full-width cards, one per row. Each is its own grid row, so
+       nothing has to height-match a neighbour and blurbs can run any length. */
+    .projects-list { display: flex; flex-direction: column; gap: 14px; }
     .project {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 230px;
+      grid-template-areas:
+        "head  head"
+        "title tags"
+        "desc  tags";
+      column-gap: 40px;
       background: var(--bg-elev);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
+      padding: 26px 28px;
       text-decoration: none;
       color: var(--text);
       cursor: pointer;
@@ -287,12 +287,18 @@
     html:not(.is-scrolling) .projects-list .project:hover .project-arrow { transform: translate(3px, -3px); opacity: 1; }
     html:not(.is-scrolling) .projects-list .project:hover h3 { color: var(--accent-text); }
     .project:focus-visible { border-color: var(--text-soft); }
+
     .project-head {
+      grid-area: head;
       display: flex;
       align-items: baseline;
       gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+    }
+    .project-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--accent-text);
     }
     /* Optional impact line, shown beside the year on card and modal. */
     .project-note {
@@ -301,12 +307,15 @@
       color: var(--text-soft);
     }
     .project-note::before { content: '\00b7'; margin-right: 8px; }
-    .project-year {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--accent-text);
+    .project-arrow {
+      margin-left: auto;
+      color: var(--text-soft);
+      opacity: 0.6;
+      transition: all var(--transition);
+      font-size: 14px;
     }
     .project h3 {
+      grid-area: title;
       font-family: 'Fraunces', serif;
       font-weight: 500;
       font-size: 21px;
@@ -315,28 +324,20 @@
       transition: color var(--transition);
     }
     .project p {
+      grid-area: desc;
       font-size: 14px;
       color: var(--text-muted);
-      margin-bottom: 20px;
       line-height: 1.55;
-      max-width: 64ch; /* keeps the full-width card readable */
-      /* Blurbs run 13-26 words. A three-line floor keeps the gap above the
-         tags identical across cards; no clamp, so nothing is ever truncated.
-         Every blurb is written to fit three lines at this width. */
-      min-height: 4.65em;
+      max-width: 62ch;
     }
-    /* The wide card is a different shape; let it size to its own copy. */
-    .project:last-child:nth-child(odd) p { min-height: 0; }
-    /* Tags and the arrow share one baseline row, so the card has a footer
-       instead of an empty band across the top. */
-    .project-foot {
+    .project-tags {
+      grid-area: tags;
       display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 16px;
-      margin-top: auto;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      justify-content: flex-end; /* flush right edge, lines up with the arrow */
     }
-    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; }
     .tag {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
@@ -344,15 +345,10 @@
       padding: 2px 8px;
       border: 1px solid var(--border);
       border-radius: 4px;
+      height: fit-content;
       transition: transform var(--transition), border-color var(--transition), color var(--transition);
     }
     html:not(.is-scrolling) .tag:hover { transform: translateY(-2px); border-color: var(--text-soft); color: var(--text-muted); }
-    .project-arrow {
-      color: var(--text-soft);
-      opacity: 0.6;
-      transition: all var(--transition);
-      font-size: 14px;
-    }
 
     /* Resume entries */
     .entries { display: flex; flex-direction: column; }
@@ -567,9 +563,13 @@
       .hero h1 { font-size: clamp(34px, 9vw, 44px); }
       .hero .tagline { font-size: 16px; }
       .about p { font-size: 16px; }
-      .projects-list { grid-template-columns: 1fr; }
-      .project { padding: 20px; }
-      .project p { min-height: 0; }
+      .project {
+        grid-template-columns: 1fr;
+        grid-template-areas: "head" "title" "desc" "tags";
+        padding: 20px;
+        row-gap: 0;
+      }
+      .project-tags { margin-top: 16px; justify-content: flex-start; }
       .project h3 { font-size: 19px; }
       .project p { font-size: 13px; }
       .contact-row { grid-template-columns: 72px 1fr auto; padding: 16px 0; }
@@ -778,80 +778,66 @@
         <div class="project" data-project="epiguide">
           <div class="project-head">
             <span class="project-year">2026</span>
+            <span class="project-arrow">↗</span>
           </div>
           <h3>EpiGuide</h3>
           <p>A Progressive Web App that helps untrained bystanders recognize anaphylaxis and walks them through using an EpiPen, offline if they need to.</p>
-          <div class="project-foot">
-            <div class="project-tags"><span class="tag">Claude API</span><span class="tag">Machine Learning</span><span class="tag">PWA</span></div>
-            <span class="project-arrow">↗</span>
-          </div>
+          <div class="project-tags"><span class="tag">Claude API</span><span class="tag">Machine Learning</span><span class="tag">PWA</span></div>
         </div>
         <div class="project" data-project="bff-classroom">
           <div class="project-head">
             <span class="project-year">2026</span>
-          </div>
-          <h3>BFF Classroom</h3>
-          <p>Free financial literacy platform for middle and high schoolers, built for a student-run nonprofit. Teachers run lessons with a class, or students take them alone.</p>
-          <div class="project-foot">
-            <div class="project-tags"><span class="tag">TypeScript</span><span class="tag">React</span><span class="tag">Supabase</span></div>
             <span class="project-arrow">↗</span>
           </div>
+          <h3>BFF Classroom</h3>
+          <p>Free financial literacy platform for middle and high schoolers, built for a student-run nonprofit. Teachers run interactive lessons with a class, or students take them alone.</p>
+          <div class="project-tags"><span class="tag">TypeScript</span><span class="tag">React</span><span class="tag">Supabase</span></div>
         </div>
         <div class="project" data-project="deca-bulletin">
           <div class="project-head">
             <span class="project-year">2026</span>
             <span class="project-note">Used by 13,000+ MA DECA members</span>
+            <span class="project-arrow">↗</span>
           </div>
           <h3>MA DECA Chapter Event Board</h3>
           <p>A shared event board for Massachusetts DECA chapters. Anyone can browse and map events; members post their own, and an admin pins the important ones.</p>
-          <div class="project-foot">
-            <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">Supabase</span><span class="tag">Leaflet</span></div>
-            <span class="project-arrow">↗</span>
-          </div>
+          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">Supabase</span><span class="tag">Leaflet</span></div>
         </div>
         <div class="project" data-project="faceless-shorts">
           <div class="project-head">
             <span class="project-year">2026</span>
+            <span class="project-arrow">↗</span>
           </div>
           <h3>Faceless Shorts Engine</h3>
           <p>Turns Reddit stories into narrated vertical Shorts and posts them to YouTube and TikTok without me. Runs on free GitHub Actions minutes.</p>
-          <div class="project-foot">
-            <div class="project-tags"><span class="tag">Python</span><span class="tag">FFmpeg</span><span class="tag">GitHub Actions</span></div>
-            <span class="project-arrow">↗</span>
-          </div>
+          <div class="project-tags"><span class="tag">Python</span><span class="tag">FFmpeg</span><span class="tag">GitHub Actions</span></div>
         </div>
         <div class="project" data-project="brusher-games">
           <div class="project-head">
             <span class="project-year">2025</span>
+            <span class="project-arrow">↗</span>
           </div>
           <h3>Brusher Games</h3>
           <p>A web-based platform that organizes and tracks school-wide elimination-style games with targets, eliminations, and live standings.</p>
-          <div class="project-foot">
-            <div class="project-tags"><span class="tag">Claude</span><span class="tag">AI</span><span class="tag">Vibecoding</span></div>
-            <span class="project-arrow">↗</span>
-          </div>
+          <div class="project-tags"><span class="tag">Claude</span><span class="tag">AI</span><span class="tag">Vibecoding</span></div>
         </div>
         <div class="project" data-project="ai-tiktok">
           <div class="project-head">
             <span class="project-year">2025</span>
+            <span class="project-arrow">↗</span>
           </div>
           <h3>AI TikTok Video Automation (Inactive)</h3>
           <p>A fully automated AI TikTok video generator and uploader using N8N, UploadPost API, OpenRouter, and Airtable.</p>
-          <div class="project-foot">
-            <div class="project-tags"><span class="tag">N8N</span><span class="tag">OpenRouter</span><span class="tag">Automation</span></div>
-            <span class="project-arrow">↗</span>
-          </div>
+          <div class="project-tags"><span class="tag">N8N</span><span class="tag">OpenRouter</span><span class="tag">Automation</span></div>
         </div>
         <div class="project" data-project="sora-downloader">
           <div class="project-head">
             <span class="project-year">2025</span>
+            <span class="project-arrow">↗</span>
           </div>
           <h3>OpenAI Sora Bulk Downloader (Inactive)</h3>
           <p>Manage and bulk-download Sora AI videos with prompts as filenames for easy organization.</p>
-          <div class="project-foot">
-            <div class="project-tags"><span class="tag">Sora</span><span class="tag">OpenAI</span><span class="tag">Replit</span></div>
-            <span class="project-arrow">↗</span>
-          </div>
+          <div class="project-tags"><span class="tag">Sora</span><span class="tag">OpenAI</span><span class="tag">Replit</span></div>
         </div>
       </div>
     </section>
