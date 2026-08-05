@@ -21,16 +21,23 @@
     })();
   </script>
 
-  <!-- No og:image / twitter:image: shared links show as a text preview, not a card. -->
+  <!-- Square 512px icon, not a banner: with twitter:card=summary this renders
+       as a small thumbnail beside the title rather than a full-width card. -->
   <meta property="og:title" content="Henry Zisow" />
   <meta property="og:description" content="Junior at Gann Academy and Massachusetts DECA State Co-President. Builds software, competes in business." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://henryzisow.com/" />
+  <meta property="og:image" content="https://henryzisow.com/icon-512.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="Henry Zisow" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Henry Zisow" />
   <meta name="twitter:description" content="Junior at Gann Academy and Massachusetts DECA State Co-President. Builds software, competes in business." />
+  <meta name="twitter:image" content="https://henryzisow.com/icon-512.png" />
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="icon-512.png" />
   <link rel="preload" href="fonts/inter-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin />
   <style>
@@ -213,6 +220,24 @@
     section:first-of-type { padding-top: 96px; }
 
     /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 56px;
+      align-items: center;
+    }
+    .hero-photo { width: 250px; margin: 0; }
+    .hero-photo img {
+      display: block;
+      width: 100%;
+      height: auto; /* without this the height attribute wins and aspect-ratio is ignored */
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      object-position: center 26%; /* keeps the face high in the frame */
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-elev);
+    }
     .hero h1 {
       font-family: 'Fraunces', serif;
       font-weight: 400;
@@ -664,6 +689,9 @@
       .nav-links { gap: 18px; }
       .nav-brand { font-size: 16px; }
       .nav-links a { font-size: 13px; }
+      .hero { grid-template-columns: 1fr; gap: 24px; }
+      .hero-photo { order: -1; width: 104px; }
+      .hero-photo img { aspect-ratio: 1 / 1; border-radius: 50%; object-position: center 22%; }
       .hero h1 { font-size: clamp(34px, 9vw, 44px); }
       .hero .tagline { font-size: 16px; }
       .about p { font-size: 16px; }
@@ -858,6 +886,7 @@
 
   <main class="container">
     <section class="hero">
+      <div class="hero-text">
       <h1>Henry Zisow<br/><em>builder</em>, student, and leader.</h1>
       <p class="tagline">Junior at Gann Academy, Massachusetts DECA State Co-President, builds things with code, competes in business.</p>
       <div class="meta">
@@ -870,6 +899,10 @@
           Resume
         </a>
       </div>
+      </div>
+      <figure class="hero-photo" id="hero-photo">
+        <img src="images/henry-zisow.jpg" alt="Henry Zisow" width="260" height="325" decoding="async" />
+      </figure>
     </section>
 
     <section id="about" class="about">
@@ -1358,6 +1391,18 @@
       if (e.key === 'Escape') closeModal();
     });
 
+    /* ---------- Portrait ---------- */
+    // Nothing breaks if the photo has not been added yet: pull the figure
+    // rather than leave a broken-image icon in the hero.
+    (function () {
+      const fig = document.getElementById('hero-photo');
+      if (!fig) return;
+      const img = fig.querySelector('img');
+      const drop = () => fig.remove();
+      img.addEventListener('error', drop);
+      if (img.complete && img.naturalWidth === 0) drop();
+    })();
+
     /* ---------- Resume: open in a tab and save a copy ---------- */
     // The anchor's own target="_blank" handles the tab; this adds the download,
     // which a single <a> cannot do alongside navigation.
@@ -1409,7 +1454,7 @@
     const REVEAL_STEP = 70;
     const REVEAL_MAX_STEPS = 5;
     const REVEAL_GROUPS = [
-      ['.hero', 'h1, .tagline, .meta'],
+      ['.hero', 'h1, .tagline, .meta, .hero-actions, .hero-photo'],
       ['#about', '.section-label, p'],
       ['#projects', '.section-label, .project'],
       ['#graveyard', '.section-label, .graveyard'],
