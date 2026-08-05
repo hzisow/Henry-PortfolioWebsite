@@ -287,25 +287,7 @@
     html:not(.is-scrolling) .projects-list .project:hover .project-arrow { transform: translate(3px, -3px); opacity: 1; }
     html:not(.is-scrolling) .projects-list .project:hover h3 { color: var(--accent-text); }
     .project:focus-visible { border-color: var(--text-soft); }
-    .project-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    /* "Inactive" lives here instead of inside the title, where it was
-       wrapping headings onto a second line. */
-    .project-status {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-soft);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 1px 8px;
-      line-height: 1.7;
-    }
+    .project-head { margin-bottom: 12px; }
     .project-year {
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
@@ -681,18 +663,13 @@
     }
     .modal-image.contain { background-size: contain; background-repeat: no-repeat; }
     .modal-body { padding: 28px; }
-    .modal-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
     .modal-year {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       color: var(--text-soft);
       text-transform: uppercase;
       letter-spacing: 0.06em;
+      margin-bottom: 12px;
     }
     .modal h3 {
       font-family: 'Fraunces', serif;
@@ -814,9 +791,8 @@
         <div class="project" data-project="ai-tiktok">
           <div class="project-head">
             <span class="project-year">2025</span>
-            <span class="project-status">Inactive</span>
           </div>
-          <h3>AI TikTok Video Automation</h3>
+          <h3>AI TikTok Video Automation (Inactive)</h3>
           <p>A fully automated AI TikTok video generator and uploader using N8N, UploadPost API, OpenRouter, and Airtable.</p>
           <div class="project-foot">
             <div class="project-tags"><span class="tag">N8N</span><span class="tag">OpenRouter</span><span class="tag">Automation</span></div>
@@ -826,9 +802,8 @@
         <div class="project" data-project="sora-downloader">
           <div class="project-head">
             <span class="project-year">2025</span>
-            <span class="project-status">Inactive</span>
           </div>
-          <h3>OpenAI Sora Bulk Downloader</h3>
+          <h3>OpenAI Sora Bulk Downloader (Inactive)</h3>
           <p>Manage and bulk-download Sora AI videos with prompts as filenames for easy organization.</p>
           <div class="project-foot">
             <div class="project-tags"><span class="tag">Sora</span><span class="tag">OpenAI</span><span class="tag">Replit</span></div>
@@ -1059,10 +1034,7 @@
         </button>
         <div class="modal-image" id="modal-image"></div>
         <div class="modal-body">
-          <div class="modal-meta">
-            <span class="modal-year" id="modal-year"></span>
-            <span class="project-status" id="modal-status"></span>
-          </div>
+          <div class="modal-year" id="modal-year"></div>
           <h3 id="modal-title"></h3>
           <div class="modal-tags" id="modal-tags"></div>
           <p class="modal-desc" id="modal-desc"></p>
@@ -1111,8 +1083,7 @@
         link: 'https://brushergames.onrender.com/'
       },
       'ai-tiktok': {
-        title: 'AI TikTok Video Automation',
-        status: 'Inactive',
+        title: 'AI TikTok Video Automation (Inactive)',
         year: '2025',
         description: 'A fully automated AI TikTok video generator and uploader. Uses N8N, UploadPost API, OpenRouter API, and Airtable.',
         tags: ['N8N', 'OpenRouter', 'Automation'],
@@ -1120,8 +1091,7 @@
         downloadLabel: 'Download N8N Workflow'
       },
       'sora-downloader': {
-        title: 'OpenAI Sora Bulk Downloader',
-        status: 'Inactive',
+        title: 'OpenAI Sora Bulk Downloader (Inactive)',
         year: '2025',
         description: 'An easy way to manage and organize Sora AI video downloads. Takes in all the files Sora generates and lets you bulk download with the file name being the prompt, for easy organization.',
         tags: ['Sora', 'OpenAI', 'Replit'],
@@ -1147,9 +1117,6 @@
         img.classList.toggle('contain', !!p.imageContain);
       }
       document.getElementById('modal-year').textContent = p.year || '';
-      const statusEl = document.getElementById('modal-status');
-      statusEl.textContent = p.status || '';
-      statusEl.hidden = !p.status;
       document.getElementById('modal-title').textContent = p.title;
       document.getElementById('modal-desc').textContent = p.description;
       document.getElementById('modal-tags').innerHTML = p.tags.map(t => '<span class="tag">' + t + '</span>').join('');
@@ -1193,9 +1160,7 @@
       const heading = el.querySelector('h3');
       el.setAttribute('role', 'button');
       el.setAttribute('tabindex', '0');
-      const status = el.querySelector('.project-status');
-      if (heading) el.setAttribute('aria-label',
-        heading.textContent + (status ? ' (' + status.textContent + ')' : '') + ' — view details');
+      if (heading) el.setAttribute('aria-label', heading.textContent + ' — view details');
       el.addEventListener('click', () => openModal(el.dataset.project));
       el.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
