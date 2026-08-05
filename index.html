@@ -1067,13 +1067,15 @@
         year: '2026',
         description: "A Progressive Web App helping untrained bystanders recognize and respond to anaphylaxis emergencies. Uses AI-powered symptom classification (logistic regression + MobileNetV2 vision model trained on registry data), Claude Haiku for EpiPen label scanning, and a privacy-preserving volunteer responder network. Offline-capable core emergency flow with step-by-step injection guidance.",
         tags: ['Supabase', 'Claude API', 'Machine Learning', 'PWA', 'MobileNetV2'],
-        link: 'https://hzisow.github.io/EpiGuide/'
+        link: 'https://hzisow.github.io/EpiGuide/',
+        repo: 'https://github.com/hzisow/EpiGuide'
       },
       'faceless-shorts': {
         title: 'Faceless Shorts Engine',
         year: '2026',
         description: "A GitHub Actions workflow that renders and publishes a full video start to finish. It pulls an unused story from a cache of about 6,500, narrates it with Piper, and builds a 1080x1920 video in FFmpeg over looping gameplay with a title card and color grade. Piper doesn't emit word-level timestamps, so the audio goes back through faster-whisper to recover them for the one-word captions. YouTube and TikTok both publish through one API call. Posting is deliberately irregular so the channel doesn't look scheduled, and the whole thing runs on free CI minutes with no server and no GPU.",
-        tags: ['Python', 'FFmpeg', 'GitHub Actions', 'Piper TTS', 'faster-whisper', 'CI/CD Automation']
+        tags: ['Python', 'FFmpeg', 'GitHub Actions', 'Piper TTS', 'faster-whisper', 'CI/CD Automation'],
+        repo: 'https://github.com/hzisow/Youtube-Automation'
       },
       'brusher-games': {
         title: 'Brusher Games',
@@ -1122,6 +1124,12 @@
       document.getElementById('modal-tags').innerHTML = p.tags.map(t => '<span class="tag">' + t + '</span>').join('');
       let actions = '';
       if (p.link) actions += '<a class="btn btn-primary" href="' + p.link + '" target="_blank" rel="noopener noreferrer">Visit Site <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>';
+      // Source link is the primary action when there is no live demo to visit.
+      if (p.repo) actions += '<a class="btn' + (p.link ? '' : ' btn-primary') + '" href="' + p.repo + '"'
+        + ' target="_blank" rel="noopener noreferrer">'
+        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+        + '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>'
+        + '</svg> View source</a>';
       if (p.download) actions += '<a class="btn" href="' + p.download + '" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> ' + p.downloadLabel + '</a>';
       const actionsEl = document.getElementById('modal-actions');
       actionsEl.innerHTML = actions;
