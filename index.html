@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Henry Zisow</title>
   <meta name="description" content="Henry Zisow — junior at Gann Academy and Massachusetts DECA State Co-President. Builds software, competes in DECA." />
+  <meta name="theme-color" content="#f7f5f0" />
 
-  <!-- Runs before first paint: arms scroll-reveal only when JS can undo it. -->
+  <!-- Runs before first paint: arms the intro and scroll scenes only when JS can undo them. -->
   <script>document.documentElement.classList.add('js');</script>
 
   <!-- Deliberately no og:image / twitter:image. Any og:image makes iMessage
@@ -23,1523 +24,629 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="preload" href="fonts/archivo-wide.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/inter-normal.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin />
-  <style>
-    /* Self-hosted variable subsets (latin). Keeps text on one origin — no
-       render-blocking stylesheet from fonts.googleapis.com, no second handshake
-       to fonts.gstatic.com before the first glyph paints. */
-    @font-face {
-      font-family: 'Fraunces';
-      font-style: normal;
-      font-weight: 400 600;
-      font-display: swap;
-      src: url(fonts/fraunces-normal.woff2) format('woff2');
-    }
-    @font-face {
-      font-family: 'Inter';
-      font-style: normal;
-      font-weight: 400 600;
-      font-display: swap;
-      src: url(fonts/inter-normal.woff2) format('woff2');
-    }
-    @font-face {
-      font-family: 'JetBrains Mono';
-      font-style: normal;
-      font-weight: 400 500;
-      font-display: swap;
-      src: url(fonts/jetbrains-mono-normal.woff2) format('woff2');
-    }
-    :root {
-      --bg: #f3f3f0;
-      --bg-elev: #e7e7e2;
-      --border: #bdbdb4;
-      --text: #131313;
-      --text-muted: #494945;
-      --text-soft: #63635c;
-      --accent: #3b85c7;
-      --accent-text: #256199; /* clears 4.5:1 on both --bg and --bg-elev */
-      --hover: #dbdbd3;
-      --stone: #dedcd5;
-      --stone-top: #e6e4dd;
-      --stone-bot: #d2cfc7;
-      --carve: rgba(0, 0, 0, 0.13);
-      --engrave: 0 1px 0 rgba(255, 255, 255, 0.6);
-      --grave-shadow: rgba(0, 0, 0, 0.18);
-      --radius: 10px;
-      --max: 920px;
-      --transition: 180ms ease;
-      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-      --nav-h: 63px;
-      color-scheme: light;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    /* Beats the display values set on .modal-actions and friends. */
-    [hidden] { display: none !important; }
-    html { scroll-behavior: smooth; }
-    :focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-      border-radius: 3px;
-    }
-
-    /* Scroll progress */
-    .scroll-progress {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transform-origin: 0 50%;
-      z-index: 60;
-      pointer-events: none;
-    }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      font-size: 16px;
-      transition: background var(--transition), color var(--transition);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .container { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
-
-    /* Nav */
-    nav.top {
-      position: sticky; top: 0; z-index: 50;
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-brand {
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
-      font-size: 17px;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      text-decoration: none;
-      transition: transform var(--transition);
-    }
-    .nav-brand:hover { transform: translateY(-1px); }
-    .nav-links { display: flex; gap: 28px; }
-    .nav-links a {
-      position: relative;
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: color var(--transition), transform var(--transition);
-    }
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 0; bottom: -3px;
-      height: 1px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transform-origin: 0 50%;
-      transition: transform 240ms var(--ease-out);
-    }
-    .nav-links a:hover { color: var(--text); transform: translateY(-1px); }
-    .nav-links a.active { color: var(--text); }
-    .nav-links a:hover::after,
-    .nav-links a.active::after { transform: scaleX(1); }
-
-    .nav-social { display: flex; align-items: center; gap: 4px; }
-    .nav-social-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px; height: 34px;
-      border-radius: 8px;
-      color: var(--text-soft);
-      transition: color var(--transition), background var(--transition), transform var(--transition);
-    }
-    .nav-social-link svg { width: 17px; height: 17px; }
-    .nav-social-link:hover { color: var(--text); background: var(--hover); transform: translateY(-1px); }
-
-
-    /* Sections */
-    /* Land the section edge just under the sticky nav; its own padding is the gap. */
-    section { padding: 64px 0 32px; scroll-margin-top: var(--nav-h); }
-    section:first-of-type { padding-top: 72px; }
-
-    /* Hero */
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 56px;
-      align-items: center;
-    }
-    .hero-photo { width: 250px; margin: 0; }
-    .hero-photo img {
-      display: block;
-      width: 100%;
-      height: auto; /* without this the height attribute wins and aspect-ratio is ignored */
-      aspect-ratio: 4 / 5;
-      object-fit: cover;
-      object-position: center 26%; /* keeps the face high in the frame */
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--bg-elev);
-    }
-    .hero h1 {
-      font-family: 'Fraunces', serif;
-      font-weight: 400;
-      font-size: clamp(40px, 6.2vw, 72px);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin-bottom: 24px;
-    }
-    .hero h1 em {
-      font-style: italic;
-      font-weight: 400;
-      color: var(--accent);
-    }
-    .hero .tagline {
-      font-size: 18px;
-      color: var(--text-muted);
-      max-width: 540px;
-      margin-bottom: 32px;
-      line-height: 1.55;
-    }
-    .hero .meta {
-      display: flex;
-      gap: 16px;
-      font-size: 14px;
-      color: var(--text-soft);
-      font-family: 'JetBrains Mono', monospace;
-      align-items: center;
-    }
-    .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-soft); }
-
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
-
-    /* Section label */
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      font-weight: 400; /* these are <h2> now — don't inherit the UA bold */
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-soft);
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* About */
-    .about p {
-      font-size: 17px;
-      color: var(--text);
-      margin-bottom: 16px;
-      max-width: 620px;
-    }
-    .about p + p { color: var(--text-muted); }
-    .about p:last-child { margin-bottom: 0; }
-
-    /* Projects — full-width cards, one per row. Each is its own grid row, so
-       nothing has to height-match a neighbour and blurbs can run any length. */
-    .projects-list { display: flex; flex-direction: column; gap: 14px; }
-    .project {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 230px;
-      grid-template-areas:
-        "head  head"
-        "title tags"
-        "desc  tags";
-      column-gap: 40px;
-      background: var(--bg-elev);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 26px 28px;
-      text-decoration: none;
-      color: var(--text);
-      cursor: pointer;
-      transition: transform 260ms var(--ease-out), border-color var(--transition), background var(--transition);
-    }
-    html:not(.is-scrolling) .projects-list .project:hover {
-      transform: translateY(-3px);
-      border-color: var(--text-soft);
-    }
-    html:not(.is-scrolling) .projects-list .project:hover .project-arrow { transform: translate(3px, -3px); opacity: 1; }
-    html:not(.is-scrolling) .projects-list .project:hover h3 { color: var(--accent-text); }
-    .project:focus-visible { border-color: var(--text-soft); }
-
-    .project-head {
-      grid-area: head;
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .project-year {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--accent-text);
-    }
-    /* Optional impact line, shown beside the year on card and modal. */
-    .project-note {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-    .project-note::before { content: '\00b7'; margin-right: 8px; }
-    .project-arrow {
-      margin-left: auto;
-      color: var(--text-soft);
-      opacity: 0.6;
-      transition: all var(--transition);
-      font-size: 14px;
-    }
-    .project h3 {
-      grid-area: title;
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
-      font-size: 21px;
-      letter-spacing: -0.01em;
-      margin-bottom: 8px;
-      transition: color var(--transition);
-    }
-    .project p {
-      grid-area: desc;
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.55;
-      max-width: 62ch;
-    }
-    .project-tags {
-      grid-area: tags;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-content: flex-start;
-      justify-content: flex-end; /* flush right edge, lines up with the arrow */
-    }
-    .tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-soft);
-      padding: 2px 8px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      height: fit-content;
-      transition: transform var(--transition), border-color var(--transition), color var(--transition);
-    }
-    html:not(.is-scrolling) .tag:hover { transform: translateY(-2px); border-color: var(--text-soft); color: var(--text-muted); }
-
-    /* Graveyard — retired projects as headstones. The arch is one border-radius;
-       Fraunces is already the display serif, which is what headstones use. */
-    .graveyard {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 48px; /* plinths overhang 11px a side; keep them clear of each other */
-      align-items: flex-end;
-      justify-content: center;
-      border-bottom: 1px solid var(--border); /* stones stand on the ground line */
-    }
-    .grave {
-      --tilt: -1.5deg;
-      position: relative;
-      width: 250px;
-      min-height: 252px;
-      margin-bottom: 13px; /* room for the plinth */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      background-color: var(--stone);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),
-        linear-gradient(180deg, var(--stone-top) 0%, var(--stone) 46%, var(--stone-bot) 100%);
-      background-blend-mode: soft-light, normal;
-      border: 1px solid var(--border);
-      border-radius: 125px 125px 6px 6px;
-      box-shadow: 0 10px 18px -10px var(--grave-shadow);
-      padding: 56px 26px 30px;
-      cursor: pointer;
-      transform: rotate(var(--tilt)); /* settled, not stamped out */
-      transition: transform 260ms var(--ease-out), border-color var(--transition);
-    }
-    .grave:nth-child(even) { --tilt: 1.3deg; min-height: 236px; }
-    /* Carved inset panel, echoing the outer arch. */
-    .grave::before {
-      content: '';
-      position: absolute;
-      inset: 11px;
-      border: 1px solid var(--carve);
-      border-radius: 115px 115px 4px 4px;
-      pointer-events: none;
-    }
-    /* Plinth the stone stands on. */
-    .grave::after {
-      content: '';
-      position: absolute;
-      left: -11px; right: -11px; bottom: -13px;
-      height: 13px;
-      background: linear-gradient(180deg, var(--stone) 0%, var(--stone-bot) 100%);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-    }
-    html:not(.is-scrolling) .graveyard .grave:hover {
-      transform: rotate(var(--tilt)) translateY(-5px);
-      border-color: var(--text-soft);
-    }
-    .grave:focus-visible { border-color: var(--text-soft); }
-    .grave h3 {
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
-      font-size: 17px;
-      line-height: 1.3;
-      letter-spacing: -0.01em;
-      margin-bottom: 8px;
-      text-shadow: var(--engrave);
-    }
-    /* --text-soft measures 4.4:1 on the stone fill, under AA — muted instead. */
-    .grave-dates {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-      text-shadow: var(--engrave);
-    }
-    .grave-rule {
-      width: 26px;
-      height: 1px;
-      background: var(--carve);
-      margin: 14px 0;
-    }
-    .grave-epitaph {
-      font-size: 13px;
-      font-style: italic;
-      color: var(--text-muted);
-      line-height: 1.5;
-      max-width: 24ch;
-      text-shadow: var(--engrave);
-    }
-
-    /* Resume entries */
-    /* The section label's trailing rule already closes the top of each list,
-       so the first row's border-top just read as a doubled line. */
-    .entry:first-child,
-    .activity:first-child,
-    .contact-row:first-child { border-top: none; }
-
-    .entries { display: flex; flex-direction: column; }
-    .entry {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      column-gap: 20px;
-      row-gap: 0;
-      padding: 24px 0;
-      border-top: 1px solid var(--border);
-    }
-    .entry:last-child { border-bottom: 1px solid var(--border); }
-    .entry-title {
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
-      font-size: 19px;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .entry-role {
-      font-size: 14px;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-    /* Awards use this slot for a description, not a title — italic there read
-       as a second job title. Same size as the bullet copy it sits beside. */
-    .entry-desc {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.55;
-      margin-top: 4px;
-      max-width: 62ch;
-    }
-    .entry-meta {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-soft);
-      text-align: right;
-      white-space: nowrap;
-    }
-    .entry-meta > div + div { margin-top: 2px; }
-    .entry-bullets {
-      list-style: none;
-      padding: 0;
-      margin-top: 16px;
-      grid-column: 1 / -1;
-    }
-    .entry-bullets li {
-      position: relative;
-      padding-left: 18px;
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      line-height: 1.55;
-    }
-    .entry-bullets li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 10px;
-      width: 8px;
-      height: 1px;
-      background: var(--text-soft);
-    }
-
-    /* One-line activity rows */
-    .activity {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 16px;
-      align-items: baseline;
-      padding: 16px 0;
-      border-top: 1px solid var(--border);
-      font-size: 15px;
-    }
-    .activity:last-child { border-bottom: 1px solid var(--border); }
-    .activity-role { font-style: italic; color: var(--text); }
-    .activity-org { color: var(--text-muted); }
-    .activity-date {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-soft);
-    }
-
-    /* Skills block */
-    .skills-list {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 16px 28px;
-    }
-    .skills-list dt {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-soft);
-      padding-top: 3px;
-    }
-    .skills-list dd {
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    .resume-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 32px; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all var(--transition);
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      font-family: inherit;
-    }
-    .btn:hover { background: var(--hover); border-color: var(--text-soft); }
-    html:not(.is-scrolling) .btn:hover { transform: translateY(-2px); }
-    .btn:active { transform: translateY(0); }
-    .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-    .btn-primary:hover { background: var(--text-muted); border-color: var(--text-muted); color: var(--bg); }
-    .btn svg { width: 14px; height: 14px; }
-
-    /* Contact */
-    .contact-list {
-      display: flex;
-      flex-direction: column;
-    }
-    .contact-row {
-      display: grid;
-      grid-template-columns: 90px 1fr auto;
-      gap: 20px;
-      align-items: center;
-      padding: 16px 0;
-      border-top: 1px solid var(--border);
-      color: var(--text);
-      text-decoration: none;
-      transition: padding 260ms var(--ease-out);
-    }
-    .contact-row:last-child { border-bottom: 1px solid var(--border); }
-    html:not(.is-scrolling) .contact-row:hover { padding-left: 10px; }
-    html:not(.is-scrolling) .contact-row:hover .contact-arrow { opacity: 1; transform: translate(3px, -3px); }
-    .contact-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-soft);
-    }
-    .contact-value { font-size: 15px; color: var(--text); }
-    .contact-arrow { color: var(--text-soft); opacity: 0.5; transition: all var(--transition); }
-
-    /* Email row keeps mailto: on the address and adds an explicit copy control,
-       since mailto: is a dead end for anyone on webmail. */
-    .contact-row-email:hover { padding-left: 0; }
-    .contact-email-link { text-decoration: none; color: var(--text); justify-self: start; }
-    .contact-email-link:hover { color: var(--accent); }
-    .copy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: transparent;
-      color: var(--text-soft);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    .copy-btn svg { width: 13px; height: 13px; }
-    .copy-btn:hover { color: var(--text); border-color: var(--text-soft); }
-    .copy-btn.copied { color: var(--accent); border-color: var(--accent); }
-
-    /* Footer */
-    footer {
-      padding: 32px 0 48px;
-      border-top: 1px solid var(--border);
-      margin-top: 40px;
-    }
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      color: var(--text-soft);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .footer-inner a {
-      color: var(--text-soft);
-      text-decoration: none;
-      transition: color var(--transition);
-    }
-    .footer-inner a:hover { color: var(--text); }
-
-    @media (max-width: 720px) {
-      :root { --nav-h: 51px; }
-      .container { padding: 0 20px; }
-      .nav-inner { padding: 12px 20px; }
-      .nav-links { gap: 18px; }
-      .nav-social { display: none; }
-      .nav-brand { font-size: 16px; }
-      .nav-links a { font-size: 13px; }
-      .hero { grid-template-columns: 1fr; gap: 24px; }
-      .hero-photo { order: -1; width: 104px; }
-      .hero-photo img { aspect-ratio: 1 / 1; border-radius: 50%; object-position: center 22%; }
-      .hero h1 { font-size: clamp(34px, 9vw, 44px); }
-      .hero .tagline { font-size: 16px; }
-      .about p { font-size: 16px; }
-      .project {
-        grid-template-columns: 1fr;
-        grid-template-areas: "head" "title" "desc" "tags";
-        padding: 20px;
-        row-gap: 0;
-      }
-      .project-tags { margin-top: 16px; justify-content: flex-start; }
-      .graveyard { gap: 20px; }
-      .grave { width: 100%; max-width: 260px; }
-      .project h3 { font-size: 19px; }
-      .project p { font-size: 13px; }
-      .contact-row { grid-template-columns: 72px 1fr auto; padding: 16px 0; }
-      .entry { padding: 20px 0; }
-      .contact-value { font-size: 14px; }
-      section { padding: 48px 0 24px; }
-      section:first-of-type { padding-top: 48px; }
-      footer { margin-top: 40px; padding: 28px 0 36px; }
-      .footer-inner { font-size: 12px; }
-      .modal-overlay { padding: 16px; }
-      .modal-body { padding: 22px; }
-      .modal h3 { font-size: 22px; }
-      .modal-desc { font-size: 14px; }
-      .resume-actions { flex-direction: column; align-items: stretch; }
-      .btn { justify-content: center; }
-    }
-
-    /* Contact used to be dropped here to make the nav fit. On a portfolio that
-       is the worst link to lose, so shrink the row instead of hiding it. */
-    @media (max-width: 460px) {
-      :root { --nav-h: 45px; }
-      .container { padding: 0 16px; }
-      .nav-inner { padding: 10px 16px; gap: 8px; }
-      .nav-brand { font-size: 15px; }
-      .nav-links { gap: 13px; }
-      .nav-links a { font-size: 12px; }
-      .footer-inner { flex-direction: column; gap: 6px; align-items: flex-start; }
-      .contact-row { grid-template-columns: 64px 1fr auto; gap: 12px; }
-      .copy-btn-label { display: none; }
-      .copy-btn { padding: 6px; }
-    }
-
-    /* Below this the brand and four links genuinely cannot coexist. */
-    @media (max-width: 370px) {
-      :root { --nav-h: 40px; }
-      .nav-brand { display: none; }
-      .nav-links { gap: 16px; }
-    }
-
-    /* Touch devices latch :hover after a tap — don't leave things nudged. */
-    @media (hover: none) {
-      html:not(.is-scrolling) .contact-row:hover { padding-left: 0; }
-      html:not(.is-scrolling) .projects-list .project:hover { transform: none; }
-      html:not(.is-scrolling) .project:hover .project-arrow,
-      html:not(.is-scrolling) .contact-row:hover .contact-arrow { transform: none; }
-      html:not(.is-scrolling) .project:hover h3 { color: inherit; }
-      html:not(.is-scrolling) .btn:hover,
-      html:not(.is-scrolling) .tag:hover { transform: none; }
-      .nav-brand:hover, .nav-links a:hover,
-      .modal-close:hover { transform: none; }
-    }
-
-    /* Modal */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: color-mix(in srgb, var(--bg) 70%, transparent);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 24px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 220ms ease, visibility 0s linear 220ms;
-    }
-    .modal-overlay.open {
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 220ms ease, visibility 0s linear 0s;
-    }
-    .modal {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      max-width: 560px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      transform: translateY(12px) scale(0.98);
-      transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
-    .modal-close {
-      position: absolute;
-      top: 16px; right: 16px;
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all var(--transition);
-      z-index: 2;
-    }
-    .modal-close:hover { color: var(--text); border-color: var(--text-soft); transform: rotate(90deg); }
-    .modal-close svg { width: 14px; height: 14px; }
-    .modal-image {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background-size: cover;
-      background-position: center;
-      background-color: var(--bg-elev);
-      border-bottom: 1px solid var(--border);
-    }
-    .modal-image.contain { background-size: contain; background-repeat: no-repeat; }
-    .modal-body { padding: 28px; }
-    .modal-year {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--text-soft);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px;
-    }
-    .modal h3 {
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
-      font-size: 26px;
-      letter-spacing: -0.01em;
-      margin-bottom: 16px;
-    }
-    .modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-    .modal-desc {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-    .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-    /* Scroll reveal — only armed once JS confirms it can un-hide these again */
-    html.js .reveal {
-      opacity: 0;
-      transform: translateY(16px);
-      transition:
-        opacity 700ms var(--ease-out),
-        transform 700ms var(--ease-out);
-      transition-delay: var(--reveal-delay, 0ms);
-    }
-    html.js .reveal.visible { opacity: 1; transform: none; }
-
-    /* Motion is decoration here — drop all of it when the OS asks. */
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      html.js .reveal { opacity: 1; transform: none; transition: none; }
-      .scroll-progress { display: none; }
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-    }
-  </style>
+  <link rel="preload" href="fonts/jetbrains-mono-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/site.css" />
 </head>
 <body>
-  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
-  <nav class="top">
-    <div class="nav-inner">
-      <a href="#" class="nav-brand">Henry Zisow</a>
-      <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#education">Resume</a>
-        <a href="#contact">Contact</a>
+  <a class="skip-link" href="#about">Skip to content</a>
+
+  <!-- ============ Preloader: a tiny "market open" chart ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-card">
+      <div class="loader-row">
+        <span>HZ &middot; PRE-MARKET</span>
+        <span class="loader-live"><i></i>LOADING</span>
       </div>
-      <div class="nav-social">
-        <a class="nav-social-link" href="https://www.linkedin.com/in/henryzisow" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12" rx="1"/><circle cx="4" cy="4" r="2"/></svg>
-        </a>
-        <a class="nav-social-link" href="https://github.com/hzisow" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        </a>
-        <a class="nav-social-link" href="mailto:hzisow@gmail.com" aria-label="Email Henry">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        </a>
+      <svg class="loader-chart" viewBox="0 0 300 90" preserveAspectRatio="none">
+        <polyline id="loader-line" points="0,82 22,76 40,79 58,66 76,70 96,55 114,60 132,44 150,49 170,36 188,40 206,27 226,31 244,18 264,22 282,9 300,4" />
+      </svg>
+      <div class="loader-row loader-foot">
+        <span>HZ &#9650;</span>
+        <span class="loader-pct"><span id="loader-pct">0</span>%</span>
       </div>
     </div>
-  </nav>
+  </div>
 
-  <main class="container">
-    <section class="hero">
-      <div class="hero-text">
-      <h1>Henry Zisow<br/><em>builder</em>, student, and leader.</h1>
-      <p class="tagline">Junior at Gann Academy and Massachusetts DECA State Co-President. Builds software, competes in DECA.</p>
-      <div class="meta">
-        <span>Boston, MA</span>
-      </div>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#projects">View projects</a>
-        <a class="btn resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-          Resume
-        </a>
-      </div>
-      </div>
-      <figure class="hero-photo" id="hero-photo">
-        <img src="images/henry-zisow.webp" alt="Henry Zisow" width="600" height="750" decoding="async" />
-      </figure>
-    </section>
+  <!-- ============ Nav ============ -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav-brand">Henry Zisow</a>
+    <span class="nav-where" id="nav-where" aria-hidden="true"></span>
+    <a href="#footer-nav" class="nav-menu" id="menu-btn" aria-controls="menu" aria-expanded="false">
+      <span class="nav-menu-open">Menu</span><span class="nav-menu-close">Close</span>
+    </a>
+  </header>
 
-    <section id="about" class="about">
-      <h2 class="section-label">About</h2>
-      <p>I'm a high school junior who builds software for fun. I spend my time prototyping with code, competing in DECA, and serving as a Massachusetts DECA State Co-President.</p>
-      <p>Recently I've been working on automation tools, small games, and utilities. I qualified for ICDC this year in Principles of Finance and placed Top 5 at States.</p>
-    </section>
-
-    <section id="projects">
-      <h2 class="section-label">Projects</h2>
-      <div class="projects-list">
-        <div class="project" data-project="epiguide">
-          <div class="project-head">
-            <span class="project-year">2026</span>
-            <span class="project-arrow">↗</span>
-          </div>
-          <h3>EpiGuide</h3>
-          <p>A Progressive Web App that helps untrained bystanders recognize anaphylaxis and walks them through using an EpiPen, offline if they need to.</p>
-          <div class="project-tags"><span class="tag">Claude API</span><span class="tag">Machine Learning</span><span class="tag">PWA</span></div>
-        </div>
-        <div class="project" data-project="bff-classroom">
-          <div class="project-head">
-            <span class="project-year">2026</span>
-            <span class="project-arrow">↗</span>
-          </div>
-          <h3>BFF Classroom</h3>
-          <p>Free financial literacy platform for middle and high schoolers, built for a student-run nonprofit. Teachers run interactive lessons with a class, or students take them alone.</p>
-          <div class="project-tags"><span class="tag">TypeScript</span><span class="tag">React</span><span class="tag">Supabase</span></div>
-        </div>
-        <div class="project" data-project="deca-bulletin">
-          <div class="project-head">
-            <span class="project-year">2026</span>
-            <span class="project-arrow">↗</span>
-          </div>
-          <h3>MA DECA Chapter Event Board</h3>
-          <p>A shared event board for Massachusetts DECA chapters. Anyone can browse and map events; members post their own, and an admin pins the important ones.</p>
-          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">Supabase</span><span class="tag">Leaflet</span></div>
-        </div>
-        <div class="project" data-project="faceless-shorts">
-          <div class="project-head">
-            <span class="project-year">2026</span>
-            <span class="project-arrow">↗</span>
-          </div>
-          <h3>Faceless Shorts Engine</h3>
-          <p>Turns Reddit stories into narrated vertical Shorts and posts them to YouTube and TikTok without me. Runs on free GitHub Actions minutes.</p>
-          <div class="project-tags"><span class="tag">Python</span><span class="tag">FFmpeg</span><span class="tag">GitHub Actions</span></div>
-        </div>
-        <div class="project" data-project="brusher-games">
-          <div class="project-head">
-            <span class="project-year">2025</span>
-            <span class="project-arrow">↗</span>
-          </div>
-          <h3>Brusher Games</h3>
-          <p>A web-based platform that organizes and tracks school-wide elimination-style games with targets, eliminations, and live standings.</p>
-          <div class="project-tags"><span class="tag">Claude</span><span class="tag">AI</span><span class="tag">Vibecoding</span></div>
-        </div>
+  <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Site menu" hidden>
+    <nav class="menu-links" aria-label="Sections">
+      <a href="#about"><span>01</span>About</a>
+      <a href="#projects"><span>02</span>Projects</a>
+      <a href="#graveyard"><span>03</span>Graveyard</a>
+      <a href="#leadership"><span>04</span>Leadership</a>
+      <a href="#record"><span>05</span>Record</a>
+      <a href="#stack"><span>06</span>Stack</a>
+      <a href="#contact"><span>07</span>Contact</a>
+    </nav>
+    <div class="menu-side">
+      <div class="menu-group">
+        <span class="mono-label">Elsewhere</span>
+        <a href="https://www.linkedin.com/in/henryzisow" target="_blank" rel="noopener noreferrer">LinkedIn &#8599;</a>
+        <a href="https://github.com/hzisow" target="_blank" rel="noopener noreferrer">GitHub &#8599;</a>
+        <a class="resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">Resume (PDF) &#8599;</a>
       </div>
-    </section>
-
-    <section id="graveyard">
-      <h2 class="section-label">Project Graveyard</h2>
-      <div class="graveyard">
-        <div class="grave" data-project="ai-tiktok">
-          <h3>AI TikTok Video Automation</h3>
-          <div class="grave-dates">2025 &ndash; 2026</div>
-          <span class="grave-rule" aria-hidden="true"></span>
-          <p class="grave-epitaph">Superseded by the Shorts engine.</p>
-        </div>
-        <div class="grave" data-project="sora-downloader">
-          <h3>OpenAI Sora Bulk Downloader</h3>
-          <div class="grave-dates">2025 &ndash; 2026</div>
-          <span class="grave-rule" aria-hidden="true"></span>
-          <p class="grave-epitaph">Stopped working when Sora got discontinued.</p>
-        </div>
+      <div class="menu-group">
+        <span class="mono-label">Say hi</span>
+        <a href="mailto:hzisow@gmail.com">hzisow@gmail.com</a>
+        <span class="menu-loc">Boston, MA</span>
       </div>
-    </section>
+    </div>
+  </div>
 
-    <section id="education">
-      <h2 class="section-label">Education</h2>
-      <div class="entries">
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">Gann Academy</h3>
-            <div class="entry-role">Class of 2028</div>
-          </div>
-          <div class="entry-meta">
-            <div>Waltham, MA</div>
-            <div>2025–Present</div>
-          </div>
-          <ul class="entry-bullets">
-            <li>Selected coursework: AP Calculus BC, AP Computer Science A, AP Chemistry, Linear Algebra, Advanced CS II: Data Analysis and AI with Python, Advanced Physics II: Mechanics, Advanced Precalculus BC, AP US History, AP Literature.</li>
-          </ul>
+  <main>
+    <!-- ============ Intro: hero + the window that becomes About ============ -->
+    <div class="intro" id="top">
+      <section class="hero" aria-label="Introduction">
+        <canvas class="hero-field" id="hero-field" aria-hidden="true"></canvas>
+
+        <h1 class="hero-name" aria-label="Henry Zisow">
+          <span class="hero-line" aria-hidden="true"><span class="ch">H</span><span class="ch">E</span><span class="ch">N</span><span class="ch">R</span><span class="ch">Y</span></span>
+          <span class="hero-line" aria-hidden="true"><span class="ch">Z</span><span class="ch">I</span><span class="ch">S</span><span class="ch">O</span><span class="ch">W</span></span>
+        </h1>
+        <p class="hero-tag" data-scramble>junior at gann academy. builds software. competes in deca.</p>
+
+        <div class="hero-window" id="hero-window" aria-hidden="true"></div>
+
+        <!-- Stickers: decoration, so they stay out of the accessibility tree. -->
+        <div class="sticker pill" data-drag style="--r:-6deg" aria-hidden="true">
+          <i class="pill-dot"></i>Boston &middot; MA DECA State Co-President
         </div>
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">Milton Academy</h3>
-            <div class="entry-role">Grade 9</div>
-          </div>
-          <div class="entry-meta">
-            <div>Milton, MA</div>
-            <div>2024–2025</div>
-          </div>
-          <ul class="entry-bullets">
-            <li>Member, Investment Club and Sports Analytics Club.</li>
-          </ul>
+
+        <div class="sticker nametag" data-drag style="--r:5deg" aria-hidden="true">
+          <div class="nametag-top"><b>HELLO</b><span>my name is</span></div>
+          <div class="nametag-body">Henry</div>
         </div>
+
+        <div class="sticker ticket" data-drag style="--r:-4deg" aria-hidden="true">
+          <div class="ticket-main">
+            <span class="ticket-kicker">Admit one &middot; ICDC 2026</span>
+            <span class="ticket-big">Principles of Finance</span>
+            <span class="ticket-sub">Top 5 at States &#9650;</span>
+          </div>
+          <div class="ticket-stub"><span>No. 005</span></div>
+        </div>
+
+        <div class="keycaps" aria-hidden="true">
+          <span class="sticker keycap" data-drag style="--r:-8deg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3b85c7" stroke-width="1.3"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.7" fill="#3b85c7" stroke="none"/></svg>
+          </span>
+          <span class="sticker keycap" data-drag style="--r:7deg">
+            <svg viewBox="0 0 24 24"><path d="M13.2 2.5 4.4 13.6c-.4.5 0 1.2.6 1.2h6.4l-.6 6.7 8.8-11.1c.4-.5 0-1.2-.6-1.2h-6.4l.6-6.7Z" fill="#3ecf8e"/></svg>
+          </span>
+          <span class="sticker keycap" data-drag style="--r:-3deg">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2.5" fill="#f2d74e"/><text x="18.5" y="18.4" text-anchor="end" font-family="Archivo Wide, Arial Black, sans-serif" font-weight="900" font-size="8.5" fill="#15171c">JS</text></svg>
+          </span>
+        </div>
+
+        <div class="hero-scroll" aria-hidden="true"><span>Scroll</span><i></i></div>
+      </section>
+
+      <section class="stage" id="about" aria-labelledby="about-title">
+        <div class="stage-grid" aria-hidden="true"></div>
+        <div class="stage-photo-slot" id="stage-slot">
+          <div class="stage-photo" id="stage-photo">
+            <img src="images/henry-zisow.webp" alt="Henry Zisow in a navy DECA blazer" width="600" height="750" decoding="async" />
+          </div>
+        </div>
+        <div class="stage-copy">
+          <h2 class="mono-label stage-label" id="about-title"><span>01</span> About</h2>
+          <p class="stage-statement" id="stage-statement">I'm a high school junior who builds software for fun. I prototype with code, compete in DECA, and serve as Massachusetts DECA <em>State Co&#8209;President.</em></p>
+          <p class="stage-sub">Recently I've been working on automation tools, small games, and utilities. I qualified for ICDC this year in Principles of Finance and placed Top 5 at States.</p>
+          <dl class="stage-stats">
+            <div><dt><span data-count="13000" data-suffix="+">13,000+</span></dt><dd>MA DECA members represented</dd></div>
+            <div><dt>Top <span data-count="5">5</span></dt><dd>of 40 at States in Finance</dd></div>
+            <div><dt><span data-count="100" data-suffix="+">100+</span></dt><dd>BFF chapters in 20 states</dd></div>
+            <div><dt><span data-count="5">5</span></dt><dd>projects in production</dd></div>
+          </dl>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ Projects: a terminal with a watchlist ============ -->
+    <section class="section projects" id="projects" aria-labelledby="projects-title">
+      <div class="sec-head">
+        <span class="sec-num">02</span>
+        <h2 class="sec-title" id="projects-title" data-split>Projects</h2>
+        <p class="sec-sub" data-scramble>things i've built. pick a ticker.</p>
       </div>
-    </section>
 
-    <section id="leadership">
-      <h2 class="section-label">Leadership, Work &amp; Service</h2>
-      <div class="entries">
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">Massachusetts DECA</h3>
-            <div class="entry-role">State Co-President</div>
-          </div>
-          <div class="entry-meta">
-            <div>Boston, MA</div>
-            <div>2026–Present</div>
-          </div>
-          <ul class="entry-bullets">
-            <li>Elected by 1,000+ voting delegates at the State Career Development Conference, representing 13,000+ competitors statewide — 1 of 2 sophomores elected to serve as state co-president.</li>
-            <li>Lead and facilitate district competitions, delivering programming and mentorship to support member success at regional and state levels.</li>
-          </ul>
+      <div class="term" id="term">
+        <div class="term-top">
+          <span class="term-brand">HZ <b>&lt;GO&gt;</b></span>
+          <span class="term-title">Project monitor</span>
+          <span class="term-clock" id="term-clock" aria-hidden="true">BOS --:--:--</span>
         </div>
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">Building Financial Futures of America</h3>
-            <div class="entry-role">National Director of Technology & AI / Boston Regional President</div>
+        <div class="term-tape" aria-hidden="true">
+          <div class="term-tape-track">
+            <span><b>EPI</b> &#9650; offline-ready</span>
+            <span><b>BFF</b> &#9650; load 10.0s &rarr; 4.5s</span>
+            <span><b>DECA</b> &#9650; 13,000+ members</span>
+            <span><b>SHRT</b> &#9650; ~6,500 stories cached</span>
+            <span><b>BRSH</b> &#9650; live standings</span>
+            <span><b>EPI</b> &#9650; offline-ready</span>
+            <span><b>BFF</b> &#9650; load 10.0s &rarr; 4.5s</span>
+            <span><b>DECA</b> &#9650; 13,000+ members</span>
+            <span><b>SHRT</b> &#9650; ~6,500 stories cached</span>
+            <span><b>BRSH</b> &#9650; live standings</span>
           </div>
-          <div class="entry-meta">
-            <div>Boston, MA</div>
-            <div>2026–Present</div>
-          </div>
-          <ul class="entry-bullets">
-            <li>Student-led 501(c)(3) teaching free financial literacy to middle and high schoolers across 100+ chapters in 20 states.</li>
-            <li>Cofounded and lead BFF's Boston chapter, running financial literacy programming and school outreach while securing corporate sponsors and donations to expand access to financial education across Greater Boston.</li>
-          </ul>
         </div>
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">MAST Tutoring</h3>
-            <div class="entry-role">Coordinator and Tutor</div>
-          </div>
-          <div class="entry-meta">
-            <div>Waltham, MA</div>
-            <div>2025–Present</div>
-          </div>
-          <ul class="entry-bullets">
-            <li>Provide weekly one-on-one tutoring across four subjects to a middle school student, improving grades and study habits over the course of the year.</li>
-          </ul>
-        </div>
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">Gann Academy DECA</h3>
-            <div class="entry-role">Vice President of Finance</div>
-          </div>
-          <div class="entry-meta">
-            <div>Waltham, MA</div>
-            <div>2026–Present</div>
-          </div>
-          <ul class="entry-bullets">
-            <li>Secure corporate sponsorships to offset competition costs and send more chapter members to compete.</li>
-            <li>Run fundraisers to build the chapter budget and keep costs down for members.</li>
-          </ul>
-        </div>
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">Brae Burn Country Club</h3>
-            <div class="entry-role">Server</div>
-          </div>
-          <div class="entry-meta">
-            <div>Newton, MA</div>
-            <div>2026–Present</div>
-          </div>
-          <ul class="entry-bullets">
-            <li>Managed food and beverage service for members and guests, handling orders efficiently during peak hours while maintaining a clean, organized station.</li>
-          </ul>
-        </div>
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">The Rashi School</h3>
-            <div class="entry-role">Student Government President</div>
-          </div>
-          <div class="entry-meta">
-            <div>Dedham, MA</div>
-            <div>2023–2024</div>
-          </div>
-          <ul class="entry-bullets">
-            <li>Collaborated with the Student Dean to organize school-wide charity initiatives and lead the student body, earning NASC Gold Recognition and ADL No Place for Hate certification.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
 
-    <section id="awards">
-      <h2 class="section-label">Awards &amp; Honors</h2>
-      <div class="entries">
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">DECA International Career Development Conference Qualifier</h3>
-            <div class="entry-desc">Placed top 5 of 40 Principles of Finance competitors at the state level to advance to internationals.</div>
+        <div class="term-body">
+          <div class="term-list" role="tablist" aria-label="Projects" aria-orientation="vertical">
+            <div class="term-list-head" aria-hidden="true"><span>Tkr</span><span>Name</span><span>Yr</span><span>Status</span></div>
+            <button class="term-row" role="tab" id="tt-epiguide" aria-controls="tp-epiguide" aria-selected="true">
+              <span class="tr-tkr">EPI</span><span class="tr-name">EpiGuide</span><span class="tr-yr">2026</span><span class="tr-status">Live</span>
+            </button>
+            <button class="term-row" role="tab" id="tt-bff" aria-controls="tp-bff" aria-selected="false" tabindex="-1">
+              <span class="tr-tkr">BFF</span><span class="tr-name">BFF Classroom</span><span class="tr-yr">2026</span><span class="tr-status">Live</span>
+            </button>
+            <button class="term-row" role="tab" id="tt-deca" aria-controls="tp-deca" aria-selected="false" tabindex="-1">
+              <span class="tr-tkr">DECA</span><span class="tr-name">MA DECA Event Board</span><span class="tr-yr">2026</span><span class="tr-status">Live</span>
+            </button>
+            <button class="term-row" role="tab" id="tt-shorts" aria-controls="tp-shorts" aria-selected="false" tabindex="-1">
+              <span class="tr-tkr">SHRT</span><span class="tr-name">Faceless Shorts Engine</span><span class="tr-yr">2026</span><span class="tr-status tr-auto">Auto</span>
+            </button>
+            <button class="term-row" role="tab" id="tt-brusher" aria-controls="tp-brusher" aria-selected="false" tabindex="-1">
+              <span class="tr-tkr">BRSH</span><span class="tr-name">Brusher Games</span><span class="tr-yr">2025</span><span class="tr-status">Live</span>
+            </button>
           </div>
-          <div class="entry-meta"><div>2026</div></div>
+
+          <div class="term-panels">
+            <article class="term-panel is-active" id="tp-epiguide" role="tabpanel" aria-labelledby="tt-epiguide" tabindex="0">
+              <div class="tp-head"><span class="tp-tkr">EPI</span><span>&lt;Project&gt;</span><span class="tp-yr">2026</span></div>
+              <h3 class="tp-name">EpiGuide</h3>
+              <p class="tp-lead">A Progressive Web App that helps untrained bystanders recognize anaphylaxis and walks them through using an EpiPen, offline if they need to.</p>
+              <p class="tp-desc">A Progressive Web App helping untrained bystanders recognize and respond to anaphylaxis emergencies. Uses AI-powered symptom classification (logistic regression + MobileNetV2 vision model trained on registry data), Claude Haiku for EpiPen label scanning, and a privacy-preserving volunteer responder network. Offline-capable core emergency flow with step-by-step injection guidance.</p>
+              <div class="tp-stack"><span class="mono-label">Stack</span><ul><li>Supabase</li><li>Claude API</li><li>Machine Learning</li><li>PWA</li><li>MobileNetV2</li></ul></div>
+              <div class="tp-keys">
+                <a class="fkey fkey-primary" href="https://hzisow.github.io/EpiGuide/" target="_blank" rel="noopener noreferrer"><kbd>F1</kbd>Visit site &#8599;</a>
+                <a class="fkey" href="https://github.com/hzisow/EpiGuide" target="_blank" rel="noopener noreferrer"><kbd>F2</kbd>View source &#8599;</a>
+              </div>
+            </article>
+
+            <article class="term-panel" id="tp-bff" role="tabpanel" aria-labelledby="tt-bff" tabindex="0">
+              <div class="tp-head"><span class="tp-tkr">BFF</span><span>&lt;Project&gt;</span><span class="tp-yr">2026</span></div>
+              <h3 class="tp-name">BFF Classroom</h3>
+              <p class="tp-lead">Free financial literacy platform for middle and high schoolers, built for a student-run nonprofit. Teachers run interactive lessons with a class, or students take them alone.</p>
+              <p class="tp-desc">BFF Classroom runs a personal finance curriculum for middle and high schoolers. Students join with a class code and work through 13 lessons. The next lesson stays locked until they score 85%. Mentors get a dashboard showing which questions their class keeps missing. It's React and TypeScript on GitHub Pages with Supabase behind it, and a Gemini edge function handles the tutor chat so the API key never reaches the browser. The curriculum is about 42,000 words in three languages, and I was shipping all of it in one bundle. The lesson path took 10 seconds on a throttled connection. Splitting content per lesson cut that to 4.5.</p>
+              <div class="tp-stack"><span class="mono-label">Stack</span><ul><li>TypeScript</li><li>React</li><li>Supabase</li><li>Google Gemini API</li><li>Tailwind CSS</li><li>GitHub Pages</li></ul></div>
+              <div class="tp-keys">
+                <a class="fkey fkey-primary" href="https://classroom.bffofamerica.org" target="_blank" rel="noopener noreferrer"><kbd>F1</kbd>Visit site &#8599;</a>
+                <a class="fkey" href="https://github.com/hzisow/BFF-Digital-Learning" target="_blank" rel="noopener noreferrer"><kbd>F2</kbd>View source &#8599;</a>
+              </div>
+            </article>
+
+            <article class="term-panel" id="tp-deca" role="tabpanel" aria-labelledby="tt-deca" tabindex="0">
+              <div class="tp-head"><span class="tp-tkr">DECA</span><span>&lt;Project&gt;</span><span class="tp-yr">2026</span></div>
+              <h3 class="tp-name">MA DECA Chapter Event Board</h3>
+              <p class="tp-note">&#9650; Used by 13,000+ Massachusetts DECA members</p>
+              <p class="tp-lead">A shared event board for Massachusetts DECA chapters. Anyone can browse and map events; members post their own, and an admin pins the important ones.</p>
+              <p class="tp-desc">MA DECA Chapter Event Board is a shared calendar I built for Massachusetts DECA chapters, with a browsable list and a map view using Leaflet and OpenStreetMap. It runs as a single HTML file with vanilla JavaScript, no framework, backed by Supabase for accounts, storage, and security rules. Members sign in to post and edit their own events. An admin account can pin events and review Instagram feature requests. Photos were the tricky part. A full-size phone photo blew past what localStorage and free Supabase storage could handle, so I added a canvas step that downscales and re-encodes uploads as JPEG before they leave the browser.</p>
+              <div class="tp-stack"><span class="mono-label">Stack</span><ul><li>JavaScript</li><li>Supabase</li><li>Leaflet</li><li>Vercel</li><li>OpenStreetMap</li></ul></div>
+              <div class="tp-keys">
+                <a class="fkey fkey-primary" href="https://bulletin.massachusettsdeca.org" target="_blank" rel="noopener noreferrer"><kbd>F1</kbd>Visit site &#8599;</a>
+                <a class="fkey" href="https://github.com/hzisow/digital-bulletin-board" target="_blank" rel="noopener noreferrer"><kbd>F2</kbd>View source &#8599;</a>
+              </div>
+            </article>
+
+            <article class="term-panel" id="tp-shorts" role="tabpanel" aria-labelledby="tt-shorts" tabindex="0">
+              <div class="tp-head"><span class="tp-tkr">SHRT</span><span>&lt;Project&gt;</span><span class="tp-yr">2026</span></div>
+              <h3 class="tp-name">Faceless Shorts Engine</h3>
+              <p class="tp-lead">Turns Reddit stories into narrated vertical Shorts and posts them to YouTube and TikTok without me. Runs on free GitHub Actions minutes.</p>
+              <p class="tp-desc">A GitHub Actions workflow that renders and publishes a full video start to finish. It pulls an unused story from a cache of about 6,500, narrates it with Piper, and builds a 1080x1920 video in FFmpeg over looping gameplay with a title card and color grade. Piper doesn't emit word-level timestamps, so the audio goes back through faster-whisper to recover them for the one-word captions. YouTube and TikTok both publish through one API call. Posting is deliberately irregular so the channel doesn't look scheduled, and the whole thing runs on free CI minutes with no server and no GPU.</p>
+              <div class="tp-stack"><span class="mono-label">Stack</span><ul><li>Python</li><li>FFmpeg</li><li>GitHub Actions</li><li>Piper TTS</li><li>faster-whisper</li><li>CI/CD Automation</li></ul></div>
+              <div class="tp-keys">
+                <a class="fkey fkey-primary" href="https://github.com/hzisow/Youtube-Automation" target="_blank" rel="noopener noreferrer"><kbd>F1</kbd>View source &#8599;</a>
+              </div>
+            </article>
+
+            <article class="term-panel" id="tp-brusher" role="tabpanel" aria-labelledby="tt-brusher" tabindex="0">
+              <div class="tp-head"><span class="tp-tkr">BRSH</span><span>&lt;Project&gt;</span><span class="tp-yr">2025</span></div>
+              <h3 class="tp-name">Brusher Games</h3>
+              <p class="tp-lead">A web-based platform that organizes and tracks school-wide elimination-style games with targets, eliminations, and live standings.</p>
+              <p class="tp-desc">A web-based platform that organizes, manages, and tracks school-wide elimination-style games by assigning targets, recording eliminations, and displaying live standings.</p>
+              <div class="tp-stack"><span class="mono-label">Stack</span><ul><li>Claude</li><li>AI</li><li>Vibecoding</li></ul></div>
+              <div class="tp-keys">
+                <a class="fkey fkey-primary" href="https://brushergames.onrender.com/" target="_blank" rel="noopener noreferrer"><kbd>F1</kbd>Visit site &#8599;</a>
+                <a class="fkey" href="https://github.com/hzisow/brusher-games" target="_blank" rel="noopener noreferrer"><kbd>F2</kbd>View source &#8599;</a>
+              </div>
+            </article>
+          </div>
         </div>
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">DECA State Career Development Conference Qualifier</h3>
-            <div class="entry-desc">Placed top 4 of 30 Principles of Finance competitors at the district level to advance to states.</div>
-          </div>
-          <div class="entry-meta"><div>2025</div></div>
-        </div>
-        <div class="entry">
-          <div>
-            <h3 class="entry-title">NASC Emerging Student Leader Award</h3>
-            <div class="entry-desc">Recognized nationally for distinction in public speaking, leadership, and service.</div>
-          </div>
-          <div class="entry-meta"><div>2022–2024</div></div>
+
+        <div class="term-foot" aria-hidden="true">
+          <span>&uarr;&darr; select</span>
+          <span>tab &rarr; links</span>
+          <span class="term-ready"><i></i>Feed live</span>
         </div>
       </div>
     </section>
 
-    <section id="activities">
-      <h2 class="section-label">Other Activities</h2>
-      <div class="entries">
-        <div class="activity">
-          <span class="activity-role">International Competitor</span>
-          <span class="activity-org">Gann Academy DECA</span>
-          <span class="activity-date">2025–Present</span>
-        </div>
-        <div class="activity">
-          <span class="activity-role">Alumni Leadership Council Member</span>
-          <span class="activity-org">The Rashi School</span>
-          <span class="activity-date">2026–Present</span>
-        </div>
-        <div class="activity">
-          <span class="activity-role">Member</span>
-          <span class="activity-org">Gann Academy Stock Market Club</span>
-          <span class="activity-date">2025–Present</span>
-        </div>
-        <div class="activity">
-          <span class="activity-role">Lawyer</span>
-          <span class="activity-org">Gann Academy Mock Trial Team</span>
-          <span class="activity-date">2025</span>
-        </div>
-        <div class="activity">
-          <span class="activity-role">Member</span>
-          <span class="activity-org">Milton Academy Investment Club</span>
-          <span class="activity-date">2024–2025</span>
+    <!-- ============ Graveyard ============ -->
+    <section class="section graveyard-sec" id="graveyard" aria-labelledby="graveyard-title">
+      <div class="sec-head">
+        <span class="sec-num">03</span>
+        <h2 class="sec-title" id="graveyard-title" data-split>Graveyard</h2>
+        <p class="sec-sub" data-scramble>projects that didn't make it. click a stone.</p>
+      </div>
+      <div class="yard">
+        <div class="graveyard">
+          <div class="grave" data-project="ai-tiktok" data-cursor="open">
+            <h3>AI TikTok Video Automation</h3>
+            <div class="grave-dates">2025 &ndash; 2026</div>
+            <span class="grave-rule" aria-hidden="true"></span>
+            <p class="grave-epitaph">Superseded by the Shorts engine.</p>
+          </div>
+          <div class="grave" data-project="sora-downloader" data-cursor="open">
+            <h3>OpenAI Sora Bulk Downloader</h3>
+            <div class="grave-dates">2025 &ndash; 2026</div>
+            <span class="grave-rule" aria-hidden="true"></span>
+            <p class="grave-epitaph">Stopped working when Sora got discontinued.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="skills">
-      <h2 class="section-label">Skills &amp; Interests</h2>
-      <dl class="skills-list">
-        <dt>Skills</dt>
-        <dd>React, Supabase, JavaScript, Java, Python, AI-assisted development, 3D modeling and printing, AI automation tools</dd>
-        <dt>Interests</dt>
-        <dd>Finance, business, artificial intelligence, machine learning, technology, mathematics</dd>
-        <dt>Hobbies</dt>
-        <dd>Golf, basketball, coding, DJing</dd>
-      </dl>
-      <div class="resume-actions">
-        <a class="btn btn-primary resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+    <!-- ============ Marquee bands ============ -->
+    <div class="bands" aria-hidden="true">
+      <div class="band band-a"><div class="band-move"><div class="band-track">
+        <span>MA DECA State Co-President</span><i>&#10022;</i><span>BFF National Director of Tech &amp; AI</span><i>&#10022;</i><span>ICDC Qualifier</span><i>&#10022;</i><span>Builder</span><i>&#10022;</i>
+        <span>MA DECA State Co-President</span><i>&#10022;</i><span>BFF National Director of Tech &amp; AI</span><i>&#10022;</i><span>ICDC Qualifier</span><i>&#10022;</i><span>Builder</span><i>&#10022;</i>
+      </div></div></div>
+      <div class="band band-b"><div class="band-move"><div class="band-track">
+        <span>Student</span><i>&#9679;</i><span>Leader</span><i>&#9679;</i><span>Builder</span><i>&#9679;</i><span>Boston, MA</span><i>&#9679;</i><span>Class of 2028</span><i>&#9679;</i>
+        <span>Student</span><i>&#9679;</i><span>Leader</span><i>&#9679;</i><span>Builder</span><i>&#9679;</i><span>Boston, MA</span><i>&#9679;</i><span>Class of 2028</span><i>&#9679;</i>
+      </div></div></div>
+    </div>
+
+    <!-- ============ Leadership: credentials on lanyards ============ -->
+    <section class="lead" id="leadership" aria-labelledby="lead-title">
+      <div class="lead-track">
+        <div class="lead-intro">
+          <span class="sec-num">04</span>
+          <h2 class="sec-title" id="lead-title" data-split>Leadership, work <em>&amp;</em> service</h2>
+          <p class="sec-sub" data-scramble>six credentials. keep scrolling.</p>
+        </div>
+
+        <article class="badge" style="--badge:#3b85c7; --badge-ink:#fff">
+          <div class="badge-strap" aria-hidden="true"><span>MASSACHUSETTS DECA &middot; MASSACHUSETTS DECA &middot; MASSACHUSETTS DECA &middot;</span></div>
+          <div class="badge-clip" aria-hidden="true"></div>
+          <div class="badge-card">
+            <div class="badge-head">
+              <span class="badge-kind">State officer</span><span class="badge-no">01</span>
+              <h3 class="badge-org">Massachusetts DECA</h3>
+              <p class="badge-role">State Co-President</p>
+            </div>
+            <div class="badge-meta"><span>Boston, MA</span><span>2026&ndash;Present</span></div>
+            <ul class="badge-points">
+              <li>Elected by 1,000+ voting delegates at the State Career Development Conference, representing 13,000+ competitors statewide — 1 of 2 sophomores elected to serve as state co-president.</li>
+              <li>Lead and facilitate district competitions, delivering programming and mentorship to support member success at regional and state levels.</li>
+            </ul>
+            <div class="badge-bar" aria-hidden="true"></div>
+          </div>
+        </article>
+
+        <article class="badge" style="--badge:#f3d77a; --badge-ink:#15171c">
+          <div class="badge-strap" aria-hidden="true"><span>BUILDING FINANCIAL FUTURES &middot; BUILDING FINANCIAL FUTURES &middot;</span></div>
+          <div class="badge-clip" aria-hidden="true"></div>
+          <div class="badge-card">
+            <div class="badge-head">
+              <span class="badge-kind">Nonprofit</span><span class="badge-no">02</span>
+              <h3 class="badge-org">Building Financial Futures of America</h3>
+              <p class="badge-role">National Director of Technology &amp; AI / Boston Regional President</p>
+            </div>
+            <div class="badge-meta"><span>Boston, MA</span><span>2026&ndash;Present</span></div>
+            <ul class="badge-points">
+              <li>Student-led 501(c)(3) teaching free financial literacy to middle and high schoolers across 100+ chapters in 20 states.</li>
+              <li>Cofounded and lead BFF's Boston chapter, running financial literacy programming and school outreach while securing corporate sponsors and donations to expand access to financial education across Greater Boston.</li>
+            </ul>
+            <div class="badge-bar" aria-hidden="true"></div>
+          </div>
+        </article>
+
+        <article class="badge" style="--badge:#9fdcc0; --badge-ink:#15171c">
+          <div class="badge-strap" aria-hidden="true"><span>MAST TUTORING &middot; MAST TUTORING &middot; MAST TUTORING &middot;</span></div>
+          <div class="badge-clip" aria-hidden="true"></div>
+          <div class="badge-card">
+            <div class="badge-head">
+              <span class="badge-kind">Service</span><span class="badge-no">03</span>
+              <h3 class="badge-org">MAST Tutoring</h3>
+              <p class="badge-role">Coordinator and Tutor</p>
+            </div>
+            <div class="badge-meta"><span>Waltham, MA</span><span>2025&ndash;Present</span></div>
+            <ul class="badge-points">
+              <li>Provide weekly one-on-one tutoring across four subjects to a middle school student, improving grades and study habits over the course of the year.</li>
+            </ul>
+            <div class="badge-bar" aria-hidden="true"></div>
+          </div>
+        </article>
+
+        <article class="badge" style="--badge:#c9b8f2; --badge-ink:#15171c">
+          <div class="badge-strap" aria-hidden="true"><span>GANN ACADEMY DECA &middot; GANN ACADEMY DECA &middot;</span></div>
+          <div class="badge-clip" aria-hidden="true"></div>
+          <div class="badge-card">
+            <div class="badge-head">
+              <span class="badge-kind">Chapter</span><span class="badge-no">04</span>
+              <h3 class="badge-org">Gann Academy DECA</h3>
+              <p class="badge-role">Vice President of Finance</p>
+            </div>
+            <div class="badge-meta"><span>Waltham, MA</span><span>2026&ndash;Present</span></div>
+            <ul class="badge-points">
+              <li>Secure corporate sponsorships to offset competition costs and send more chapter members to compete.</li>
+              <li>Run fundraisers to build the chapter budget and keep costs down for members.</li>
+            </ul>
+            <div class="badge-bar" aria-hidden="true"></div>
+          </div>
+        </article>
+
+        <article class="badge" style="--badge:#ff8a6b; --badge-ink:#15171c">
+          <div class="badge-strap" aria-hidden="true"><span>BRAE BURN COUNTRY CLUB &middot; BRAE BURN COUNTRY CLUB &middot;</span></div>
+          <div class="badge-clip" aria-hidden="true"></div>
+          <div class="badge-card">
+            <div class="badge-head">
+              <span class="badge-kind">Work</span><span class="badge-no">05</span>
+              <h3 class="badge-org">Brae Burn Country Club</h3>
+              <p class="badge-role">Server</p>
+            </div>
+            <div class="badge-meta"><span>Newton, MA</span><span>2026&ndash;Present</span></div>
+            <ul class="badge-points">
+              <li>Managed food and beverage service for members and guests, handling orders efficiently during peak hours while maintaining a clean, organized station.</li>
+            </ul>
+            <div class="badge-bar" aria-hidden="true"></div>
+          </div>
+        </article>
+
+        <article class="badge" style="--badge:#10213a; --badge-ink:#fff">
+          <div class="badge-strap" aria-hidden="true"><span>THE RASHI SCHOOL &middot; THE RASHI SCHOOL &middot; THE RASHI SCHOOL &middot;</span></div>
+          <div class="badge-clip" aria-hidden="true"></div>
+          <div class="badge-card">
+            <div class="badge-head">
+              <span class="badge-kind">Student gov</span><span class="badge-no">06</span>
+              <h3 class="badge-org">The Rashi School</h3>
+              <p class="badge-role">Student Government President</p>
+            </div>
+            <div class="badge-meta"><span>Dedham, MA</span><span>2023&ndash;2024</span></div>
+            <ul class="badge-points">
+              <li>Collaborated with the Student Dean to organize school-wide charity initiatives and lead the student body, earning NASC Gold Recognition and ADL No Place for Hate certification.</li>
+            </ul>
+            <div class="badge-bar" aria-hidden="true"></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ The record: education, awards, activities ============ -->
+    <section class="section record" id="record" aria-labelledby="record-title">
+      <div class="sec-head">
+        <span class="sec-num">05</span>
+        <h2 class="sec-title" id="record-title" data-split>The record</h2>
+        <p class="sec-sub" data-scramble>education, awards, and everything else.</p>
+      </div>
+
+      <div class="rec-block" id="education">
+        <h3 class="rec-label mono-label">Education</h3>
+        <div class="rec-rows">
+          <div class="school" data-reveal>
+            <div class="school-main">
+              <h4 class="school-name">Gann Academy</h4>
+              <p class="school-role">Class of 2028</p>
+            </div>
+            <div class="school-meta"><span>Waltham, MA</span><span>2025&ndash;Present</span></div>
+            <div class="school-extra">
+              <span class="mono-label">Selected coursework</span>
+              <ul class="chips">
+                <li>AP Calculus BC</li><li>AP Computer Science A</li><li>AP Chemistry</li><li>Linear Algebra</li><li>Advanced CS II: Data Analysis and AI with Python</li><li>Advanced Physics II: Mechanics</li><li>Advanced Precalculus BC</li><li>AP US History</li><li>AP Literature</li>
+              </ul>
+            </div>
+          </div>
+          <div class="school" data-reveal>
+            <div class="school-main">
+              <h4 class="school-name">Milton Academy</h4>
+              <p class="school-role">Grade 9</p>
+            </div>
+            <div class="school-meta"><span>Milton, MA</span><span>2024&ndash;2025</span></div>
+            <div class="school-extra"><p>Member, Investment Club and Sports Analytics Club.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec-block" id="awards">
+        <h3 class="rec-label mono-label">Awards &amp; honors</h3>
+        <div class="rec-rows">
+          <div class="award" data-reveal>
+            <span class="award-year">2026</span>
+            <div><h4 class="award-title">DECA International Career Development Conference Qualifier</h4><p class="award-desc">Placed top 5 of 40 Principles of Finance competitors at the state level to advance to internationals.</p></div>
+            <span class="award-mark" aria-hidden="true">&#9733;</span>
+          </div>
+          <div class="award" data-reveal>
+            <span class="award-year">2025</span>
+            <div><h4 class="award-title">DECA State Career Development Conference Qualifier</h4><p class="award-desc">Placed top 4 of 30 Principles of Finance competitors at the district level to advance to states.</p></div>
+            <span class="award-mark" aria-hidden="true">&#9733;</span>
+          </div>
+          <div class="award" data-reveal>
+            <span class="award-year">2022&ndash;24</span>
+            <div><h4 class="award-title">NASC Emerging Student Leader Award</h4><p class="award-desc">Recognized nationally for distinction in public speaking, leadership, and service.</p></div>
+            <span class="award-mark" aria-hidden="true">&#9733;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec-block" id="activities">
+        <h3 class="rec-label mono-label">Other activities</h3>
+        <div class="rec-rows">
+          <div class="activity" data-reveal><span class="activity-role">International Competitor</span><span class="activity-org">Gann Academy DECA</span><span class="activity-date">2025&ndash;Present</span></div>
+          <div class="activity" data-reveal><span class="activity-role">Alumni Leadership Council Member</span><span class="activity-org">The Rashi School</span><span class="activity-date">2026&ndash;Present</span></div>
+          <div class="activity" data-reveal><span class="activity-role">Member</span><span class="activity-org">Gann Academy Stock Market Club</span><span class="activity-date">2025&ndash;Present</span></div>
+          <div class="activity" data-reveal><span class="activity-role">Lawyer</span><span class="activity-org">Gann Academy Mock Trial Team</span><span class="activity-date">2025</span></div>
+          <div class="activity" data-reveal><span class="activity-role">Member</span><span class="activity-org">Milton Academy Investment Club</span><span class="activity-date">2024&ndash;2025</span></div>
+        </div>
+      </div>
+
+      <div class="rec-actions" data-reveal>
+        <a class="btn btn-ink resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
           View full resume (PDF)
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
         </a>
       </div>
     </section>
 
-    <section id="contact">
-      <h2 class="section-label">Contact</h2>
-      <div class="contact-list">
-        <div class="contact-row contact-row-email">
-          <div class="contact-label">Email</div>
-          <a class="contact-value contact-email-link" href="mailto:hzisow@gmail.com">hzisow@gmail.com</a>
-          <button type="button" class="copy-btn" id="copy-email" data-copy="hzisow@gmail.com" aria-label="Copy email address to clipboard">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="13" height="13" x="9" y="9" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span class="copy-btn-label">Copy</span>
-          </button>
+    <!-- ============ Stack: a pad controller ============ -->
+    <section class="section stack" id="stack" aria-labelledby="stack-title">
+      <div class="sec-head">
+        <span class="sec-num">06</span>
+        <h2 class="sec-title" id="stack-title" data-split>What I work with</h2>
+        <p class="sec-sub" data-scramble>skills, interests, hobbies. hit a pad.</p>
+      </div>
+
+      <div class="pad-device" id="pad-device">
+        <div class="pad-top">
+          <span class="pad-brand">HZ&#8209;18</span>
+          <div class="pad-lcd" aria-live="polite"><span id="pad-lcd">READY &middot; PRESS A PAD</span></div>
+          <button type="button" class="pad-sound" id="pad-sound" aria-pressed="true">Sound on</button>
         </div>
-        <a class="contact-row" href="https://www.linkedin.com/in/henryzisow" target="_blank">
-          <div class="contact-label">LinkedIn</div>
-          <div class="contact-value">Henry Zisow</div>
-          <div class="contact-arrow">↗</div>
-        </a>
-        <a class="contact-row" href="https://github.com/hzisow" target="_blank">
-          <div class="contact-label">GitHub</div>
-          <div class="contact-value">@hzisow</div>
-          <div class="contact-arrow">↗</div>
-        </a>
+        <div class="pads" id="pads">
+          <button type="button" class="pad" data-cat="skill"><span>React</span><kbd>1</kbd></button>
+          <button type="button" class="pad" data-cat="skill"><span>Supabase</span><kbd>2</kbd></button>
+          <button type="button" class="pad" data-cat="skill"><span>JavaScript</span><kbd>3</kbd></button>
+          <button type="button" class="pad" data-cat="skill"><span>Java</span><kbd>4</kbd></button>
+          <button type="button" class="pad" data-cat="skill"><span>Python</span><kbd>5</kbd></button>
+          <button type="button" class="pad" data-cat="skill"><span>AI-assisted development</span><kbd>6</kbd></button>
+          <button type="button" class="pad" data-cat="skill"><span>3D modeling &amp; printing</span><kbd>Q</kbd></button>
+          <button type="button" class="pad" data-cat="skill"><span>AI automation tools</span><kbd>W</kbd></button>
+          <button type="button" class="pad" data-cat="interest"><span>Finance</span><kbd>E</kbd></button>
+          <button type="button" class="pad" data-cat="interest"><span>Business</span><kbd>R</kbd></button>
+          <button type="button" class="pad" data-cat="interest"><span>Artificial intelligence</span><kbd>T</kbd></button>
+          <button type="button" class="pad" data-cat="interest"><span>Machine learning</span><kbd>Y</kbd></button>
+          <button type="button" class="pad" data-cat="interest"><span>Technology</span><kbd>A</kbd></button>
+          <button type="button" class="pad" data-cat="interest"><span>Mathematics</span><kbd>S</kbd></button>
+          <button type="button" class="pad" data-cat="hobby"><span>Golf</span><kbd>D</kbd></button>
+          <button type="button" class="pad" data-cat="hobby"><span>Basketball</span><kbd>F</kbd></button>
+          <button type="button" class="pad" data-cat="hobby"><span>Coding</span><kbd>G</kbd></button>
+          <button type="button" class="pad" data-cat="hobby"><span>DJing</span><kbd>H</kbd></button>
+        </div>
+        <div class="pad-legend">
+          <span><i class="lg-skill"></i>Skills</span>
+          <span><i class="lg-interest"></i>Interests</span>
+          <span><i class="lg-hobby"></i>Hobbies</span>
+        </div>
       </div>
     </section>
 
-    <div class="modal-overlay" id="modal">
-      <div class="modal" id="modal-inner" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <button class="modal-close" id="modal-close-btn" aria-label="Close">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
-        <div class="modal-image" id="modal-image"></div>
-        <div class="modal-body">
-          <div class="project-head">
-            <span class="modal-year" id="modal-year"></span>
-            <span class="project-note" id="modal-note"></span>
+    <!-- ============ Contact: an envelope ============ -->
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="contact-inner">
+        <div class="sec-head contact-head">
+          <span class="sec-num">07</span>
+          <h2 class="sec-title" id="contact-title" data-split>Say hi</h2>
+          <p class="sec-sub" data-scramble>you've got mail.</p>
+        </div>
+
+        <div class="envelope-wrap" id="envelope">
+          <div class="letter" id="letter">
+            <span class="mono-label">From the desk of</span>
+            <p class="letter-name">Henry Zisow</p>
+            <div class="contact-list">
+              <div class="contact-row contact-row-email">
+                <span class="contact-label">Email</span>
+                <a class="contact-value" href="mailto:hzisow@gmail.com">hzisow@gmail.com</a>
+                <button type="button" class="copy-btn" id="copy-email" data-copy="hzisow@gmail.com" aria-label="Copy email address to clipboard">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="13" height="13" x="9" y="9" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  <span class="copy-btn-label">Copy</span>
+                </button>
+              </div>
+              <a class="contact-row" href="https://www.linkedin.com/in/henryzisow" target="_blank" rel="noopener noreferrer">
+                <span class="contact-label">LinkedIn</span><span class="contact-value">Henry Zisow</span><span class="contact-arrow" aria-hidden="true">&#8599;</span>
+              </a>
+              <a class="contact-row" href="https://github.com/hzisow" target="_blank" rel="noopener noreferrer">
+                <span class="contact-label">GitHub</span><span class="contact-value">@hzisow</span><span class="contact-arrow" aria-hidden="true">&#8599;</span>
+              </a>
+              <a class="contact-row resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">
+                <span class="contact-label">Resume</span><span class="contact-value">Henry Zisow Resume.pdf</span><span class="contact-arrow" aria-hidden="true">&#8599;</span>
+              </a>
+            </div>
           </div>
-          <h3 id="modal-title"></h3>
-          <div class="modal-tags" id="modal-tags"></div>
-          <p class="modal-desc" id="modal-desc"></p>
-          <div class="modal-actions" id="modal-actions"></div>
+          <div class="env-body" aria-hidden="true">
+            <div class="env-back"></div>
+            <div class="env-front">
+              <div class="env-stamp"><span>HZ</span></div>
+              <div class="env-post">Boston MA &middot; 2026</div>
+            </div>
+            <div class="env-flap" id="env-flap"></div>
+          </div>
         </div>
       </div>
-    </div>
-
-    <footer>
-      <div class="footer-inner">
-        <span>© 2026 Henry Zisow</span>
-        <span>Boston, MA</span>
-      </div>
-    </footer>
+    </section>
   </main>
 
-  <script>
-    const root = document.documentElement;
+  <!-- ============ Footer ============ -->
+  <footer class="footer" id="footer">
+    <div class="footer-cols">
+      <div class="footer-col">
+        <span class="mono-label">Henry Zisow</span>
+        <a class="footer-email" href="mailto:hzisow@gmail.com">hzisow@gmail.com</a>
+      </div>
+      <nav class="footer-col" id="footer-nav" aria-label="Footer">
+        <span class="mono-label">Sections</span>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#graveyard">Graveyard</a>
+        <a href="#leadership">Leadership</a>
+        <a href="#record">Record</a>
+        <a href="#stack">Stack</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="footer-col">
+        <span class="mono-label">Elsewhere</span>
+        <a href="https://www.linkedin.com/in/henryzisow" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://github.com/hzisow" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="resume-link" href="Henry%20Zisow%20Resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+      </div>
+      <div class="footer-col">
+        <span class="mono-label">Building</span>
+        <a href="https://hzisow.github.io/EpiGuide/" target="_blank" rel="noopener noreferrer">EpiGuide</a>
+        <a href="https://classroom.bffofamerica.org" target="_blank" rel="noopener noreferrer">BFF Classroom</a>
+        <a href="https://bulletin.massachusettsdeca.org" target="_blank" rel="noopener noreferrer">MA DECA Event Board</a>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>&copy; 2026 Henry Zisow &middot; Boston, MA</span>
+      <a href="#top">Back to top &uarr;</a>
+    </div>
+    <div class="footer-giant" aria-hidden="true">
+      <span class="fg-outline">HENRY</span><span class="fg-fill">ZISOW</span>
+    </div>
+  </footer>
 
-    const projects = {
-      'epiguide': {
-        title: 'EpiGuide',
-        year: '2026',
-        description: "A Progressive Web App helping untrained bystanders recognize and respond to anaphylaxis emergencies. Uses AI-powered symptom classification (logistic regression + MobileNetV2 vision model trained on registry data), Claude Haiku for EpiPen label scanning, and a privacy-preserving volunteer responder network. Offline-capable core emergency flow with step-by-step injection guidance.",
-        tags: ['Supabase', 'Claude API', 'Machine Learning', 'PWA', 'MobileNetV2'],
-        link: 'https://hzisow.github.io/EpiGuide/',
-        repo: 'https://github.com/hzisow/EpiGuide'
-      },
-      'bff-classroom': {
-        title: 'BFF Classroom',
-        year: '2026',
-        description: "BFF Classroom runs a personal finance curriculum for middle and high schoolers. Students join with a class code and work through 13 lessons. The next lesson stays locked until they score 85%. Mentors get a dashboard showing which questions their class keeps missing. It's React and TypeScript on GitHub Pages with Supabase behind it, and a Gemini edge function handles the tutor chat so the API key never reaches the browser. The curriculum is about 42,000 words in three languages, and I was shipping all of it in one bundle. The lesson path took 10 seconds on a throttled connection. Splitting content per lesson cut that to 4.5.",
-        tags: ['TypeScript', 'React', 'Supabase', 'Google Gemini API', 'Tailwind CSS', 'GitHub Pages'],
-        link: 'https://classroom.bffofamerica.org',
-        repo: 'https://github.com/hzisow/BFF-Digital-Learning'
-      },
-      'deca-bulletin': {
-        title: 'MA DECA Chapter Event Board',
-        year: '2026',
-        note: 'Used by 13,000+ Massachusetts DECA members',
-        description: "MA DECA Chapter Event Board is a shared calendar I built for Massachusetts DECA chapters, with a browsable list and a map view using Leaflet and OpenStreetMap. It runs as a single HTML file with vanilla JavaScript, no framework, backed by Supabase for accounts, storage, and security rules. Members sign in to post and edit their own events. An admin account can pin events and review Instagram feature requests. Photos were the tricky part. A full-size phone photo blew past what localStorage and free Supabase storage could handle, so I added a canvas step that downscales and re-encodes uploads as JPEG before they leave the browser.",
-        tags: ['JavaScript', 'Supabase', 'Leaflet', 'Vercel', 'OpenStreetMap'],
-        link: 'https://bulletin.massachusettsdeca.org',
-        repo: 'https://github.com/hzisow/digital-bulletin-board'
-      },
-      'faceless-shorts': {
-        title: 'Faceless Shorts Engine',
-        year: '2026',
-        description: "A GitHub Actions workflow that renders and publishes a full video start to finish. It pulls an unused story from a cache of about 6,500, narrates it with Piper, and builds a 1080x1920 video in FFmpeg over looping gameplay with a title card and color grade. Piper doesn't emit word-level timestamps, so the audio goes back through faster-whisper to recover them for the one-word captions. YouTube and TikTok both publish through one API call. Posting is deliberately irregular so the channel doesn't look scheduled, and the whole thing runs on free CI minutes with no server and no GPU.",
-        tags: ['Python', 'FFmpeg', 'GitHub Actions', 'Piper TTS', 'faster-whisper', 'CI/CD Automation'],
-        repo: 'https://github.com/hzisow/Youtube-Automation'
-      },
-      'brusher-games': {
-        title: 'Brusher Games',
-        year: '2025',
-        description: 'A web-based platform that organizes, manages, and tracks school-wide elimination-style games by assigning targets, recording eliminations, and displaying live standings.',
-        tags: ['Claude', 'AI', 'Vibecoding'],
-        link: 'https://brushergames.onrender.com/',
-        repo: 'https://github.com/hzisow/brusher-games'
-      },
-      'ai-tiktok': {
-        title: 'AI TikTok Video Automation',
-        year: '2025',
-        description: 'A fully automated AI TikTok video generator and uploader. Uses N8N, UploadPost API, OpenRouter API, and Airtable.',
-        tags: ['N8N', 'OpenRouter', 'Automation'],
-        download: 'Airtable_to_Platforms.json',
-        downloadLabel: 'Download N8N Workflow'
-      },
-      'sora-downloader': {
-        title: 'OpenAI Sora Bulk Downloader',
-        year: '2025',
-        description: 'An easy way to manage and organize Sora AI video downloads. Takes in all the files Sora generates and lets you bulk download with the file name being the prompt, for easy organization.',
-        tags: ['Sora', 'OpenAI', 'Replit'],
-        link: 'https://sora-batch-gen--hzisow.replit.app/'
-      }
-    };
+  <!-- ============ Graveyard modal ============ -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal" id="modal-inner" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" id="modal-close-btn" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <div class="modal-body">
+        <div class="modal-year mono-label" id="modal-year"></div>
+        <h3 id="modal-title"></h3>
+        <div class="modal-tags" id="modal-tags"></div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-actions" id="modal-actions"></div>
+      </div>
+    </div>
+  </div>
 
-    const modal = document.getElementById('modal');
-    const modalInner = document.getElementById('modal-inner');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
-    let lastFocused = null;
+  <div class="cursor" id="cursor" aria-hidden="true"><span id="cursor-label"></span></div>
 
-    function openModal(id) {
-      const p = projects[id];
-      if (!p) return;
-      lastFocused = document.activeElement;
-      // Not every project has a screenshot — collapse the frame rather than
-      // showing an empty grey block.
-      const img = document.getElementById('modal-image');
-      img.hidden = !p.image;
-      if (p.image) {
-        img.style.backgroundImage = "url('" + p.image + "')";
-        img.classList.toggle('contain', !!p.imageContain);
-      }
-      document.getElementById('modal-year').textContent = p.year || '';
-      const noteEl = document.getElementById('modal-note');
-      noteEl.textContent = p.note || '';
-      noteEl.hidden = !p.note;
-      document.getElementById('modal-title').textContent = p.title;
-      document.getElementById('modal-desc').textContent = p.description;
-      document.getElementById('modal-tags').innerHTML = p.tags.map(t => '<span class="tag">' + t + '</span>').join('');
-      let actions = '';
-      if (p.link) actions += '<a class="btn btn-primary" href="' + p.link + '" target="_blank" rel="noopener noreferrer">Visit Site <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>';
-      // Source link is the primary action when there is no live demo to visit.
-      if (p.repo) actions += '<a class="btn' + (p.link ? '' : ' btn-primary') + '" href="' + p.repo + '"'
-        + ' target="_blank" rel="noopener noreferrer">'
-        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
-        + '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>'
-        + '</svg> View source</a>';
-      if (p.download) actions += '<a class="btn" href="' + p.download + '" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> ' + p.downloadLabel + '</a>';
-      const actionsEl = document.getElementById('modal-actions');
-      actionsEl.innerHTML = actions;
-      actionsEl.hidden = !actions;
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      modalCloseBtn.focus();
-    }
-
-    function closeModal() {
-      if (!modal.classList.contains('open')) return;
-      modal.classList.remove('open');
-      document.body.style.overflow = '';
-      if (lastFocused) lastFocused.focus();
-      lastFocused = null;
-    }
-
-    // Keep Tab inside the dialog while it's open.
-    modalInner.addEventListener('keydown', e => {
-      if (e.key !== 'Tab') return;
-      const focusable = modalInner.querySelectorAll('a[href], button:not([disabled])');
-      if (!focusable.length) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    });
-
-    // The cards are divs, so they need the button affordances spelled out.
-    document.querySelectorAll('[data-project]').forEach(el => {
-      const heading = el.querySelector('h3');
-      el.setAttribute('role', 'button');
-      el.setAttribute('tabindex', '0');
-      if (heading) el.setAttribute('aria-label', heading.textContent + ' — view details');
-      el.addEventListener('click', () => openModal(el.dataset.project));
-      el.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openModal(el.dataset.project);
-        }
-      });
-      // Warm the screenshot before the modal asks for it, so it doesn't
-      // open to an empty frame. Fires once per card.
-      let warmed = false;
-      const warm = () => {
-        if (warmed) return;
-        warmed = true;
-        const src = (projects[el.dataset.project] || {}).image;
-        if (src) new Image().src = src;
-      };
-      el.addEventListener('mouseenter', warm, { once: true });
-      el.addEventListener('focus', warm, { once: true });
-    });
-
-    modal.addEventListener('click', e => {
-      if (e.target === modal) closeModal();
-    });
-    document.getElementById('modal-close-btn').addEventListener('click', closeModal);
-    document.getElementById('modal-inner').addEventListener('click', e => e.stopPropagation());
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
-    });
-
-    /* ---------- Portrait ---------- */
-    // Nothing breaks if the photo has not been added yet: pull the figure
-    // rather than leave a broken-image icon in the hero.
-    (function () {
-      const fig = document.getElementById('hero-photo');
-      if (!fig) return;
-      const img = fig.querySelector('img');
-      const drop = () => fig.remove();
-      img.addEventListener('error', drop);
-      if (img.complete && img.naturalWidth === 0) drop();
-    })();
-
-    /* ---------- Resume: open in a tab and save a copy ---------- */
-    // The anchor's own target="_blank" handles the tab; this adds the download,
-    // which a single <a> cannot do alongside navigation.
-    document.querySelectorAll('.resume-link').forEach(el => el.addEventListener('click', () => {
-      const saver = document.createElement('a');
-      saver.href = 'Henry%20Zisow%20Resume.pdf';
-      saver.download = 'Henry Zisow Resume.pdf';
-      document.body.appendChild(saver);
-      saver.click();
-      document.body.removeChild(saver);
-    }));
-
-    /* ---------- Copy email ---------- */
-    const copyBtn = document.getElementById('copy-email');
-    const copyLabel = copyBtn.querySelector('.copy-btn-label');
-    let copyResetTimer = null;
-
-    copyBtn.addEventListener('click', async () => {
-      const value = copyBtn.dataset.copy;
-      let ok = true;
-      try {
-        await navigator.clipboard.writeText(value);
-      } catch (e) {
-        // Older browsers, and any non-secure origin, reject the async API.
-        try {
-          const scratch = document.createElement('textarea');
-          scratch.value = value;
-          scratch.setAttribute('readonly', '');
-          scratch.style.cssText = 'position:absolute;left:-9999px';
-          document.body.appendChild(scratch);
-          scratch.select();
-          ok = document.execCommand('copy');
-          document.body.removeChild(scratch);
-        } catch (e2) {
-          ok = false;
-        }
-      }
-      copyLabel.textContent = ok ? 'Copied' : 'Press ⌘C';
-      copyBtn.classList.toggle('copied', ok);
-      clearTimeout(copyResetTimer);
-      copyResetTimer = setTimeout(() => {
-        copyLabel.textContent = 'Copy';
-        copyBtn.classList.remove('copied');
-      }, 2000);
-    });
-
-    /* ---------- Scroll reveal ---------- */
-    // Stagger restarts per section so a long list never trails far behind the scroll.
-    const REVEAL_STEP = 70;
-    const REVEAL_MAX_STEPS = 5;
-    const REVEAL_GROUPS = [
-      ['.hero', 'h1, .tagline, .meta, .hero-actions, .hero-photo'],
-      ['#about', '.section-label, p'],
-      ['#projects', '.section-label, .project'],
-      ['#graveyard', '.section-label, .graveyard'],
-      ['#education', '.section-label, .entry'],
-      ['#leadership', '.section-label, .entry'],
-      ['#awards', '.section-label, .entry'],
-      ['#activities', '.section-label, .activity'],
-      ['#skills', '.section-label, .skills-list, .resume-actions'],
-      ['#contact', '.section-label, .contact-row'],
-      ['footer', '.footer-inner']
-    ];
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!prefersReducedMotion && 'IntersectionObserver' in window) {
-      const revealObserver = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
-        });
-      // Keep the bottom inset small: the footer sits only ~32px off the page
-      // bottom, and a larger inset would exclude it from the root entirely.
-      }, { rootMargin: '0px 0px -24px 0px', threshold: 0.05 });
-
-      REVEAL_GROUPS.forEach(([containerSel, childSel]) => {
-        const container = document.querySelector(containerSel);
-        if (!container) return;
-        container.querySelectorAll(childSel).forEach((el, i) => {
-          el.style.setProperty('--reveal-delay', Math.min(i, REVEAL_MAX_STEPS) * REVEAL_STEP + 'ms');
-          el.classList.add('reveal');
-          revealObserver.observe(el);
-        });
-      });
-    }
-
-    /* ---------- Scroll progress + active nav link ---------- */
-    // Every resume-ish section lights up the one "Resume" link in the nav.
-    const NAV_SECTION_MAP = {
-      about: 'about',
-      projects: 'projects',
-      graveyard: 'projects',
-      education: 'education',
-      leadership: 'education',
-      awards: 'education',
-      activities: 'education',
-      skills: 'education',
-      contact: 'contact'
-    };
-
-    const progressBar = document.getElementById('scroll-progress');
-    const navLinks = Array.from(document.querySelectorAll('.nav-links a'));
-    const spySections = Array.from(document.querySelectorAll('section[id]'));
-
-    // Everything layout-dependent is measured here, never inside the scroll
-    // handler — reading offsetTop/scrollHeight per frame forces sync layout.
-    let docMax = 0, navH = 63, sectionTops = [];
-    function measure() {
-      docMax = document.documentElement.scrollHeight - window.innerHeight;
-      navH = parseInt(getComputedStyle(root).getPropertyValue('--nav-h'), 10) || 63;
-      sectionTops = spySections.map(s => ({ id: s.id, top: s.offsetTop }));
-    }
-
-    let ticking = false, revealSafetyDone = false, scrollIdleTimer = null, activeHref = null;
-
-    function onScroll() {
-      ticking = false;
-      const scrolled = window.scrollY;
-
-      progressBar.style.transform = 'scaleX(' + (docMax > 0 ? Math.min(scrolled / docMax, 1) : 0) + ')';
-
-      const line = scrolled + navH + 40;
-      let currentId = null;
-      for (let i = 0; i < sectionTops.length; i++) {
-        if (sectionTops[i].top <= line) currentId = sectionTops[i].id;
-      }
-      const href = currentId && NAV_SECTION_MAP[currentId] ? '#' + NAV_SECTION_MAP[currentId] : null;
-      if (href !== activeHref) {
-        activeHref = href;
-        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === href));
-      }
-
-      // Safety net: content must never stay invisible. If anything is still
-      // unrevealed once we're at the bottom, there is no scroll left to trigger it.
-      if (!revealSafetyDone && docMax > 0 && scrolled >= docMax - 2) {
-        revealSafetyDone = true;
-        document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
-      }
-    }
-
-    window.addEventListener('scroll', () => {
-      // Suppress hover motion while the page moves, so rows passing under a
-      // stationary cursor don't twitch. Cleared shortly after scrolling stops.
-      if (!scrollIdleTimer) root.classList.add('is-scrolling');
-      clearTimeout(scrollIdleTimer);
-      scrollIdleTimer = setTimeout(() => {
-        scrollIdleTimer = null;
-        root.classList.remove('is-scrolling');
-      }, 140);
-
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(onScroll);
-    }, { passive: true });
-
-    let resizeTimer = null;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => { measure(); onScroll(); }, 150);
-    }, { passive: true });
-
-    measure();
-    onScroll();
-    window.addEventListener('load', () => { measure(); onScroll(); });
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => { measure(); onScroll(); });
-    }
-  </script>
+  <script src="vendor/gsap.min.js" defer></script>
+  <script src="vendor/ScrollTrigger.min.js" defer></script>
+  <script src="assets/site.js" defer></script>
 </body>
 </html>
